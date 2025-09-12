@@ -1,0 +1,62 @@
+<section class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 my-6">
+  @for (item of mails; track item.id; let i = $index; let last = $last) {
+    <div class="md:p-3 border-2 border-transparent rounded-lg transition-all duration-300 hover:border-blue-500">
+      <div class="flex justify-between">
+        <div class="flex items-center gap-4">
+          <div class="relative w-20 h-20"> <img class="absolute top-0 left-0 h-20 w-20 z-10" [src]="item.scanned_document ? 'assets/images/pdf.png' : 'assets/images/notFile.png'" alt="Document Statut">
+            @if (item.treatment_proof) {
+              <img class="absolute bottom-0 right-0 h-16 w-16 z-20 translate-x-3 translate-y-3" src="assets/images/pdf.png" alt="Traitement Prouvé">
+            }
+          </div>
+          @if (role === roles.ADMIN_ASSISTANT) {
+            @if (tab === tabs.INITIAL) {
+              <button matTooltip="Cliquer pour annoter" mat-button (click)="onAddComment(item)">Annoter</button>
+            }@else {
+              @if (item.status === status.TO_SENIOR_ASSISTANT || item.status === status.TO_DIRECTOR || item.status === status.TO_BE_PROCESSED) {
+                <button matTooltip="Cliquez pour afficher l'Assistant Principal" mat-icon-button><mat-icon>check</mat-icon></button>
+              }@else {
+                <button matTooltip="Cliquer pour envoyer à l'Assistant Principal pour  validation" mat-button (click)="onSend(item)">Envoyer</button>
+              }
+            }
+          }@else if (role === roles.SENIOR_ASSISTANT) {
+            @if (tab === tabs.INITIAL) {
+              <button matTooltip="Cliquer pour annoter" mat-button (click)="onAddComment(item)">Annoter</button>
+            }@else {
+              @if (item.status === status.TO_DIRECTOR || item.status === status.TO_BE_PROCESSED) {
+                <button matTooltip="Cliquez pour afficher l'Assistant Principal" mat-icon-button><mat-icon>check</mat-icon></button>
+              }@else {
+                <button matTooltip="Cliquer pour envoyer à l'Assistant Principal pour  validation" mat-button (click)="onSend(item)">Envoyer</button>
+              }
+            }
+          }@else if (role === roles.DIRECTOR) {
+            @if (tab === tabs.INITIAL || item.status === status.TO_DIRECTOR) {
+              <button matTooltip="Cliquer pour annoter" mat-button (click)="onAddProof(item)">Joindre preuve</button>
+            }@else {
+              @if (item.status === status.TO_BE_PROCESSED) {
+                <button matTooltip="Cliquez pour afficher l'Assistant Principal" mat-icon-button><mat-icon>check</mat-icon></button>
+              }
+            }
+          }
+        </div>
+        <button mat-icon-button [matMenuTriggerFor]="mailMenu" [matMenuTriggerData]="{ item: item }">
+          <mat-icon class="mat-18">more_vert</mat-icon>
+        </button>
+      </div>
+      <h1 class="mt-4 text-xl font-semibold text-gray-800"> {{ item.subject }} &nbsp; <span>#{{ item.id }}</span> </h1>
+      <div class="mt-2 text-gray-500 dark:text-gray-400">
+        <div><span>Date du courrier : </span> <span> {{ item.mail_date | date: 'dd/MM/yyyy' }} </span> &nbsp; | &nbsp;
+          <span>Date d'enregistrement : </span> <span> {{ item.create_at | date: 'dd/MM/yyyy' }} </span>
+        </div>
+        <div><span>Expéditeur : </span> <span> {{ item.sender }} </span></div>
+      </div>
+    </div>
+    @if (!last) {
+      <hr class="block sm:hidden border border-blue-950">
+    }
+  }
+</section>
+<mat-menu #mailMenu="matMenu" [overlapTrigger]="false" yPosition="below">
+  <ng-template matMenuContent let-item="item">
+    <app-incoming-external-mail-menu-component [role]="role" (actionSelected)="onActinSelected($event)" [item]="item"></app-incoming-external-mail-menu-component>
+  </ng-template>
+</mat-menu>

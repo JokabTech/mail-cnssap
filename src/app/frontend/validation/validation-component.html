@@ -1,0 +1,23 @@
+<div class="bg-gray-100 h-full lg:h-auto">
+  <div class="container mx-auto py-10 xl:py-14 xl:px-32">
+    <div
+      class="lg:bg-white lg:rounded-md lg:border lg:border-gray-300 w-full min-h-96 p-5 flex flex-col items-center justify-center lg:mt-5">
+      <h1 class="font-medium text-2xl text-blue-950 text-center">VÉRIFICATION DE VOTRE COMPTE COURRIERS CNSSAP</h1>
+      <p class="mt-3 lg:mt-2 text-center">
+        Un code de validation à 5 chiffres vous a été envoyé par e-mail. Veuillez l'entrer ci-dessous pour vérifier votre compte.
+      </p>
+      <div class="flex justify-center space-x-2 mb-4 mt-10">
+        @for (item of codeDigits; track item; let i = $index) {
+        <input type="number" min="0" max="9" [(ngModel)]="codeDigits[i]" (input)="moveToNext(i, $event)" (paste)="pasteCode($event)" #inputs class="w-14 h-14 border border-gray-300 rounded-lg text-center text-xl font-bold focus:ring-2 focus:ring-blue-500 no-spinner">
+        }
+      </div>
+      @if (loader) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }@else {
+      @if (errorMessage) {
+      <p class="text-red-500 text-lg">{{ errorMessage }}</p>
+      }
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="p-4">
+  <input type="file" accept="application/pdf" (change)="onFileSelected($event)" />
+
+  <div class="mt-4">
+    @if (thumbnailSrc) {
+      <img [src]="thumbnailSrc" alt="Miniature PDF" class="rounded shadow-md border" />
+    }
+  </div>
+</div>

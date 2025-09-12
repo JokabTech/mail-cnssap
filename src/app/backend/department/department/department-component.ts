@@ -1,0 +1,149 @@
+import { Department } from './../../../shared/models/department';
+import { Component, computed, inject, OnDestroy, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { HttpService } from '../../../core/services/http.service';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import { MessageService } from '../../../core/services/message.service';
+import { StateService } from '../../../core/services/state.service';
+import { FormControl } from '@angular/forms';
+import { SharedBackend } from '../../../shared/imports/shared-backend-imports';
+import { SharedImports } from '../../../shared/imports/shared-imports';
+import { Roles } from '../../../shared/enums/roles-enum';
+import { BackComponent } from "../../../shared/components/back/back-component";
+import { Header } from '../../../shared/models/header';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DepartmentEditComponent } from '../department-edit/department-edit-component';
+
+@Component({
+  selector: 'app-department-component',
+  imports: [...SharedBackend, ...SharedImports, BackComponent],
+  templateUrl: './department-component.html',
+  styleUrl: './department-component.scss'
+})
+export class DepartmentComponent implements OnInit, OnDestroy {
+  private http = inject(HttpService);
+  private message = inject(MessageService);
+  private stateService = inject(StateService);
+  private dialog = inject(MatDialog);
+
+  public xSmallOrSmall = computed(() => this.stateService.XSmallOrSmall());
+  private unsubscribe$ = new Subject<void>();
+
+  loading = false;
+  allUDepartments: Department[] = [];
+  filteredDepartments: Department[] = [];
+  paginatedDepartments: Department[] = [];
+
+  totalLength = 0;
+  currentPage = 0;
+  pageSizeOptions: number[] = [6, 10, 15, 20];
+  pageSize = this.pageSizeOptions[0];
+  searchKeyword = new FormControl('');
+
+  roles = Roles;
+
+  constructor() {
+    this.stateService.setHeader(new Header('GESTION DES DIRECTIONS', 'Liste des toutes les directions', 'event_seat'));
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  ngOnInit(): void {
+    this.onGet();
+    this.setupSearch();
+  }
+
+  onGet(): void {
+    this.loading = true;
+    this.http.url = `departments`;
+    this.unsubscribe$.next();
+    this.http.get<Department[]>().pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: (data) => {
+        this.allUDepartments = data;
+        this.filteredDepartments = data;
+      },
+      error: (err) => {
+        this.loading = false;
+        this.message.openSnackBar(err, 'Fermer', 800);
+      },
+      complete: () => {
+        this.loading = false;
+        this.totalLength = this.filteredDepartments.length;
+        this.updatePaginated();
+      },
+    });
+  }
+
+  setupSearch(): void {
+    this.searchKeyword.valueChanges
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(value => {
+        this.applyFilter(value);
+      });
+  }
+
+  applyFilter(filterValue: string | null): void {
+    const keyword = filterValue ? filterValue.toLowerCase().trim() : '';
+    this.filteredDepartments = this.allUDepartments.filter(department =>
+      department.designation.toLowerCase().includes(keyword)
+    );
+
+    this.totalLength = this.filteredDepartments.length;
+    this.currentPage = 0;
+    this.updatePaginated();
+  }
+
+  updatePaginated() {
+    const startIndex = this.currentPage * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedDepartments = this.filteredDepartments.slice(startIndex, endIndex);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.updatePaginated();
+  }
+
+  onAddDialog(department?: Department) {
+    const conf = new MatDialogConfig();
+    conf.disableClose = true;
+    conf.data = { title: `Ajouter une direction`, department, target: 'add' };
+
+    //conf.minWidth = this.xSmallOrSmall() ? '96vw' : '60vw';
+    //conf.height = '80%';
+
+    const dialogRef = this.dialog.open(DepartmentEditComponent, conf);
+    dialogRef.afterClosed().subscribe((department: Department) => {
+      if (department) {
+         this.allUDepartments.push(department);
+        this.applyFilter(this.searchKeyword.value);
+      }
+    });
+  }
+
+  onUpdateDialog(department?: Department) {
+    const conf = new MatDialogConfig();
+    conf.disableClose = true;
+    conf.data = { title: `Modifier une direction`, department, target: 'edit' };
+
+    //conf.minWidth = this.xSmallOrSmall() ? '96vw' : '60vw';
+    //conf.height = '80%';
+
+    const dialogRef = this.dialog.open(DepartmentEditComponent, conf);
+    dialogRef.afterClosed().subscribe((department: Department) => {
+      if (department) {
+        const index = this.filteredDepartments.findIndex(dep => dep.id === department.id);
+        if (index !== -1) {
+          this.filteredDepartments[index] = department;
+          this.updatePaginated();
+        }
+      }
+    });
+  }
+}

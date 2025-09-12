@@ -1,0 +1,218 @@
+<div class="layout-container" [class.layout-is-mobile]="XSmallOrSmall">
+  <mat-toolbar color="primary" class="layout-toolbar shadow-sm z-[2]">
+    <button (click)="drawer.toggle()" mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <div class="pl-4 flex items-center">
+      <img class="h-8" src="assets/images/logo.PNG" alt="Logo CNSSAP">
+    </div>
+
+    <span style="flex: 1 1 auto;"></span>
+    <div>
+      @if (!XSmallOrSmall) {
+      <button mat-icon-button class="me-1">
+        <mat-icon matBadge="15" matBadgeColor="accent">notifications</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="accountMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <mat-menu #accountMenu [overlapTrigger]="false" yPosition="below">
+        <button mat-menu-item routerLink="/">
+          <mat-icon>dashboard</mat-icon>Dashboard
+        </button>
+        <button mat-menu-item>
+          <mat-icon>help</mat-icon><span>Aide</span>
+        </button>
+      </mat-menu>
+      }
+      <button mat-icon-button [matMenuTriggerFor]="role">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+      <mat-menu #role [overlapTrigger]="false" yPosition="below">
+        @for (item of roles; track item) {
+          <button mat-menu-item (click)="onChangeRole(item)">
+             {{ buildRoleName(item) }}
+          </button>
+        }
+      </mat-menu>
+
+      <button mat-icon-button class="ms-3" (click)="onSwitch()">
+        <mat-icon color="primary"> {{ switch ? 'wb_sunny' : 'brightness_2' }} </mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+  <mat-sidenav-container class="layout-sidenav-container" [style.marginTop.px]="(XSmallOrSmall) ? 56 : 0">
+    <mat-sidenav #drawer [fixedInViewport]="XSmallOrSmall" [attr.role]="XSmallOrSmall ? 'dialog' : 'navigation'" [mode]="XSmallOrSmall ? 'over' : 'side'" [opened]="XSmallOrSmall === false" fixedTopGap="56">
+      <div class="p-6 bg-white min-h-28">
+        <img src="assets/images/avatar.png" class="h-16" alt="avatart" />
+        <div class="text-right">
+          @if (authentication) {
+            {{ authentication.full_name }} <br>
+            {{ roleLabel }}
+          }@else {
+            Utilisateur anonyme
+          }
+          <br />
+        </div>
+      </div>
+      <mat-accordion>
+        <mat-divider></mat-divider>
+        <mat-expansion-panel [class.mat-elevation-z0]="true" dense expanded="">
+          <mat-expansion-panel-header>
+            <mat-icon class="me-3" matListItemIcon>home</mat-icon>&nbsp;Accueil
+          </mat-expansion-panel-header>
+          <mat-nav-list dense>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/dashboard">
+              <mat-icon class="me-3" matListItemIcon>dashboard</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Dashboard</span>
+            </mat-list-item>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/aide">
+              <mat-icon class="me-3" matListItemIcon>help</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Aide</span>
+            </mat-list-item>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/aide">
+              <mat-icon class="me-3" matListItemIcon>question_answer</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>A propos</span>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+        <mat-divider></mat-divider>
+        <mat-expansion-panel [class.mat-elevation-z0]="true" dense>
+          <mat-expansion-panel-header>
+            <mat-icon class="me-3" matListItemIcon>trending_down</mat-icon>&nbsp;Courries entrants
+          </mat-expansion-panel-header>
+          <mat-nav-list dense>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/mails/incoming/external">
+              <mat-icon class="me-3" matListItemIcon>call_made</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Externes</span>
+            </mat-list-item>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/mails/incoming/internal">
+              <mat-icon class="me-3" matListItemIcon>call_received</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Internes</span>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+        <mat-divider></mat-divider>
+        <mat-expansion-panel [class.mat-elevation-z0]="true" dense>
+          <mat-expansion-panel-header>
+            <mat-icon class="me-3" matListItemIcon>trending_up</mat-icon>&nbsp;Courriers sortants
+          </mat-expansion-panel-header>
+          <mat-nav-list dense>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/groupes">
+              <mat-icon class="me-3" matListItemIcon>supervisor_account</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Externes</span>
+            </mat-list-item>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/groupes/new">
+              <mat-icon class="me-3" matListItemIcon>settings_applications</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Internes</span>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+        <mat-divider></mat-divider>
+        <mat-expansion-panel [class.mat-elevation-z0]="true" dense>
+          <mat-expansion-panel-header>
+            <mat-icon class="me-3" matListItemIcon>folder</mat-icon>&nbsp;Types documents
+          </mat-expansion-panel-header>
+          <mat-nav-list dense>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/documents">
+              <mat-icon class="me-3" matListItemIcon>list</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Tous les types</span>
+            </mat-list-item>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/groupes/new">
+              <mat-icon class="me-3" matListItemIcon>add</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Nouveau type</span>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+        <mat-divider></mat-divider>
+        <mat-expansion-panel [class.mat-elevation-z0]="true" dense>
+          <mat-expansion-panel-header>
+            <mat-icon class="me-3" matListItemIcon>event_seat</mat-icon>&nbsp;Gestion des directions
+          </mat-expansion-panel-header>
+          <mat-nav-list dense>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/departments">
+              <mat-icon class="me-3" matListItemIcon>list</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Toutes les directions</span>
+            </mat-list-item>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/groupes/new">
+              <mat-icon class="me-3" matListItemIcon>add</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Nouvelle direction</span>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+        <mat-divider></mat-divider>
+        <mat-expansion-panel [class.mat-elevation-z0]="true" dense>
+          <mat-expansion-panel-header>
+            <mat-icon class="me-3" matListItemIcon>work_outline</mat-icon>&nbsp;Gestion des fonctions
+          </mat-expansion-panel-header>
+          <mat-nav-list dense>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/functions">
+              <mat-icon class="me-3" matListItemIcon>list</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Toutes les fonctions</span>
+            </mat-list-item>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/groupes/new">
+              <mat-icon class="me-3" matListItemIcon>add</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Noulle fonction</span>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+        <mat-divider></mat-divider>
+        <mat-expansion-panel [class.mat-elevation-z0]="true" dense>
+          <mat-expansion-panel-header>
+            <mat-icon class="me-3" matListItemIcon>people</mat-icon>&nbsp;Gestion des utilisateurs
+          </mat-expansion-panel-header>
+          <mat-nav-list dense>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/users">
+              <mat-icon class="me-3" matListItemIcon>list</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Tous les utilisateurs</span>
+            </mat-list-item>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/dashboard">
+              <mat-icon class="me-3" matListItemIcon>add</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Nouveau utilisateur</span>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+        <mat-divider></mat-divider>
+        <mat-expansion-panel [class.mat-elevation-z0]="true" dense>
+          <mat-expansion-panel-header>
+            <mat-icon class="me-3" matListItemIcon>devices</mat-icon>&nbsp;Courriers archivés
+          </mat-expansion-panel-header>
+          <mat-nav-list dense>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/groupes">
+              <mat-icon class="me-3" matListItemIcon>send</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Invitations</span>
+            </mat-list-item>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/groupes/new">
+              <mat-icon class="me-3" matListItemIcon>weekend</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Ticket</span>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-expansion-panel>
+        <mat-divider></mat-divider>
+      </mat-accordion>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="min-h-full flex flex-col bg-[#f0f3f5]">
+        <div class="p-5 bg-[#f7f9fa] flex gap-5 items-center">
+          <div class="bg-white p-4 shadow-lg">
+            <mat-icon style="color: #f9d4dd;"> {{ header().icon }} </mat-icon>
+          </div>
+          <div>
+            <span class="app-text-title"> {{ header().title }} </span>
+            <div class="page-title-subheading lg:mt-1"> {{ header().subTitle }} </div>
+          </div>
+        </div>
+
+        <main class="mx-3.5 md:mx-6 my-6 md:my-8">
+          <router-outlet />
+        </main>
+
+        <footer class="bg-[#fafbfc] mt-auto p-4 sm:p-6 shadow-lg shadow-black">
+          <p class="text-center">&copy; Copyright 2025 CNSSAP</p>
+        </footer>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

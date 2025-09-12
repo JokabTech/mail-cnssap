@@ -1,0 +1,14 @@
+<app-toolbar-component (tabSelected)="onSelectTab($event, true)" (actionButton)="onActionButton($event)"></app-toolbar-component>
+<app-search-bar-component (searchChanged)="onSearchChanged($event)"></app-search-bar-component>
+
+@if (incomingExternalMailService.loading) {
+  <div class="flex items-center justify-center my-10">
+    <mat-spinner></mat-spinner>
+  </div>
+}@else {
+  <app-external-incoming-mails-grid-component [tab]="tab" (menuSelected)="onMenuSelected($event)" [mails]="incomingExternalMailService.page.items"></app-external-incoming-mails-grid-component>
+}
+
+@if (incomingExternalMailService.page) {
+  <mat-paginator class="mt-12" [length]="incomingExternalMailService.page.totalItems" [pageSize]="incomingExternalMailService.criteria.pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions" (page)="onNext($event)" showFirstLastButtons aria-label="Select page"></mat-paginator>
+}

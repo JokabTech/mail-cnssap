@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.layout-is-mobile .layout-toolbar {
+  position: fixed;
+  z-index: 2;
+}
+
+.layout-sidenav-container {
+  flex: 1;
+}
+
+.layout-is-mobile .layout-sidenav-container {
+  flex: 1 0 auto;
+}
+
+.u-bg-header {
+  background-color: #f7f9fa;
+}
+
+.u-bg-main {
+  background-color: #f0f3f5;
+}
+
+.u-text-title {
+  font-size: 20px;
+  font-weight: 300;
+  color: #495070;
+}
+
+.u-title-subheading {
+  color: #999;
+}
+
+.u-bg-header-main {
+  background-color: var(--mat-sys-surface);
+}
+
+.app-text-title {
+  font-size: 20px;
+  font-weight: 300;
+  color: #495070;
+}
+
+.page-title-subheading {
+  color: #999;
+}
+
+.drag{
+  background-color: rgb(247, 245, 245);
+  border-color: blue;
+}
+
+.mdc-notched-outline__notch {
+  border-style: none;
+}
+
+.mat-mdc-icon-button {
+  line-height: normal;
+}
+
+.u-bg-header-main {
+  background-color: var(--mat-sys-surface);
+}
+
+.blue-text {
+  color: #007ac3;
+}
+
+
+

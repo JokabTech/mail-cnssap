@@ -1,0 +1,44 @@
+<section class="flex items-center justify-between md:h-16 md:px-4 border-b border-b-gray-300 md:border-b-0 py-2 md:py-0" [ngClass]="xSmallOrSmall() ? '' : 'u-bg-header-main'">
+  <div class="flex gap-2">
+    <app-back-component></app-back-component>
+
+    @for (tab of tabs; track tab.key) {
+      <div [ngClass]="{'bg-gray-200': selectedTab === tab.key}" (click)="onSelectTab(tab, true)">
+          <button mat-icon-button [matTooltip]="tab.tooltip">
+            <mat-icon [ngStyle]="{'color': selectedTab === tab.key ? '#007ac3' : ''}">
+              {{ tab.icon }}
+            </mat-icon>
+          </button>
+        </div>
+    }
+  </div>
+
+
+
+  @if (!xSmallOrSmall() && incomingInternalMailService.page) {
+    <span class="text-lg"> {{ title }} ({{ incomingInternalMailService.page.totalItems }}) </span>
+  }
+
+  <div>
+    <button mat-icon-button matTooltip="Nouveau courrier" (click)="goToForm('add')">
+      <mat-icon>add</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Imprimer">
+      <mat-icon>print</mat-icon>
+    </button>
+  </div>
+</section>
+
+<app-search-bar-component (searchChanged)="onSearchChanged($event)"></app-search-bar-component>
+
+@if (incomingInternalMailService.loading) {
+  <div class="flex items-center justify-center my-10">
+    <mat-spinner></mat-spinner>
+  </div>
+}@else {
+  <app-incoming-internal-mails-grid-component (menuSelected)="onMenuSelected($event)" [mails]="incomingInternalMailService.page.items" [role]="role()"></app-incoming-internal-mails-grid-component>
+}
+
+@if (incomingInternalMailService.page) {
+  <mat-paginator class="mt-12" [length]="incomingInternalMailService.page.totalItems" [pageSize]="incomingInternalMailService.criteria.pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onNext($event)" showFirstLastButtons aria-label="Select page"></mat-paginator>
+}

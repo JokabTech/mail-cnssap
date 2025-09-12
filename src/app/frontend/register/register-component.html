@@ -1,0 +1,92 @@
+<div class="h-full bg-white">
+  <div class="bg-gray-100 h-full lg:h-auto">
+    <div class="container mx-auto py-4 xl:py-10 xl:px-24">
+      <div class="flex flex-wrap items-center content-center">
+        <div class="w-full lg:w-6/12 hidden lg:block">
+          <img class="h-52 ml-1" src="assets/images/logo.PNG" alt="Logo Ubunifu events">
+          <p class="pt-4 ml-4 text-md">
+            Cette application permet la gestion
+            centralisée, sécurisée et numérique des courriers entrants et sortants au sein de la CNSSAP
+          </p>
+        </div>
+        <div class="w-full lg:w-6/12 p-4">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="lg:bg-white lg:rounded-md lg:border lg:border-gray-300 md:py-11 md:px-11">
+            <h1 class="text-center font-medium text-2xl text-blue-950">COURRIERS CNSSAP</h1>
+            <p class="text-center mt-2">Créez votre compte organisateur dès maintenant</p>
+            <mat-form-field class="w-full mt-6">
+              <mat-label>Nom complet</mat-label>
+              <input type="text" matInput formControlName="full_name">
+              <mat-icon color="primary" matSuffix>person</mat-icon>
+              <mat-error *ngIf="form.get('full_name')!.hasError"> {{ getErrorFullName() }} </mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-full mt-1">
+              <mat-label>Adresse E-mail</mat-label>
+              <input type="email" matInput formControlName="email">
+              <mat-icon color="primary" matSuffix>home</mat-icon>
+              <mat-error *ngIf="form.get('email')!.hasError"> {{ getErrorEmail() }} </mat-error>
+            </mat-form-field>
+            <div class="flex flex-col md:flex-row gap-x-5">
+              <mat-form-field class="w-full md:w-6/12 mt-1">
+                <mat-label>Mot de passe</mat-label>
+                <input type="password" matInput formControlName="password" [type]="hide ? 'password' : 'text'" (focus)="lock = true">
+                <a mat-icon-button matSuffix (click)="hide = !hide">
+                  @if (lock) {
+                    <mat-icon color="primary">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  }@else {
+                    <mat-icon color="primary">lock</mat-icon>
+                  }
+                </a>
+                <mat-error *ngIf="form.get('password')!.hasError"> {{ getErrorPassword() }} </mat-error>
+              </mat-form-field>
+              <mat-form-field class="w-full md:w-6/12 mt-1">
+                <mat-label>Confirmation</mat-label>
+                <input matInput formControlName="password2" [type]="hide ? 'password' : 'text'" (focus)="lock = true">
+                <a mat-icon-button matSuffix (click)="hide = !hide">
+                  @if (lock) {
+                    <mat-icon color="primary">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  }@else {
+                    <mat-icon color="primary">lock</mat-icon>
+                  }
+                </a>
+                <mat-error *ngIf="form.get('password2')!.hasError"> {{ getErrorPassword2() }} </mat-error>
+              </mat-form-field>
+            </div>
+            <mat-checkbox formControlName="terms" [required]="true">
+              J'accepte
+              <a routerLink target="_blank" class="text-blue-800 cursor-pointer hover:text-blue-900">
+                la politique de confidentialité
+              </a> et
+              <a routerLink target="_blank" class="text-blue-800 cursor-pointer hover:text-blue-900">
+                les conditions d'utilisation
+              </a>
+            </mat-checkbox>
+            <button class="w-full mt-4" mat-flat-button>S'inscrire maintenant</button>
+            <div class="flex items-center gap-2 mt-5">
+              <hr class="flex-1 border-t border-gray-400">
+              <p class="text-gray-600 font-semibold">OU</p>
+              <hr class="flex-1 border-t border-gray-400">
+            </div>
+            <div class="flex flex-col md:flex-row mt-4 gap-3">
+              <button class="w-full md:w-6/12" type="button" mat-stroked-button color="primary">
+                <div class="flex items-center">
+                  <img height="20" width="20" src="assets/images/google.png" alt="Google" class="me-2">
+                  <span>S'inscrire avec Google</span>
+                </div>
+              </button>
+              <button class="w-full md:w-6/12" type="button" mat-stroked-button color="primary">
+                <div class="flex items-center">
+                  <img height="20" width="20" src="assets/images/facebook.png" alt="Google" class="me-2">
+                  <span>S'inscrire avec Facebook</span>
+                </div>
+              </button>
+            </div>
+            <p class="w-full text-center text-md mt-6">
+              Si vous avez un compte
+              <a routerLink="/auth/login" class="cursor-pointer text-blue-900 hover:text-blue-700">Connectez-vous</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

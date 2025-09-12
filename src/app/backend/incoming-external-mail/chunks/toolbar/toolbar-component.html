@@ -1,0 +1,49 @@
+<section class="flex items-center justify-between md:h-16 md:px-4 border-b border-b-gray-300 md:border-b-0 py-2 md:py-0" [ngClass]="xSmallOrSmall() ? '' : 'u-bg-header-main'">
+  <div class="flex gap-2">
+    @if (!xSmallOrSmall()) {
+    <button mat-icon-button (click)="onGoBack()" class="me-2">
+      <mat-icon>arrow_back_ios</mat-icon>
+    </button>
+    }
+
+    @for (tab of tabs; track tab.key) {
+      @if (tab.roles.includes(role)) {
+        <div [ngClass]="{'bg-gray-200': selectedTab === tab.key}" (click)="onSelectTab(tab)">
+          <button mat-icon-button [matTooltip]="getTooltip(tab)">
+            <mat-icon [ngStyle]="{'color': selectedTab === tab.key ? '#007ac3' : ''}">
+              {{ tab.icon }}
+            </mat-icon>
+          </button>
+        </div>
+      }
+    }
+  </div>
+
+  @if (!xSmallOrSmall()) {
+    <span class="text-lg"> {{ title | uppercase }} </span>
+  }
+
+  <div>
+    @if (role === roles.MAIL_ARCHIVES_AGENT || role === roles.ADMIN_ASSISTANT || role === roles.EXECUTIVE_SECRETARY) {
+      <button mat-icon-button matTooltip="Nouveau courrier" (click)="onEmit('goToForm')">
+        <mat-icon>add</mat-icon>
+      </button>
+    }
+    <button mat-icon-button matTooltip="Actualiser" (click)="onEmit('refresh')">
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Imprimer" (click)="onEmit('print')">
+      <mat-icon>print</mat-icon>
+    </button>
+    @if (role === roles.ADMIN_ASSISTANT || role === roles.SENIOR_ASSISTANT) {
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+
+      <mat-menu #menu [overlapTrigger]="false" yPosition="below">
+        <button mat-menu-item (click)="onEmit('destined')"><mat-icon>check</mat-icon> Courriers qui me sont destinés</button>
+        <button mat-menu-item (click)="onEmit('all')"><mat-icon>list</mat-icon> Liste complete des courriers </button>
+      </mat-menu>
+    }
+  </div>
+</section>

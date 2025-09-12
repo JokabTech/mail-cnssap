@@ -1,0 +1,63 @@
+
+    <button mat-menu-item (click)="onMenuItemClicked('view_detail', item)">
+      <mat-icon>list</mat-icon>Voir le détail
+    </button>
+
+    @if (item.scanned_document) {
+      <button mat-menu-item (click)="onMenuItemClicked('display_document', item)">
+        <mat-icon>remove_red_eye</mat-icon><span>Aperçu document</span>
+      </button>
+    }
+
+    @if (item.treatment_proof && role !== roles.MAIL_ARCHIVES_AGENT) {
+      <button mat-menu-item (click)="onMenuItemClicked('display_proof', item)">
+        <mat-icon>remove_red_eye</mat-icon><span>Aperçu preuve</span>
+      </button>
+    }
+
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="onMenuItemClicked('receipt', item)">
+      <mat-icon>print</mat-icon><span>Accusé de réception</span>
+    </button>
+
+     @if (item.scanned_document) {
+      <button mat-menu-item (click)="onMenuItemClicked('download_mail', item)">
+        <mat-icon>cloud_download</mat-icon><span>Télécharger courrier</span>
+      </button>
+    }
+
+    @if (item.treatment_proof && role !== roles.MAIL_ARCHIVES_AGENT ) {
+      <button mat-menu-item (click)="onMenuItemClicked('download_proof', item)">
+      <mat-icon>get_app</mat-icon><span>Télécharger preuve</span>
+    </button>
+    }
+
+    @if (role !== roles.MAIL_ARCHIVES_AGENT) {
+      <mat-divider></mat-divider>
+      @if (role !== roles.DIRECTOR) {
+        <button mat-menu-item (click)="onMenuItemClicked('add_comment', item)">
+          <mat-icon>add</mat-icon><span>Ajouter Annotation</span>
+        </button>
+      }
+      <button mat-menu-item (click)="onMenuItemClicked('treatment_proof', item)">
+        <mat-icon>attach_file</mat-icon><span>Joindre une preuve</span>
+      </button>
+      <button mat-menu-item (click)="onMenuItemClicked('share_mail', item)">
+        <mat-icon>shared</mat-icon><span>Partager le courrier</span>
+      </button>
+      @if (role === roles.DIRECTOR) {
+        <button mat-menu-item (click)="onMenuItemClicked('assign_agent', item)">
+          <mat-icon>person</mat-icon><span>Assigner un agent</span>
+        </button>
+      }
+    }
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="onMenuItemClicked('edit_mail', item)">
+      <mat-icon>edit</mat-icon><span>Modifier ce courrier</span>
+    </button>
+
+    @if (role !== roles.MAIL_ARCHIVES_AGENT) {
+      <button mat-menu-item (click)="onMenuItemClicked('delete_mail', item)">
+        <mat-icon>delete</mat-icon><span>Mettre à la corbeille</span>
+      </button>
+    }

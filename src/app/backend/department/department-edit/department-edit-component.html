@@ -1,0 +1,36 @@
+<div class="flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 shadow-sm">
+  <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-300">
+    {{ data.title }}
+  </h2>
+  <button mat-icon-button (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <form class="-mx-3 md:-mx-0" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="w-full mt-1">
+      <mat-form-field class="w-full">
+        <mat-label>Désignation de la direction</mat-label>
+        <input type="text" matInput formControlName="designation">
+        @if (form.get('designation')?.hasError) {
+          <mat-error> {{ getErrorDesignation() }} </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Acronyme de la direction</mat-label>
+        <input type="text" matInput formControlName="acronym">
+        @if (form.get('acronym')?.hasError) {
+          <mat-error> {{ getErrorAcronym() }} </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<div class="mt-5">
+  <hr class="border-gray-300">
+</div>
+<mat-dialog-actions>
+  <button mat-flat-button cdkFocusInitial (click)="onSubmit()"> Enregister </button>
+</mat-dialog-actions>

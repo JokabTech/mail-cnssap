@@ -1,0 +1,62 @@
+<div class="bg-gray-100 h-full md:bg-transparent md:h-auto">
+  <div class="bg-gray-100 h-full lg:h-auto">
+    <div class="container mx-auto py-4 xl:py-10 xl:px-20">
+      <div class="flex flex-wrap items-center content-center">
+        <div class="w-full lg:w-6/12 hidden lg:block">
+          <img class="h-52 ml-1" src="assets/images/logo.PNG" alt="Logo Ubunifu events">
+          <p class="pt-4 ml-4 text-md">
+            Cette application permet la gestion
+            centralisée, sécurisée et numérique des courriers entrants et sortants au sein de la CNSSAP. d
+          </p>
+        </div>
+        <form class="w-full lg:w-6/12 p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="lg:bg-white lg:rounded-md lg:border lg:border-gray-300 md:py-11 md:px-11">
+            <h1 class="text-center font-medium text-2xl text-blue-950">COURRIERS CNSSAP</h1>
+            <p class="text-center mt-2">Veuillez vous connecter avec votre compte</p>
+            <mat-form-field class="w-full mt-7">
+              <mat-label>Nom d'utilisateur</mat-label>
+              <input type="email" matInput formControlName="username">
+              <mat-icon color="primary" matSuffix>person</mat-icon>
+            </mat-form-field>
+            <mat-form-field class="w-full mt-1">
+              <mat-label>Mot de passe</mat-label>
+              <input type="password" matInput formControlName="password" [type]="hide ? 'password' : 'text'"
+                (focus)="lock = true">
+              <a mat-icon-button matSuffix (click)="hide = !hide">
+                @if (lock) {
+                  <mat-icon color="primary">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                }@else {
+                  <mat-icon color="primary">lock</mat-icon>
+                }
+              </a>
+            </mat-form-field>
+            <p class="text-right text-blue-950 cursor-pointer hover:text-blue-900">Mot de passe oublié ?</p>
+            <button class="w-full mt-4" mat-flat-button>Se connecter maintenant</button>
+            <div class="flex items-center gap-2 mt-5">
+              <hr class="flex-1 border-t border-gray-400">
+              <p class="text-gray-600 font-semibold">OU</p>
+              <hr class="flex-1 border-t border-gray-400">
+            </div>
+            <div class="flex flex-col md:flex-row mt-3 gap-3">
+              <button class="md:w-6/12" type="button" mat-stroked-button color="primary" (click)="onLogin()">
+                <div class="flex items-center">
+                  <img height="20" width="20" src="assets/images/google.png" alt="Google" class="me-2">
+                  <span>Se connecter avec Google</span>
+                </div>
+              </button>
+              <button class="md:w-6/12" type="button" mat-stroked-button color="primary">
+                <div class="flex items-center">
+                  <img height="20" width="20" src="assets/images/facebook.png" alt="Google" class="me-2">
+                  <span>Se connecter avec Facebook</span>
+                </div>
+              </button>
+            </div>
+            <p class="w-full text-center text-md mt-10"> Etes-vous nouveau ?
+              <a routerLink="/auth/register" class="cursor-pointer text-blue-900 hover:text-blue-700">Créer un compte</a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

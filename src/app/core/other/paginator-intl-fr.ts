@@ -1,0 +1,21 @@
+import { MatPaginatorIntl } from '@angular/material/paginator';
+
+export function getFrenchPaginatorIntl(): MatPaginatorIntl {
+  const paginatorIntl = new MatPaginatorIntl();
+
+  paginatorIntl.itemsPerPageLabel = 'Éléments par page :';
+  paginatorIntl.nextPageLabel = 'Suivant';
+  paginatorIntl.previousPageLabel = 'Précédent';
+  paginatorIntl.firstPageLabel = 'Première page';
+  paginatorIntl.lastPageLabel = 'Dernière page';
+  paginatorIntl.getRangeLabel = (page: number, pageSize: number, length: number) => {
+    if (length === 0 || pageSize === 0) {
+      return '0 sur ' + length;
+    }
+    const startIndex = page * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, length);
+    return `${startIndex + 1} – ${endIndex} sur ${length}`;
+  };
+
+  return paginatorIntl;
+}
