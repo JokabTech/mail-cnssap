@@ -59,7 +59,7 @@
         </p>
       </div>
 
-      <editor [formControlName]="commentFormControlName" class="w-full" licenseKey="gpl" [init]="init" />
+      <editor [formControlName]="commentFormControlName" class="w-full" apiKey="3dejrpuyh0ucy7n25448c4t5p79rrkaiwdfxfxfdcmrum9if" licenseKey="gpl" [init]="init" />
 
       @if (form.get(commentFormControlName)?.hasError('required') && form.touched) {
         <mat-error> {{ getErrorComment(commentFormControlName) }} </mat-error>
