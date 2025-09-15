@@ -32,7 +32,7 @@
     </button>
     }
 
-    @if (role !== roles.MAIL_ARCHIVES_AGENT) {
+    @if (role !== roles.MAIL_ARCHIVES_AGENT && role !== roles.EXECUTIVE_SECRETARY) {
       <mat-divider></mat-divider>
       @if (role !== roles.DIRECTOR) {
         <button mat-menu-item (click)="onMenuItemClicked('add_comment', item)">
@@ -51,8 +51,9 @@
         </button>
       }
     }
-    <mat-divider></mat-divider>
-    <button mat-menu-item (click)="onMenuItemClicked('edit_mail', item)">
+    @if (isExternalMail && role !== roles.EXECUTIVE_SECRETARY || isExternalMail && role !== roles.MAIL_ARCHIVES_AGENT) {
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="onMenuItemClicked('edit_mail', item)">
       <mat-icon>edit</mat-icon><span>Modifier ce courrier</span>
     </button>
 
@@ -60,4 +61,5 @@
       <button mat-menu-item (click)="onMenuItemClicked('delete_mail', item)">
         <mat-icon>delete</mat-icon><span>Mettre à la corbeille</span>
       </button>
+    }
     }

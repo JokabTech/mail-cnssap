@@ -46,6 +46,7 @@ export class LoginComponent {
     this.unsubscribe$.next();
     this.http.login(this.form.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: data => {
+        console.log(data);
         sessionStorage.setItem('authentication', JSON.stringify(data));
       },
       error: err => {

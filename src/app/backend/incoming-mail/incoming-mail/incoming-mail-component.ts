@@ -5,11 +5,11 @@ import { ActionEvent } from './../../../shared/models/action-event';
 import { StateService } from '../../../core/services/state.service';
 import { PdfService } from '../../../core/services/pdf-service';
 import { SharedBackend } from '../../../shared/imports/shared-backend-imports';
-import { ToolbarComponent } from '../../incoming-external-mail/chunks/toolbar/toolbar-component';
-import { SearchBarComponent } from '../../incoming-external-mail/chunks/search-bar/search-bar-component';
 import { MailBaseService } from '../../../core/services/mail-base-service';
 import { IncomingMail } from '../../../shared/models/incoming-mail';
 import { IncomingMailGridComponent } from "../chunks/incoming-mail-grid/incoming-mail-grid-component";
+import { ToolbarComponent } from '../chunks/toolbar/toolbar-component';
+import { SearchBarComponent } from '../chunks/search-bar/search-bar-component';
 
 @Component({
   selector: 'app-incoming-mail-component',
@@ -22,7 +22,7 @@ import { IncomingMailGridComponent } from "../chunks/incoming-mail-grid/incoming
   templateUrl: './incoming-mail-component.html',
   styleUrl: './incoming-mail-component.scss'
 })
-export abstract class IncomingMailComponent <T extends IncomingMail> implements OnInit{
+export abstract class IncomingMailComponent<T extends IncomingMail> implements OnInit {
   protected abstract mailService: MailBaseService<T>;
   private pdfService = inject(PdfService);
   private stateService = inject(StateService);
@@ -105,10 +105,10 @@ export abstract class IncomingMailComponent <T extends IncomingMail> implements 
         this.mailService.gotToDetails(event.data);
         break;
       case 'display_document':
-        this.pdfService.displayOnlinePdf(event.data.id, 'document');
+        this.mailService.displayOnline(event.data.id, 'document');
         break;
       case 'display_proof':
-        this.pdfService.displayOnlinePdf(event.data.id, 'proof');
+        this.mailService.displayOnline(event.data.id, 'proof');
         break;
       case 'receipt':
         // Implement receipt logic

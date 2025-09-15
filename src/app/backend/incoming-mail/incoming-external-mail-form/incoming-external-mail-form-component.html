@@ -1,0 +1,5 @@
+@if (role() === roles.MAIL_ARCHIVES_AGENT || role() === roles.ADMIN_ASSISTANT) {
+  <app-incoming-external-mail-impl-form-component></app-incoming-external-mail-impl-form-component>
+}@else {
+  <h1>Vous n'avez pas le droit d'accèder a ce formulaire</h1>
+}

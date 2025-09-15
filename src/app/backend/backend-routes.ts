@@ -27,28 +27,26 @@ export const backendRoutes: Routes = [
   },
   {
     path: 'mails/incoming/external',
-    //loadComponent: () => import('./incoming-external-mail/incoming-external-mail/incoming-external-mail-component').then(m => m.IncomingExternalMailComponent)
     loadComponent: () => import('./incoming-mail/incoming-external-mail-list/incoming-external-mail-list-component').then(m => m.IncomingExternalMailListComponent)
   },
   {
     path: 'mails/incoming/external/form',
-    loadComponent: () => import('./incoming-external-mail/incoming-external-mail-form/incoming-external-mail-form-component').then(m => m.IncomingExternalMailFormComponent)
+    loadComponent: () => import('./incoming-mail/incoming-external-mail-form/incoming-external-mail-form-component').then(m => m.IncomingExternalMailFormComponent)
   },
   {
     path: 'mails/incoming/external/detail',
-    loadComponent: () => import('./incoming-external-mail/incoming-external-mail-detail/incoming-external-mail-detail-component').then(m => m.IncomingExternalMailDetailComponent)
+    loadComponent: () => import('./incoming-mail/chunks/incoming-externa-mail-detail/incoming-externa-mail-detail-component').then(m => m.IncomingExternaMailDetailComponent)
   },
   {
     path: 'mails/incoming/internal',
-    //loadComponent: () => import('./incoming-internal-mail/incoming-internal-mail/incoming-internal-mail-component').then(m => m.IncomingInternalMailComponent)
     loadComponent: () => import('./incoming-mail/incoming-internal-mail-list/incoming-internal-mail-list-component').then(m => m.IncomingInternalMailListComponent)
   },
   {
     path: 'mails/incoming/internal/form',
-    loadComponent: () => import('./incoming-internal-mail/incoming-internal-mail-form/incoming-internal-mail-form-component').then(m => m.IncomingInternalMailFormComponent)
+    loadComponent: () => import('./incoming-mail/incoming-internal-mail-form/incoming-internal-mail-form-component').then(m => m.IncomingInternalMailFormComponent)
   },
   {
     path: 'mails/incoming/internal/detail',
-    loadComponent: () => import('./incoming-internal-mail/incoming-internall-mail-detail/incoming-internall-mail-detail-component').then(m => m.IncomingInternallMailDetailComponent)
+    loadComponent: () => import('./incoming-mail/chunks/incoming-interna-mail-detail/incoming-interna-mail-detail-component').then(m => m.IncomingInternaMailDetailComponent)
   },
 ];

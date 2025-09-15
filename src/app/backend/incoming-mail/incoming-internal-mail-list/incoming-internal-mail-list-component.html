@@ -1,1 +1,5 @@
-<p>incoming-internal-mail-list-component works!</p>
+@if (role() !== roles.AGENT) {
+  <app-incoming-internal-mail-list-impl-component></app-incoming-internal-mail-list-impl-component>
+}@else {
+  <h1>Vous n'avez pas droit d'accèder à cette fonctionnalité</h1>
+}

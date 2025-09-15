@@ -7,6 +7,6 @@ import { MailBaseService } from './mail-base-service';
 })
 export class IncomingExternalMailService extends MailBaseService<IncomingExternalMail> {
   constructor() {
-    super('incoming-external-mails', '/mails/incoming/external');
+    super('incoming-external-mails', '/mails/incoming/external', 'external');
   }
 }

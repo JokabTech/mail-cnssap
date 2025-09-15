@@ -6,7 +6,6 @@ import { Roles } from '../../../../shared/enums/roles-enum';
 import { MailStatus } from '../../../../shared/enums/mail-status.enum';
 import { Tabs } from '../../../../shared/enums/tab-enum';
 import { HttpService } from '../../../../core/services/http.service'
-import { User } from '../../../../shared/models/user';
 import { IncomingMailMenuComponent } from "../incoming-mail-menu/incoming-mail-menu-component";
 
 @Component({

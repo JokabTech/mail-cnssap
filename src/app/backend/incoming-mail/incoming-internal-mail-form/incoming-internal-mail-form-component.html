@@ -1,0 +1,5 @@
+@if (role() === roles.EXECUTIVE_SECRETARY || role() === roles.ADMIN_ASSISTANT) {
+  <app-incoming-internal-mail-form-impl-component></app-incoming-internal-mail-form-impl-component>
+}@else {
+  <h1>Vous n'avez pas le droit d'accèder a cette fonctionnalité</h1>
+}

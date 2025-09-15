@@ -1,0 +1,101 @@
+<div class="flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 shadow-sm">
+  <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-300">
+    {{ data.title }}
+  </h2>
+  <button mat-icon-button (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  @if (isFormReady) {
+    <form class="-mx-3 md:-mx-0" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="w-full mb-4">
+        <h1 class="text-lg font-bold">{{ role === roles.ADMIN_ASSISTANT ? 'Validateur (Assistant Principale)' :
+          'Directeur' }} </h1>
+        <p>
+          Cette personne {{ role === roles.ADMIN_ASSISTANT ? `est chargée de valider l'annoation et de transférer
+          le courrier au directeur concerné` : 'est chargée du traitement de ce courrier' }}.
+        </p>
+      </div>
+
+      <div class="w-full">
+        @if (role === roles.ADMIN_ASSISTANT) {
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Assistant principal chargé de la validation</mat-label>
+            <mat-select matInput [formControlName]="assigneeFormControlName">
+              @for (item of seniorAssistants; track item.id) {
+              <mat-option [value]="item.id"> {{ item.full_name }} </mat-option>
+              }
+            </mat-select>
+            @if (form.get(assigneeFormControlName)?.hasError('required')) {
+            <mat-error> {{ getErrorSeriorAssistant(assigneeFormControlName) }} </mat-error>
+            }
+          </mat-form-field>
+        }@else {
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Directeur chargé de traitement de ce courrier</mat-label>
+            <mat-select matInput [formControlName]="assigneeFormControlName">
+              @for (item of directors; track item.id) {
+              <mat-option [value]="item.id"> {{ item.full_name }} </mat-option>
+              }
+            </mat-select>
+            @if (form.get(assigneeFormControlName)?.hasError('required')) {
+            <mat-error> {{ getErrorSeriorAssistant(assigneeFormControlName) }} </mat-error>
+            }
+          </mat-form-field>
+        }
+        <div class="w-full flex justify-end">
+          <mat-checkbox formControlName="should_send_document" class="-mt-5">
+            Transférer directement <span> {{ role === roles.ADMIN_ASSISTANT ? `à l'assistant principal pour validation` : `au directeur pour traitement` }} </span>
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <div class="w-full mb-4">
+        <h1 class="text-lg font-bold">Ajouter une annotation (visible par {{ role === roles.ADMIN_ASSISTANT ? `le personnel de direction` : 'la personne chargée du traitement'}}) </h1>
+        <p>
+          Votre annotation sera visible par {{ role === roles.ADMIN_ASSISTANT ? `l'Assistant Principal chargé de validation` : `le Directeur chargé du traitement` }}
+        </p>
+      </div>
+
+      <editor [formControlName]="commentFormControlName" class="w-full" apiKey="3dejrpuyh0ucy7n25448c4t5p79rrkaiwdfxfxfdcmrum9if" licenseKey="gpl" [init]="init" />
+
+      @if (form.get(commentFormControlName)?.hasError('required') && form.touched) {
+        <mat-error> {{ getErrorComment(commentFormControlName) }} </mat-error>
+      }
+
+      @if (data.mail.scanned_document === null) {
+        <mat-checkbox labelPosition="after" (change)="onCheckboxChange($event)">Joindre un fichier scanné</mat-checkbox>
+      }
+
+      @if (disabled) {
+        <div class="w-full mt-1">
+          <div class="p-1 w-full h-56 flex flex-col items-center justify-center border-2 border-dashed border-gray-400 bg-white rounded-lg cursor-pointer hover:border-blue-500 transition" [ngClass]="{ 'bg-gray-100 border-blue-500': isDragging }" (click)="triggerFileInput()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+            <mat-icon class="mat-18">attach_file</mat-icon>
+            <p class="text-gray-600 text-lg text-center mt-2 px-1"> Déposez ici un fichier au format PDF ou image, ou <span class="text-blue-500 font-bold"> cliquez </span> pour le sélectionner.</p>
+            @if (pdfService.localPdf) {
+              <p class="text-lg border-t-4 border-r-gray-100 mt-0.5">Fichier : {{ pdfService.localPdf.name }} </p>
+            }
+          </div>
+          @if (errorMessage !== '') {
+            <mat-error class="mt-1.5"> {{ errorMessage }} </mat-error>
+          }
+        </div>
+      }
+    </form>
+  }@else {
+    <div class="flex items-center justify-center my-10">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+</mat-dialog-content>
+<div class="mt-2">
+  <hr class="border-gray-300">
+</div>
+<mat-dialog-actions>
+  <button mat-flat-button cdkFocusInitial (click)="onSubmit()"> Sauvegarder </button>
+  <button matButton="elevated" cdkFocusInitial (click)="onClose()"> Fermer </button>
+</mat-dialog-actions>
+
+<input type="file" #fileInput (change)="onFileSelected($event)" class="hidden" accept=".jpg, .jpeg, .png, application/pdf">
