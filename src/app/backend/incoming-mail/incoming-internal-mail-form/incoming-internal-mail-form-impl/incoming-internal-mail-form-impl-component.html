@@ -16,7 +16,7 @@
 </section>
 
 <div class="w-full md:px-16">
-  <h1 class="mt-7 text-lg md:px-4 hidden md:block">FORMULAIRE D'AJOUT D'UN NOUVEAU COURRIER ENTRANT EXTERNE</h1>
+  <h1 class="mt-7 text-lg md:px-4 hidden md:block">FORMULAIRE D'AJOUT D'UN NOUVEAU COURRIER ENTRANT INTERNE</h1>
 
   @if (isFormReady) {
     <form class="w-full flex flex-wrap mt-4" [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -41,8 +41,7 @@
     <div class="w-full md:px-4 mb-4">
       <h1 class="text-lg font-bold">Type de document</h1>
       <p>
-        Indiquez ici le sujet principal du courrier. Il s'agit de l'objet tel qu'il figure sur le courrier scanné.
-        Ce titre apparaîtra dans les listes et les recherches.
+        Il s'agit du type de courrier que vous êtes sur le point d'ajouter
       </p>
     </div>
 
@@ -98,7 +97,7 @@
     <div class="w-full md:px-4 mb-4">
       <h1 class="text-lg font-bold">Destinateur et Annotateur</h1>
       <p>
-        Sélectionnez le directeur en charge de traiter ce courrier, il le recevra et le traitera ains que de quel type de courrier il s'agit
+        Sélectionnez le directeur en charge de traiter ce courrier, il le recevra et le traitera. Veillez sélectinner également le type de courrier dont il s'agit
       </p>
     </div>
 

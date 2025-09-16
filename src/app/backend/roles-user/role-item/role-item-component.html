@@ -10,7 +10,7 @@
         </p>
       }
     </div>
-    <mat-slide-toggle [(ngModel)]="disable" (click)="$event.stopPropagation()" [disabled]="!isAccountActive"></mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="disable" (click)="$event.stopPropagation()" (change)="onToggleChange2($event)" [disabled]="!isAccountActive"></mat-slide-toggle>
   </div>
   @if (loader) {
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>

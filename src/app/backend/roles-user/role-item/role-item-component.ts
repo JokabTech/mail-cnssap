@@ -8,6 +8,7 @@ import { StateService } from '../../../core/services/state.service';
 import { SharedBackend } from '../../../shared/imports/shared-backend-imports';
 import { SharedImports } from '../../../shared/imports/shared-imports';
 import { FormsModule } from '@angular/forms';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-role-item-component',
@@ -90,5 +91,14 @@ export class RoleItemComponent implements OnInit{
         this.message.openSnackBar("Le rôle a été retiré avec succès", 'Fermer', 4000);
       }
     });
+  }
+
+  onToggleChange2(event: MatSlideToggleChange): void {
+    const newStatus = event.checked;
+    if (newStatus) {
+      this.addRoleToUser();
+    }else{
+      this.removeRoleFromUser();
+    }
   }
 }

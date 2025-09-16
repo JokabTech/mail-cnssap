@@ -11,8 +11,7 @@
   @if (isFormReady) {
     <form class="-mx-3 md:-mx-0" [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="w-full mb-4">
-        <h1 class="text-lg font-bold">{{ role === roles.ADMIN_ASSISTANT ? 'Validateur (Assistant Principale)' :
-          'Directeur' }} </h1>
+        <h1 class="text-lg font-bold">{{ role === roles.ADMIN_ASSISTANT ? 'Validateur (Assistant Principal)' : 'Directeur' }} </h1>
         <p>
           Cette personne {{ role === roles.ADMIN_ASSISTANT ? `est chargée de valider l'annoation et de transférer
           le courrier au directeur concerné` : 'est chargée du traitement de ce courrier' }}.

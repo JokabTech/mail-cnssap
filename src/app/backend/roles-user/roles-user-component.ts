@@ -43,16 +43,19 @@ export class RolesUserComponent {
   }
 
   toggleAccountStatus() {
+    this.loader = true;
     this.http.url = `users/${this.user.id}/toggle-status`;
     this.http.update(null).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: () => {
         this.user.is_active = !this.user.is_active;
       },
       error: err => {
+        this.loader = false;
         this.message.openSnackBar(err, 'Fermer', 4000);
         this.isAccountActive = !this.isAccountActive;
       },
       complete: () => {
+         this.loader = false;
         this.message.openSnackBar('Le statut du compte a été mis à jour avec succès.', 'Fermer', 4000);
       }
     });

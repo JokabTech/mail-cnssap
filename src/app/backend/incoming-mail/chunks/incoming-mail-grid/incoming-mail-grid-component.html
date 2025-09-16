@@ -23,9 +23,9 @@
               <button matTooltip="Cliquer pour annoter" mat-button (click)="onAddComment(item)">Annoter</button>
             }@else {
               @if (item.status === status.TO_DIRECTOR || item.status === status.TO_BE_PROCESSED) {
-                <button matTooltip="Cliquez pour afficher l'Assistant Principal" mat-icon-button><mat-icon>check</mat-icon></button>
+                <button matTooltip="Cliquez pour afficher le Directeur" mat-icon-button><mat-icon>check</mat-icon></button>
               }@else {
-                <button matTooltip="Cliquer pour envoyer à l'Assistant Principal pour  validation" mat-button (click)="onSend(item)">Envoyer</button>
+                <button matTooltip="Cliquer pour envoyer au Directeur pour traitement" mat-button (click)="onSend(item)">Envoyer</button>
               }
             }
           }@else if (role === roles.DIRECTOR) {

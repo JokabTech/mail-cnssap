@@ -9,7 +9,7 @@
       </button>
     }
 
-    @if (item.treatment_proof && role !== roles.MAIL_ARCHIVES_AGENT) {
+    @if (item.treatment_proof && role !== roles.MAIL_ARCHIVES_AGENT && role !== roles.EXECUTIVE_SECRETARY) {
       <button mat-menu-item (click)="onMenuItemClicked('display_proof', item)">
         <mat-icon>remove_red_eye</mat-icon><span>Aperçu preuve</span>
       </button>
@@ -26,7 +26,7 @@
       </button>
     }
 
-    @if (item.treatment_proof && role !== roles.MAIL_ARCHIVES_AGENT ) {
+    @if (item.treatment_proof && role !== roles.MAIL_ARCHIVES_AGENT && role !== roles.EXECUTIVE_SECRETARY) {
       <button mat-menu-item (click)="onMenuItemClicked('download_proof', item)">
       <mat-icon>get_app</mat-icon><span>Télécharger preuve</span>
     </button>
@@ -51,15 +51,15 @@
         </button>
       }
     }
-    @if (isExternalMail && role !== roles.EXECUTIVE_SECRETARY || isExternalMail && role !== roles.MAIL_ARCHIVES_AGENT) {
+    @if (role === roles.ADMIN_ASSISTANT || role === roles.EXECUTIVE_SECRETARY && isExternalMail === false || role === roles.MAIL_ARCHIVES_AGENT && isExternalMail === true) {
       <mat-divider></mat-divider>
       <button mat-menu-item (click)="onMenuItemClicked('edit_mail', item)">
       <mat-icon>edit</mat-icon><span>Modifier ce courrier</span>
     </button>
+    }
 
-    @if (role !== roles.MAIL_ARCHIVES_AGENT) {
+     @if (role === roles.SENIOR_ASSISTANT || role === roles.ADMIN_ASSISTANT) {
       <button mat-menu-item (click)="onMenuItemClicked('delete_mail', item)">
         <mat-icon>delete</mat-icon><span>Mettre à la corbeille</span>
       </button>
-    }
     }

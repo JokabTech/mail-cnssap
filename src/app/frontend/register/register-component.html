@@ -60,7 +60,15 @@
                 les conditions d'utilisation
               </a>
             </mat-checkbox>
-            <button class="w-full mt-4" mat-flat-button>S'inscrire maintenant</button>
+            <button class="w-full mt-4" mat-flat-button [disabled]="loader">
+              <div class="flex items-center">
+                  @if (loader) {
+                    <img height="20" width="20" src="assets/images/loader.gif" alt="Google" class="m-4">
+                  }
+                  <span>S'inscrire maintenant</span>
+                </div>
+            </button>
+
             <div class="flex items-center gap-2 mt-5">
               <hr class="flex-1 border-t border-gray-400">
               <p class="text-gray-600 font-semibold">OU</p>

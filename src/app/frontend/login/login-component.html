@@ -31,7 +31,14 @@
               </a>
             </mat-form-field>
             <p class="text-right text-blue-950 cursor-pointer hover:text-blue-900">Mot de passe oublié ?</p>
-            <button class="w-full mt-4" mat-flat-button>Se connecter maintenant</button>
+            <button class="w-full mt-4" mat-flat-button [disabled]="loader">
+              <div class="flex items-center">
+                  @if (loader) {
+                    <img height="20" width="20" src="assets/images/loader.gif" alt="Google" class="m-4">
+                  }
+                  <span>Se connecter maintenant</span>
+                </div>
+            </button>
             <div class="flex items-center gap-2 mt-5">
               <hr class="flex-1 border-t border-gray-400">
               <p class="text-gray-600 font-semibold">OU</p>

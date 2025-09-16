@@ -22,6 +22,7 @@ export class IncomingMailMenuComponent<T extends IncomingMail> implements OnInit
 
   ngOnInit(): void {
     this.isExternalMail = 'sender' in this.item && typeof this.item.sender === 'string';
+    console.log(this.isExternalMail);
   }
 
 

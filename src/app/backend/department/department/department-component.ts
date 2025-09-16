@@ -1,24 +1,27 @@
+import { User } from './../../../shared/models/user';
 import { Department } from './../../../shared/models/department';
 import { Component, computed, inject, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { HttpService } from '../../../core/services/http.service';
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { MessageService } from '../../../core/services/message.service';
 import { StateService } from '../../../core/services/state.service';
 import { FormControl } from '@angular/forms';
 import { SharedBackend } from '../../../shared/imports/shared-backend-imports';
 import { SharedImports } from '../../../shared/imports/shared-imports';
 import { Roles } from '../../../shared/enums/roles-enum';
-import { BackComponent } from "../../../shared/components/back/back-component";
+import { BackComponent } from '../../../shared/components/back/back-component';
 import { Header } from '../../../shared/models/header';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DepartmentEditComponent } from '../department-edit/department-edit-component';
+import { UserFilterComponent } from '../../user/user-filter/user-filter-component';
+import { ConfirmComponent } from '../../../shared/components/confirm/confirm-component';
 
 @Component({
   selector: 'app-department-component',
   imports: [...SharedBackend, ...SharedImports, BackComponent],
   templateUrl: './department-component.html',
-  styleUrl: './department-component.scss'
+  styleUrl: './department-component.scss',
 })
 export class DepartmentComponent implements OnInit, OnDestroy {
   private http = inject(HttpService);
@@ -41,9 +44,17 @@ export class DepartmentComponent implements OnInit, OnDestroy {
   searchKeyword = new FormControl('');
 
   roles = Roles;
+  user!: User;
+  loader = false;
 
   constructor() {
-    this.stateService.setHeader(new Header('GESTION DES DIRECTIONS', 'Liste des toutes les directions', 'event_seat'));
+    this.stateService.setHeader(
+      new Header(
+        'GESTION DES DIRECTIONS',
+        'Liste des toutes les directions',
+        'event_seat'
+      )
+    );
   }
 
   ngOnDestroy(): void {
@@ -60,36 +71,37 @@ export class DepartmentComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.http.url = `departments`;
     this.unsubscribe$.next();
-    this.http.get<Department[]>().pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: (data) => {
-        this.allUDepartments = data;
-        this.filteredDepartments = data;
-      },
-      error: (err) => {
-        this.loading = false;
-        this.message.openSnackBar(err, 'Fermer', 800);
-      },
-      complete: () => {
-        this.loading = false;
-        this.totalLength = this.filteredDepartments.length;
-        this.updatePaginated();
-      },
-    });
+    this.http
+      .get<Department[]>()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data) => {
+          this.allUDepartments = data;
+          this.filteredDepartments = data;
+        },
+        error: (err) => {
+          this.loading = false;
+          this.message.openSnackBar(err, 'Fermer', 800);
+        },
+        complete: () => {
+          this.loading = false;
+          this.totalLength = this.filteredDepartments.length;
+          this.updatePaginated();
+        },
+      });
   }
 
   setupSearch(): void {
     this.searchKeyword.valueChanges
-      .pipe(
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe(value => {
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((value) => {
         this.applyFilter(value);
       });
   }
 
   applyFilter(filterValue: string | null): void {
     const keyword = filterValue ? filterValue.toLowerCase().trim() : '';
-    this.filteredDepartments = this.allUDepartments.filter(department =>
+    this.filteredDepartments = this.allUDepartments.filter((department) =>
       department.designation.toLowerCase().includes(keyword)
     );
 
@@ -101,7 +113,10 @@ export class DepartmentComponent implements OnInit, OnDestroy {
   updatePaginated() {
     const startIndex = this.currentPage * this.pageSize;
     const endIndex = startIndex + this.pageSize;
-    this.paginatedDepartments = this.filteredDepartments.slice(startIndex, endIndex);
+    this.paginatedDepartments = this.filteredDepartments.slice(
+      startIndex,
+      endIndex
+    );
   }
 
   onPageChange(event: PageEvent) {
@@ -121,7 +136,7 @@ export class DepartmentComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DepartmentEditComponent, conf);
     dialogRef.afterClosed().subscribe((department: Department) => {
       if (department) {
-         this.allUDepartments.push(department);
+        this.allUDepartments.push(department);
         this.applyFilter(this.searchKeyword.value);
       }
     });
@@ -138,7 +153,9 @@ export class DepartmentComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DepartmentEditComponent, conf);
     dialogRef.afterClosed().subscribe((department: Department) => {
       if (department) {
-        const index = this.filteredDepartments.findIndex(dep => dep.id === department.id);
+        const index = this.filteredDepartments.findIndex(
+          (dep) => dep.id === department.id
+        );
         if (index !== -1) {
           this.filteredDepartments[index] = department;
           this.updatePaginated();
@@ -146,4 +163,43 @@ export class DepartmentComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  onAsignDir(department: Department) {
+    const conf = new MatDialogConfig();
+    conf.disableClose = true;
+    conf.data = { title: `Rechercher un utilisateur` };
+    conf.minWidth = this.xSmallOrSmall() ? '96vw' : '57vw';
+    const dialogRef = this.dialog.open(UserFilterComponent, conf);
+    dialogRef.afterClosed().subscribe((user: User) => {
+      this.openQuestion(department, user);
+    });
+  }
+   openQuestion(department: Department, user: User): void {
+      const dialogRef = this.dialog.open(ConfirmComponent, {
+        data: {
+          message: `Souhaitez-vous vraiment associer  ${user.full_name} comme ${department.designation} ?`,
+          buttonText: { ok: 'Oui', cancel: 'Non' },
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((confirm: boolean) => {
+        if (confirm) {
+          this.loader = true;
+          this.http.url = `users/${department.id}/dir`;
+          this.http.update({director_id: user.id}).subscribe({
+            next: (data: any) => {
+            },
+            error: () => {
+              this.loader = false;
+              this.message.openSnackBar(`Une erreur est survenue, veuillez réessayer.`, 'Fermer', 4000);
+            },
+            complete: () => {
+              this.loader = false;
+              this.onGet();
+              this.message.openSnackBar(`Opération effectuée avec succès !`, 'Fermer', 4000);
+            },
+          });
+        }
+      });
+    }
 }

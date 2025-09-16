@@ -35,7 +35,9 @@
   </div>
 
   @if (loading) {
-  <mat-spinner></mat-spinner>
+  <div class="flex justify-center">
+    <mat-spinner></mat-spinner>
+  </div>
   }@else {
   <div class="flex flex-col mt-6">
     <!-- C’est ici qu’on force le scroll horizontal -->

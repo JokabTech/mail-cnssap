@@ -17,6 +17,7 @@ export class RegisterComponent {
   lock = false;
   form!: FormGroup;
   unsubscribe$ = new Subject<void>();
+  loader = false;
 
   constructor(
     private message: MessageService,
@@ -73,6 +74,7 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
+    this.loader = true;
     this.http.url = 'auth/register';
     this.unsubscribe$.next();
     this.http.login(this.form.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
@@ -80,6 +82,7 @@ export class RegisterComponent {
         sessionStorage.setItem('authentication', JSON.stringify(data));
       },
       error: err => {
+        this.loader = false;
         if (err.status === 0) {
           this.message.openSnackBar("Aucune connexion internet", 'Fermer', 6000);
         } else {
