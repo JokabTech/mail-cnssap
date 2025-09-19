@@ -84,10 +84,10 @@ export class CommentDialogComponent implements OnInit, OnDestroy {
     let asign: number | string = '';
     if (Roles.ADMIN_ASSISTANT) {
       asign = this.data.mail.seniorAssistant ? this.data.mail.seniorAssistant.id : '';
-    }else {
+    } else {
       asign = this.data.mail.director ? this.data.mail.director.id : '';
     }
-    console.log(asign);
+
     const formGroupConfig: { [key: string]: any } = {
       should_send_document: new FormControl(false),
 
@@ -95,6 +95,7 @@ export class CommentDialogComponent implements OnInit, OnDestroy {
 
       [this.assigneeFormControlName]: new FormControl(3, [Validators.required])
     };
+
     this.form = new FormGroup(formGroupConfig);
   }
 

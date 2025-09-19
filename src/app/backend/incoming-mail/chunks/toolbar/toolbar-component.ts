@@ -13,7 +13,7 @@ export interface Tab {
   tooltipMaa?: string;
   tooltipAaSa?: string;
   tooltipDir?: string;
-  roles: string[];
+  roles?: string[];
 }
 
 @Component({
@@ -28,6 +28,7 @@ export class ToolbarComponent implements OnInit {
   private httpService = inject(HttpService);
 
   @Input() selectedTab: string = 'initial';
+  @Input() forOutgoingMail = false;
 
   @Output() tabSelected = new EventEmitter<string>();
   @Output() actionButton = new EventEmitter<string>();
@@ -35,7 +36,7 @@ export class ToolbarComponent implements OnInit {
   roles = Roles;
   role = this.httpService.role;
 
-  tabs: Tab[] = [
+  tabsIncoming: Tab[] = [
     {
       key: 'initial',
       icon: 'toc',
@@ -50,16 +51,31 @@ export class ToolbarComponent implements OnInit {
     { key: 'to-process', icon: 'translate', tooltip: 'Courriers à traiter', roles: [Roles.MAIL_ARCHIVES_AGENT, Roles.EXECUTIVE_SECRETARY, Roles.ADMIN_ASSISTANT, Roles.SENIOR_ASSISTANT] }
   ];
 
+  tabsOutgoing: Tab[] = [
+    { key: 'initial', icon: 'receipt', tooltip: 'Courriers en cours de transmission' },
+    { key: 'sent', icon: 'list', tooltip: 'Courriers déjà transmis' },
+    { key: 'all', icon: 'assignment_turned_in', tooltip: 'Liste complete de courriers' },
+  ];
+
   title: string | undefined;
   xSmallOrSmall = computed(() => this.stateService.XSmallOrSmall());
 
   constructor() { }
 
   ngOnInit(): void {
-    for (let index in this.tabs) {
-      if (this.tabs[index].key === this.selectedTab) {
-        this.title = this.getTooltip(this.tabs[index]);
+    if (this.forOutgoingMail) {
+      for (let index in this.tabsOutgoing) {
+        if (this.tabsOutgoing[index].key === this.selectedTab) {
+          this.title = this.getTooltip(this.tabsOutgoing[index]);
 
+        }
+      }
+    } else {
+      for (let index in this.tabsIncoming) {
+        if (this.tabsIncoming[index].key === this.selectedTab) {
+          this.title = this.getTooltip(this.tabsIncoming[index]);
+
+        }
       }
     }
   }

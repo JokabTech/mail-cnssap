@@ -1,23 +1,16 @@
 import { MailStatus } from '../enums/mail-status.enum';
 import { User } from './user';
-import { Department } from './department';
+import { BaseMail } from './base-mail';
 
-export interface IncomingMail {
-  id: number;
-  subject: string;
-  scanned_document: string;
-  mail_date: Date;
-  create_at: Date;
-  update_at: Date;
-  treatment_proof: string;
-  admin_assistant_comment: string;
-  annotated_by_aa: string;
-  annotated_by_sa: string;
-  senior_assistant_comment: string;
+export interface IncomingMail extends BaseMail {
   status: MailStatus;
-  director: User;
-  adminAssistant: User;
-  seniorAssistant: User;
-  department: Department;
-  sender: string | User;
+  treatment_proof?: string;
+  admin_assistant_comment?: string | null;
+  annotated_by_aa: boolean;
+  senior_assistant_comment?: string | null;
+  annotated_by_sa: boolean;
+  director?: User;
+  adminAssistant?: User;
+  seniorAssistant?: User;
+  agent?: User;
 }

@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { IncomingExternalMail } from '../../../../shared/models/Incoming-external-mail';
+import { Component, inject, OnInit } from '@angular/core';
 import { IncomingExternalMailService } from '../../../../core/services/incoming-external-mail-service';
 import { StateService } from '../../../../core/services/state.service';
 import { Header } from '../../../../shared/models/header';
@@ -9,6 +8,7 @@ import { Criteria } from '../../../../shared/models/criteria';
 import { ActionEvent } from '../../../../shared/models/action-event';
 import { SearchBarComponent } from '../../chunks/search-bar/search-bar-component';
 import { ToolbarComponent } from '../../chunks/toolbar/toolbar-component';
+import { IncomingExternalMail } from '../../../../shared/models/incoming-external-mail';
 
 @Component({
   selector: 'app-incoming-external-mail-list-impl-component',
@@ -21,7 +21,7 @@ import { ToolbarComponent } from '../../chunks/toolbar/toolbar-component';
   templateUrl: './incoming-external-mail-list-impl-component.html',
   styleUrl: './incoming-external-mail-list-impl-component.scss'
 })
-export class IncomingExternalMailListImplComponent {
+export class IncomingExternalMailListImplComponent implements OnInit{
   public mailService = inject(IncomingExternalMailService);
   protected stateService = inject(StateService);
 

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { IncomingExternalMail } from '../../shared/models/Incoming-external-mail';
-import { MailBaseService } from './mail-base-service';
+import { AbstractIncomingMailService } from './abstract-incoming-mail-service';
+import { IncomingExternalMail } from '../../shared/models/incoming-external-mail';
 
 @Injectable({
   providedIn: 'root'
 })
-export class IncomingExternalMailService extends MailBaseService<IncomingExternalMail> {
+export class IncomingExternalMailService extends AbstractIncomingMailService<IncomingExternalMail> {
   constructor() {
-    super('incoming-external-mails', '/mails/incoming/external', 'external');
+    super('incoming-external-mails', '/mails/incoming/external', 'incoming-external');
   }
 }

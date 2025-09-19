@@ -6,15 +6,27 @@
     </button>
     }
 
-    @for (tab of tabs; track tab.key) {
-      @if (tab.roles.includes(role)) {
+    @if (forOutgoingMail) {
+      @for (tab of tabsOutgoing; track tab.key) {
         <div [ngClass]="{'bg-gray-200': selectedTab === tab.key}" (click)="onSelectTab(tab)">
-          <button mat-icon-button [matTooltip]="getTooltip(tab)">
-            <mat-icon [ngStyle]="{'color': selectedTab === tab.key ? '#007ac3' : ''}">
-              {{ tab.icon }}
-            </mat-icon>
-          </button>
+            <button mat-icon-button [matTooltip]="getTooltip(tab)">
+              <mat-icon [ngStyle]="{'color': selectedTab === tab.key ? '#007ac3' : ''}">
+                {{ tab.icon }}
+              </mat-icon>
+            </button>
         </div>
+      }
+    }@else {
+      @for (tab of tabsIncoming; track tab.key) {
+        @if (tab.roles?.includes(role)) {
+          <div [ngClass]="{'bg-gray-200': selectedTab === tab.key}" (click)="onSelectTab(tab)">
+            <button mat-icon-button [matTooltip]="getTooltip(tab)">
+              <mat-icon [ngStyle]="{'color': selectedTab === tab.key ? '#007ac3' : ''}">
+                {{ tab.icon }}
+              </mat-icon>
+            </button>
+          </div>
+        }
       }
     }
   </div>

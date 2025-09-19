@@ -20,7 +20,6 @@ import { SharedImports } from '../../../shared/imports/shared-imports';
 export class TreatmentProoftDialogComponent {
   readonly dialogRef = inject(MatDialogRef<TreatmentProoftDialogComponent>);
   readonly message = inject(MessageService);
-  // Use IncomingMail, the base interface, to make it generic
   readonly data: { title: string, mail: IncomingMail, endpoint: string } = inject(MAT_DIALOG_DATA);
   readonly http = inject(HttpService);
   stateService = inject(StateService);
@@ -31,18 +30,12 @@ export class TreatmentProoftDialogComponent {
   disabled = false;
   errorMessage = '';
   public isDragging = false;
-  isExternalMail = false;
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   form!: FormGroup;
   uploadProgress = 0;
 
   public xSmallOrSmall = computed(() => this.stateService.XSmallOrSmall());
-
-  constructor() {
-    // Determine the mail type if needed for specific logic (e.g., in the template)
-    this.isExternalMail = 'sender' in this.data.mail && typeof (this.data.mail as any).sender === 'string';
-  }
 
   onClose() {
     this.dialogRef.close();

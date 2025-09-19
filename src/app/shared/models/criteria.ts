@@ -13,5 +13,6 @@ export class Criteria {
     public withAdminAssistant?: boolean,
     public withSeniorAssistant?: boolean,
     public withDirector?: boolean,
+    public is_transmitted?: boolean,
   ) { }
 }

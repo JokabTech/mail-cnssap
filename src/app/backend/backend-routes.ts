@@ -49,4 +49,14 @@ export const backendRoutes: Routes = [
     path: 'mails/incoming/internal/detail',
     loadComponent: () => import('./incoming-mail/chunks/incoming-interna-mail-detail/incoming-interna-mail-detail-component').then(m => m.IncomingInternaMailDetailComponent)
   },
+
+
+  {
+    path: 'mails/outgoing/external',
+    loadComponent: () => import('./outgoing-mail/outgoing-external-mail-list/outgoing-external-mail-list-component').then(m => m.OutgoingExternalMailListComponent)
+  },
+  {
+    path: 'mails/outgoing/external/form',
+    loadComponent: () => import('./outgoing-mail/outgoing-external-mail-form/outgoing-external-mail-form-component').then(m => m.OutgoingExternalMailFormComponent)
+  },
 ];

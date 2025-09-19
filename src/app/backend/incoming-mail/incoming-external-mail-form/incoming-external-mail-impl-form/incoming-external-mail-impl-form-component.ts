@@ -14,8 +14,8 @@ import { MessageService } from '../../../../core/services/message.service';
 import { PdfService } from '../../../../core/services/pdf-service';
 import { User } from '../../../../shared/models/user';
 import { FormActionPayload } from '../../../../shared/models/form-action-payload';
-import { IncomingExternalMail } from '../../../../shared/models/Incoming-external-mail';
 import { Roles } from '../../../../shared/enums/roles-enum';
+import { IncomingExternalMail } from '../../../../shared/models/incoming-external-mail';
 
 @Component({
   selector: 'app-incoming-external-mail-impl-form-component',
@@ -173,6 +173,7 @@ export class IncomingExternalMailImplFormComponent implements OnInit, OnDestroy 
       return;
     }
 
+    /*
     let target = '';
     if (this.role === Roles.MAIL_ARCHIVES_AGENT) {
       target = 'by-maa';
@@ -181,16 +182,17 @@ export class IncomingExternalMailImplFormComponent implements OnInit, OnDestroy 
     } else if (this.role === Roles.SENIOR_ASSISTANT) {
       target = 'by-sa';
     }
+ */
 
-    if (this.formActionPayload.action === 'add') {
-      this.add(target);
+     if (this.formActionPayload.action === 'add') {
+      this.add();
     } else {
-      this.update(target);
+      this.update();
     }
   }
 
-  add(target: string) {
-    this.http.url = `incoming-external-mails/${target}`;
+  add() {
+    this.http.url = `incoming-external-mails}`;
     this.http.sendFormData<string>(JSON.stringify(this.form.value), this.pdfService.localPdf, 'post').subscribe({
       next: (event) => {
         if (event.type === HttpEventType.UploadProgress) {
@@ -213,17 +215,14 @@ export class IncomingExternalMailImplFormComponent implements OnInit, OnDestroy 
     });
   }
 
-  update(target: string) {
-    this.http.url = `incoming-external-mails/${target}/${this.formActionPayload.data.id}`;
+  update() {
+    this.http.url = `incoming-external-mails/${this.formActionPayload.data.id}`;
     this.http.sendFormData<string>(JSON.stringify(this.form.value), this.pdfService.localPdf, 'patch').subscribe({
       next: (event) => {
         if (event.type === HttpEventType.UploadProgress) {
           this.uploadProgress = Math.round((event.loaded / (event.total || 1)) * 100);
         } else if (event.type === HttpEventType.Response) {
           this.message.openSnackBar(`Modification effectué avec succès !`, 'Fermer', 4000);
-          //this.isSubmitting = true;
-          //this.form.reset();
-          //this.pdfService.localPdf = null;
         }
       },
       error: (err) => {

@@ -11,10 +11,9 @@ import { SharedImports } from '../../../../shared/imports/shared-imports';
   styleUrl: './incoming-mail-menu-component.scss'
 })
 export class IncomingMailMenuComponent<T extends IncomingMail> implements OnInit {
-
   @Input() role!: string;
-  @Input() item!: T;
 
+  @Input() item!: T;
   @Output() actionSelected = new EventEmitter<ActionEvent<T>>();
 
   roles = Roles;
@@ -22,9 +21,7 @@ export class IncomingMailMenuComponent<T extends IncomingMail> implements OnInit
 
   ngOnInit(): void {
     this.isExternalMail = 'sender' in this.item && typeof this.item.sender === 'string';
-    console.log(this.isExternalMail);
   }
-
 
   onMenuItemClicked(action: string, data: T) {
     this.actionSelected.emit({ action, data });

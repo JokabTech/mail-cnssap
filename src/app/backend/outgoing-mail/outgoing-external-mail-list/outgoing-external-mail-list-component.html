@@ -1,0 +1,6 @@
+@if (role() !== roles.AGENT) {
+<app-outgoing-external-mail-list-impl-component></app-outgoing-external-mail-list-impl-component>
+}@else {
+  <h1>Vous n'avez pas droit d'accèder à cette fonctionnalité</h1>
+}
+

@@ -1,3 +1,4 @@
+import { DocumentType } from './../../../../shared/models/document_type';
 import { Component, computed, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { forkJoin, Observable, Subject, takeUntil } from 'rxjs';
@@ -14,12 +15,11 @@ import { StateService } from '../../../../core/services/state.service';
 import { PdfService } from '../../../../core/services/pdf-service';
 import { User } from '../../../../shared/models/user';
 import { FormActionPayload } from '../../../../shared/models/form-action-payload';
-import { IncomingInternalMail } from '../../../../shared/models/Incoming-internal-mail';
 import { Roles } from '../../../../shared/enums/roles-enum';
 import { Header } from '../../../../shared/models/header';
-import { DocumentType } from '../../../../shared/models/document_type';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { UserFilterComponent } from '../../../user/user-filter/user-filter-component';
+import { IncomingInternalMail } from '../../../../shared/models/incoming-internal-mail';
 
 @Component({
   selector: 'app-incoming-internal-mail-form-impl-component',

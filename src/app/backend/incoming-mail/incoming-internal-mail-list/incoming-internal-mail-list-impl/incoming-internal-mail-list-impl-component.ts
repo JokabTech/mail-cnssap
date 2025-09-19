@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { IncomingInternalMail } from '../../../../shared/models/Incoming-internal-mail';
+import { Component, inject, OnInit } from '@angular/core';
 import { IncomingInternalMailService } from '../../../../core/services/incoming-internal-mail-service';
 import { StateService } from '../../../../core/services/state.service';
 import { Header } from '../../../../shared/models/header';
@@ -9,6 +8,7 @@ import { Criteria } from '../../../../shared/models/criteria';
 import { ActionEvent } from '../../../../shared/models/action-event';
 import { ToolbarComponent } from '../../chunks/toolbar/toolbar-component';
 import { SearchBarComponent } from '../../chunks/search-bar/search-bar-component';
+import { IncomingInternalMail } from '../../../../shared/models/incoming-internal-mail';
 
 @Component({
   selector: 'app-incoming-internal-mail-list-impl-component',
@@ -21,7 +21,7 @@ import { SearchBarComponent } from '../../chunks/search-bar/search-bar-component
   templateUrl: './incoming-internal-mail-list-impl-component.html',
   styleUrl: './incoming-internal-mail-list-impl-component.scss'
 })
-export class IncomingInternalMailListImplComponent {
+export class IncomingInternalMailListImplComponent implements OnInit {
   public mailService = inject(IncomingInternalMailService);
   protected stateService = inject(StateService);
 

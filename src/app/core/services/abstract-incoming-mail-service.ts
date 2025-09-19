@@ -1,82 +1,22 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { IncomingMail } from '../../shared/models/incoming-mail';
-import { HttpService } from './http.service';
-import { Router } from '@angular/router';
-import { StateService } from './state.service';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { HttpParamsService } from './http-params-service';
-import { MessageService } from './message.service';
-import { finalize, Subject, switchMap } from 'rxjs';
-import { RequestOptions } from '../../shared/models/request-options';
-import { Page } from '../../shared/models/page';
-import { Criteria } from '../../shared/models/criteria';
-import { FormActionPayload } from '../../shared/models/form-action-payload';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { Tabs } from '../../shared/enums/tab-enum';
 import { Roles } from '../../shared/enums/roles-enum';
 import { ConfirmComponent } from '../../shared/components/confirm/confirm-component';
 import { MailStatus } from '../../shared/enums/mail-status.enum';
 import { CommentDialogComponent } from '../../backend/incoming-mail/comment-dialog/comment-dialog-component';
 import { HttpEventType } from '@angular/common/http';
-import { PdfService } from './pdf-service';
 import { ActionEvent } from '../../shared/models/action-event';
-import { PageEvent } from '@angular/material/paginator';
 import { TreatmentProoftDialogComponent } from '../../backend/incoming-mail/treatment-prooft-dialog/treatment-prooft-dialog-component';
+import { AbstractMailService } from './abstract-mail-service';
 
 @Injectable({
   providedIn: 'root'
 })
-export abstract class MailBaseService<T extends IncomingMail> {
-  protected http = inject(HttpService);
-  protected router = inject(Router);
-  protected stateService = inject(StateService);
-  protected dialog = inject(MatDialog);
-  protected paramsService = inject(HttpParamsService);
-  protected message = inject(MessageService);
-  protected pdfService = inject(PdfService);
-
-  private readonly mailSearchTrigger$ = new Subject<RequestOptions>();
-
-  xSmallOrSmall = computed(() => this.stateService.XSmallOrSmall());
-
-  public page!: Page<T>;
-  public loading = false;
-  public error = null;
-  public criteria = new Criteria(1, 6);
-  public uploadProgress = 0;
-
-  public pageSizeOptions: number[] = [6, 12, 24, 100];
-  public pageEvent!: PageEvent;
-  public pageIndex = 0;
-  public tab = 'initial';
-  public key!: string;
-
-  protected constructor(protected endpoint: string, protected routePrefix: string, key: string) {
-    this.key = key;
-    this.mailSearchTrigger$
-      .pipe(
-        switchMap((options) => {
-          this.loading = true;
-          this.error = null;
-          this.http.url = options.url;
-          return this.http.get<Page<T>>(options.params).pipe(finalize(() => (this.loading = false)));
-        })
-      )
-      .subscribe({
-        next: (data) => {
-          this.page = data;
-        },
-        error: (err) => (this.error = err),
-      });
-  }
-
-  public findMails(requestOptions: RequestOptions): void {
-    this.mailSearchTrigger$.next(requestOptions);
-  }
-
-  public goToForm(action: string, mail?: T) {
-    const payload = new FormActionPayload(action, mail);
-    sessionStorage.setItem('formActionPayload', JSON.stringify(payload));
-    this.router.navigateByUrl(`${this.routePrefix}/form`);
+export abstract class AbstractIncomingMailService<T extends IncomingMail> extends AbstractMailService<T> {
+  protected constructor(endpoint: string, routePrefix: string, key: string) {
+    super(endpoint, routePrefix, key);
   }
 
   openAddCommentDialog(mail: T, tab: string) {
@@ -107,37 +47,6 @@ export abstract class MailBaseService<T extends IncomingMail> {
         this.buildInitial();
       }
     });
-  }
-
-  downloadDocument(documentId: number, target: string) {
-    this.http.url = `${this.endpoint}/${target}/${documentId}`;
-    this.http.getPdfDocument().subscribe({
-      next: (data: Blob) => {
-        const fileURL = URL.createObjectURL(data);
-        const a = document.createElement('a');
-        a.href = fileURL;
-        a.download = `${target}_${documentId}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        URL.revokeObjectURL(fileURL);
-        a.remove();
-      },
-      error: () => {
-        this.message.openSnackBar('Erreur lors du téléchargement du document', 'Fermer', 6000);
-      },
-      complete: () => {
-        this.message.openSnackBar('Début du téléchargement', 'Fermer', 1000);
-      },
-    });
-  }
-
-  gotToDetails(mail: T) {
-    sessionStorage.setItem(this.endpoint.replace(/-/g, ''), JSON.stringify(mail));
-    this.router.navigateByUrl(`${this.routePrefix}/detail`);
-  }
-
-  search(criteria: Criteria) {
-    this.findMails(this.paramsService.build(this.endpoint, criteria));
   }
 
   buildInitial() {
@@ -224,15 +133,7 @@ export abstract class MailBaseService<T extends IncomingMail> {
     });
   }
 
-  displayOnline(mail_id: number, target: string) {
-    this.pdfService.displayOnlinePdf(mail_id, target, this.endpoint);
-  }
-
-  displayLocal() {
-    this.pdfService.displayLocalPdf();
-  }
-
-  selectTab(tab: string, isNewTab = false) {
+  public selectTab(tab: string, isNewTab = false) {
     if (isNewTab) {
       this.criteria.page = 1;
       this.criteria.pageSize = 6;
@@ -260,7 +161,7 @@ export abstract class MailBaseService<T extends IncomingMail> {
     sessionStorage.setItem(this.key, tab);
   }
 
-  actionButton(tab: string) {
+  public actionButton(tab: string) {
     switch (tab) {
       case 'goToForm':
         this.goToForm('add');
@@ -275,7 +176,7 @@ export abstract class MailBaseService<T extends IncomingMail> {
     }
   }
 
-  menuSelected(event: ActionEvent<T>) {
+  public menuSelected(event: ActionEvent<T>) {
     switch (event.action) {
       case 'view_detail':
         this.gotToDetails(event.data);
@@ -318,13 +219,4 @@ export abstract class MailBaseService<T extends IncomingMail> {
         console.warn(`Action non gérée :`);
     }
   }
-
-  public onNext(event: PageEvent): void {
-    this.pageEvent = event;
-    this.pageIndex = event.pageIndex;
-    this.criteria.page = this.pageEvent.pageIndex + 1;
-    this.criteria.pageSize = this.pageEvent.pageSize;
-    this.selectTab(this.tab);
-  }
-
 }
