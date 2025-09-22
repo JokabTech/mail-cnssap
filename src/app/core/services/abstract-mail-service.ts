@@ -1,9 +1,10 @@
+import { ReceiptPrintService } from './receipt-print-service';
 import { computed, inject, Injectable } from '@angular/core';
 import { BaseMail } from '../../shared/models/base-mail';
 import { HttpService } from './http.service';
 import { Router } from '@angular/router';
 import { StateService } from './state.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { HttpParamsService } from './http-params-service';
 import { MessageService } from './message.service';
 import { PdfService } from './pdf-service';
@@ -14,6 +15,8 @@ import { Criteria } from '../../shared/models/criteria';
 import { PageEvent } from '@angular/material/paginator';
 import { FormActionPayload } from '../../shared/models/form-action-payload';
 import { ActionEvent } from '../../shared/models/action-event';
+import { AddFileComponent } from '../../shared/components/add-file/add-file-component';
+import { RoleService } from './role-service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,10 +29,11 @@ export abstract class AbstractMailService<T extends BaseMail> {
   protected paramsService = inject(HttpParamsService);
   protected message = inject(MessageService);
   protected pdfService = inject(PdfService);
+  protected receiptPrintService = inject(ReceiptPrintService);
 
   private readonly mailSearchTrigger$ = new Subject<RequestOptions>();
-  private sessionKey!: string;
 
+  public sessionKey!: string;
   public xSmallOrSmall = computed(() => this.stateService.XSmallOrSmall());
   public page!: Page<T>;
   public loading = false;
@@ -66,7 +70,7 @@ export abstract class AbstractMailService<T extends BaseMail> {
     this.router.navigateByUrl(`${this.routePrefix}/form`);
   }
 
-  downloadDocument(documentId: number, target: string) {
+  downloadDocument(documentId: number, target: 'document' | 'proof' | 'acknowledgement-receipt') {
     this.http.url = `${this.endpoint}/${target}/${documentId}`;
     this.http.getPdfDocument().subscribe({
       next: (data: Blob) => {
@@ -87,6 +91,19 @@ export abstract class AbstractMailService<T extends BaseMail> {
       },
     });
   }
+
+  addFile(mail: T, title: string, target: 'treatment-proof' | 'acknowledgement-receipt') {
+    const conf = new MatDialogConfig();
+    conf.disableClose = true;
+    conf.data = { title, id: mail.id, subject: mail.subject, endpoint: `${this.endpoint}/${target}` };
+    const dialogRef = this.dialog.open(AddFileComponent, conf);
+    dialogRef.afterClosed().subscribe((result: T) => {
+      if (result) {
+        this.selectTab(this.tab);
+      }
+    });
+  }
+
 
   protected find(requestOptions: RequestOptions): void {
     this.mailSearchTrigger$.next(requestOptions);
@@ -109,7 +126,7 @@ export abstract class AbstractMailService<T extends BaseMail> {
     this.selectTab(this.tab);
   }
 
-  displayOnline(mail_id: number, target: string) {
+  displayOnline(mail_id: number, target: 'document' | 'proof' | 'acknowledgement-receipt') {
     this.pdfService.displayOnlinePdf(mail_id, target, this.endpoint);
   }
 

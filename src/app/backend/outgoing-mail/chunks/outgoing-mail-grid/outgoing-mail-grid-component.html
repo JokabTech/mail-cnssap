@@ -4,7 +4,7 @@
       <div class="flex justify-between">
         <div class="flex items-center gap-4">
           <div class="relative w-20 h-20"> <img class="absolute top-0 left-0 h-20 w-20 z-10" [src]="item.scanned_document ? 'assets/images/pdf.png' : 'assets/images/notFile.png'" alt="Document Statut">
-            @if (getAcknowledgementReceipt(item)) {
+            @if (item.acknowledgement_receipt) {
               <img class="absolute bottom-0 right-0 h-16 w-16 z-20 translate-x-3 translate-y-3" src="assets/images/pdf.png" alt="Traitement Prouvé">
             }
           </div>

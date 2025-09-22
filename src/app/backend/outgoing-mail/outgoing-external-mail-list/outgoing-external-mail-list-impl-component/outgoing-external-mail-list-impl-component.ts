@@ -1,4 +1,4 @@
-import { OutgoingMailGridComponent } from './../../chunks/outgoing-mail-grid/outgoing-mail-grid-component';
+import { OutgoingMailGridComponent } from '../../chunks/outgoing-mail-grid/outgoing-mail-grid-component';
 import { Component, inject, OnInit } from '@angular/core';
 import { ToolbarComponent } from '../../../incoming-mail/chunks/toolbar/toolbar-component';
 import { StateService } from '../../../../core/services/state.service';
@@ -45,7 +45,8 @@ export class OutgoingExternalMailListImplComponent implements OnInit {
   }
 
   onSearchChanged(criteria: Criteria) {
-    console.log(criteria);
+    Object.assign(this.mailService.criteria, criteria);
+    this.onSelectTab(this.mailService.tab);
   }
 
   onMenuSelected(event: ActionEvent<OutgoingExternalMail>) {

@@ -13,7 +13,7 @@ export class OutgoingMailMenuComponent<T extends OutgoingMail> {
   @Input() item!: T;
   @Output() actionSelected = new EventEmitter<ActionEvent<T>>();
 
-   onMenuItemClicked(action: string, data: T) {
-      this.actionSelected.emit({ action, data });
-    }
+  onMenuItemClicked(action: string, data: T) {
+    this.actionSelected.emit({ action, data });
+  }
 }

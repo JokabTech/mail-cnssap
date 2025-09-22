@@ -10,8 +10,10 @@ import { DocumentPreviewComponent } from '../../backend/incoming-mail/document-p
 })
 export class PdfService {
   private supportedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
+
   localPdf!: File | null;
   onLinePdf!: string | null;
+
   current_mail!: number;
   current_target!: string;
 

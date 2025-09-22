@@ -1,0 +1,42 @@
+<div class="flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 shadow-sm">
+  <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-300">
+    {{ data.title }}
+  </h2>
+  <button mat-icon-button (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <div class="-mx-3 md:-mx-0">
+    <h1 class="text-lg">OBJET DU COURRIER : {{ data.subject | uppercase }} </h1>
+    <div class="w-full mt-1">
+      <div class="p-1 w-full h-56 flex flex-col items-center justify-center border-2 border-dashed border-gray-400 bg-white rounded-lg cursor-pointer hover:border-blue-500 transition" [ngClass]="{ 'bg-gray-100 border-blue-500': isDragging }" (click)="triggerFileInput()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+        <mat-icon class="mat-18">attach_file</mat-icon>
+        <p class="text-gray-600 text-lg text-center mt-2 px-1"> Déposez ici un fichier au format PDF ou image, ou <span class="text-blue-500 font-bold"> cliquez </span> pour le sélectionner.</p>
+        @if (pdfService.localPdf) {
+          <p class="text-lg border-t-4 border-r-gray-100 mt-0.5 text-center">Fichier : {{ pdfService.localPdf.name }} </p>
+        }
+      </div>
+      @if (errorMessage !== '') {
+        <mat-error class="mt-1.5"> {{ errorMessage }} </mat-error>
+      }
+    </div>
+  </div>
+</mat-dialog-content>
+<div class="mt-5">
+  <hr class="border-gray-300">
+</div>
+<mat-dialog-actions>
+  @if (pdfService.localPdf) {
+    <button type="button" mat-stroked-button color="primary" (click)="onPreviewDocument()">
+      <div class="flex items-center">
+        <mat-icon class="me-2">remove_red_eye</mat-icon>
+        <span>Prévisualiser</span>
+      </div>
+    </button>
+  }
+  <button mat-flat-button cdkFocusInitial (click)="onSubmit()"> Sauvegarder </button>
+</mat-dialog-actions>
+
+<input type="file" #fileInput (change)="onFileSelected($event)" class="hidden" accept=".jpg, .jpeg, .png, application/pdf">

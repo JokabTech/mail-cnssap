@@ -8,6 +8,8 @@ import { LayoutImports } from '../../shared/imports/layout-imports';
 import { Authentication } from '../../shared/models/authentication';
 import { HttpService } from '../../core/services/http.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
+import { RoleService } from '../../core/services/role-service';
 
 @Component({
   selector: 'app-layout-backend-component',
@@ -16,6 +18,12 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   styleUrl: './layout-backend-component.scss'
 })
 export class LayoutBackendComponent {
+  private stateService = inject(StateService);
+  private http = inject(HttpService);
+  private router = inject(Router);
+
+  public roleService = inject(RoleService);
+
   toggle = false;
   switch = false;
 
@@ -37,10 +45,7 @@ export class LayoutBackendComponent {
   roles: string[] = [];
   roleLabel = '';
 
-  constructor(
-    private stateService: StateService,
-    private http: HttpService
-  ) {
+  constructor() {
     if (sessionStorage.getItem('authentication')) {
       this.authentication = JSON.parse(<string>sessionStorage.getItem('authentication'));
       this.http.authentication = this.authentication;
@@ -102,27 +107,15 @@ export class LayoutBackendComponent {
     }
   }
 
-  buildRoleName(role: string) {
-    switch (role) {
-      case Roles.DIRECTOR:
-        return 'Directeur'
-      case Roles.SENIOR_ASSISTANT:
-        return 'Assistant Principal'
-      case Roles.ADMIN_ASSISTANT:
-        return 'Assistant Administratif'
-      case Roles.MAIL_ARCHIVES_AGENT:
-        return 'Agent Courrier et Archive'
-      case Roles.EXECUTIVE_SECRETARY:
-        return 'Secrétaire de direction'
-      default:
-        return 'Agent'
-    }
-  }
-
   onChangeRole(role: string) {
     this.stateService.setRole(role)
-    this.roleLabel = this.buildRoleName(role);
+    this.roleLabel = this.roleService.build(role);
     sessionStorage.setItem('role', role);
+  }
+
+  logout() {
+    sessionStorage.clear();
+    this.router.navigateByUrl('/');
   }
 
 }

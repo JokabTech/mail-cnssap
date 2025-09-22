@@ -1,37 +1,49 @@
-<button mat-menu-item (click)="onMenuItemClicked('view_detail', item)">
-  <mat-icon>list</mat-icon>Voir le détail
+<button mat-menu-item (click)="onMenuItemClicked('view_details', item)">
+  <mat-icon>list</mat-icon><span>Voir les détails</span>
 </button>
+
+<mat-divider></mat-divider>
 
 @if (item.scanned_document) {
   <button mat-menu-item (click)="onMenuItemClicked('display_document', item)">
-    <mat-icon>remove_red_eye</mat-icon><span>Aperçu document</span>
+    <mat-icon>remove_red_eye</mat-icon><span>Aperçu du document</span>
   </button>
-}
 
-<mat-divider></mat-divider>
-<button mat-menu-item (click)="onMenuItemClicked('preview_receipt', item)">
-  <mat-icon>print</mat-icon><span>Aperçu accusé de réception</span>
-</button>
-
-@if (item.scanned_document) {
-  <button mat-menu-item (click)="onMenuItemClicked('download_receipt', item)">
-    <mat-icon>cloud_download</mat-icon><span>Télécharger accusé de réception</span>
+  <button mat-menu-item (click)="onMenuItemClicked('download_mail', item)">
+    <mat-icon>get_app</mat-icon><span>Télécharger le document</span>
   </button>
+
+  <button mat-menu-item (click)="onMenuItemClicked('share_mail', item)">
+    <mat-icon>shared</mat-icon><span>Partager le document</span>
+  </button>
+
+  <mat-divider></mat-divider>
 }
 
 <button mat-menu-item (click)="onMenuItemClicked('add_receipt', item)">
-  <mat-icon>add</mat-icon><span>Ajouter accusé de réception</span>
+  <mat-icon>add</mat-icon><span>Ajouter un accusé de réception</span>
 </button>
 
-<button mat-menu-item (click)="onMenuItemClicked('share_mail', item)">
-  <mat-icon>shared</mat-icon><span>Partager accusé de réception</span>
-</button>
+@if (item.acknowledgement_receipt) {
+  <button mat-menu-item (click)="onMenuItemClicked('preview_receipt', item)">
+    <mat-icon>remove_red_eye</mat-icon><span>Aperçu de l'accusé de réception</span>
+  </button>
+
+  <button mat-menu-item (click)="onMenuItemClicked('download_receipt', item)">
+    <mat-icon>get_app</mat-icon><span>Télécharger l'accusé de réception</span>
+  </button>
+
+  <button mat-menu-item (click)="onMenuItemClicked('share_receipt', item)">
+    <mat-icon>shared</mat-icon><span>Partager l'accusé de réception</span>
+  </button>
+}
 
 <mat-divider></mat-divider>
+
 <button mat-menu-item (click)="onMenuItemClicked('edit_mail', item)">
-  <mat-icon>edit</mat-icon><span>Modifier ce courrier</span>
+  <mat-icon>edit</mat-icon><span>Modifier le courrier</span>
 </button>
 
 <button mat-menu-item (click)="onMenuItemClicked('delete_mail', item)">
-  <mat-icon>delete</mat-icon><span>Mettre à la corbeille</span>
+  <mat-icon>delete</mat-icon><span>Supprimer le courrier</span>
 </button>

@@ -1,0 +1,1 @@
+import{c as i}from"./chunk-YJ6I4H5R.js";import{Y as t}from"./chunk-D6M5U3FV.js";var r=class n extends i{constructor(){super("incoming-external-mails","/mails/incoming/external","incoming-external")}static \u0275fac=function(o){return new(o||n)};static \u0275prov=t({token:n,factory:n.\u0275fac,providedIn:"root"})};export{r as a};

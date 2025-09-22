@@ -1,4 +1,3 @@
-import { MatDialog } from '@angular/material/dialog';
 import { Component, computed, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { forkJoin, Observable, Subject, takeUntil } from 'rxjs';
@@ -31,7 +30,6 @@ export class IncomingExternalMailImplFormComponent implements OnInit, OnDestroy 
   private stateService = inject(StateService);
   private http = inject(HttpService);
   private message = inject(MessageService);
-  private dialog = inject(MatDialog);
   public pdfService = inject(PdfService);
   private router = inject(Router);
 
@@ -76,7 +74,6 @@ export class IncomingExternalMailImplFormComponent implements OnInit, OnDestroy 
   }
 
   ngOnDestroy(): void {
-    sessionStorage.removeItem('incomingExternalMail');
     this.pdfService.localPdf = null;
     this.pdfService.onLinePdf = null;
 
@@ -192,7 +189,7 @@ export class IncomingExternalMailImplFormComponent implements OnInit, OnDestroy 
   }
 
   add() {
-    this.http.url = `incoming-external-mails}`;
+    this.http.url = `incoming-external-mails`;
     this.http.sendFormData<string>(JSON.stringify(this.form.value), this.pdfService.localPdf, 'post').subscribe({
       next: (event) => {
         if (event.type === HttpEventType.UploadProgress) {

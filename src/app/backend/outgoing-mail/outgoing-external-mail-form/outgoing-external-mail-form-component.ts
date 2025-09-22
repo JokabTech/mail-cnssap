@@ -7,18 +7,18 @@ import { MessageService } from '../../../core/services/message.service';
 import { SharedBackend } from '../../../shared/imports/shared-backend-imports';
 import { SharedImports } from '../../../shared/imports/shared-imports';
 import { FormActionPayload } from '../../../shared/models/form-action-payload';
-import { OutgoingExternalMail } from '../../../shared/models/outgoing-external-mail';
 import { HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { User } from '../../../shared/models/user';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { OutgoingInternalMail } from '../../../shared/models/outgoing-internal-mail';
 
 @Component({
   selector: 'app-outgoing-external-mail-form-component',
   imports: [...SharedBackend, ...SharedImports],
   templateUrl: './outgoing-external-mail-form-component.html',
   styleUrl: './outgoing-external-mail-form-component.scss',
-   providers: [
+  providers: [
     provideNativeDateAdapter()
   ]
 })
@@ -41,10 +41,12 @@ export class OutgoingExternalMailFormComponent implements OnInit, OnDestroy {
   private unsubscribeDir$ = new Subject<void>();
   directors: User[] = [];
   isFormReady = false;
-  formActionPayload: FormActionPayload<OutgoingExternalMail>;
+  formActionPayload: FormActionPayload<OutgoingInternalMail>;
+  mail!: OutgoingInternalMail;
 
   constructor() {
     this.formActionPayload = JSON.parse(<string>sessionStorage.getItem('formActionPayload'));
+    this.mail = this.formActionPayload.data;
   }
 
   ngOnInit(): void {
@@ -62,11 +64,11 @@ export class OutgoingExternalMailFormComponent implements OnInit, OnDestroy {
 
   private initForm(): void {
     this.form = new FormGroup({
-      subject: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]),
-      mail_date: new FormControl('', [Validators.required]),
-      reference: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
-      recipient: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
-      sender_id: new FormControl('', [Validators.required]),
+      subject: new FormControl(this.mail ? this.mail.subject : '', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]),
+      mail_date: new FormControl(this.mail ? this.mail.mail_date : '', [Validators.required]),
+      reference: new FormControl(this.mail ? this.mail.reference : '', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+      recipient: new FormControl(this.mail ? this.mail.recipient : '', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
+      sender_id: new FormControl(this.mail && this.mail.sender ? this.mail.sender.id :  '', [Validators.required]),
     });
   }
 

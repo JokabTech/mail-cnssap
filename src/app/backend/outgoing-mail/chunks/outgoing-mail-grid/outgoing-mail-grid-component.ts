@@ -38,12 +38,4 @@ export class OutgoingMailGridComponent<T extends OutgoingMail> {
   onAddProof(mail: T) {
     this.menuSelected.emit(new ActionEvent('treatment_proof', mail));
   }
-
-  getAcknowledgementReceipt(item: OutgoingMail): string | undefined {
-    if ('acknowledgement_receipt' in item) {
-      const outgoingExternalMail = item as OutgoingExternalMail;
-      return outgoingExternalMail.acknowledgement_receipt;
-    }
-    return 'Inconnu';
-  }
 }

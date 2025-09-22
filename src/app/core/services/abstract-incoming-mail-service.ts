@@ -8,7 +8,6 @@ import { MailStatus } from '../../shared/enums/mail-status.enum';
 import { CommentDialogComponent } from '../../backend/incoming-mail/comment-dialog/comment-dialog-component';
 import { HttpEventType } from '@angular/common/http';
 import { ActionEvent } from '../../shared/models/action-event';
-import { TreatmentProoftDialogComponent } from '../../backend/incoming-mail/treatment-prooft-dialog/treatment-prooft-dialog-component';
 import { AbstractMailService } from './abstract-mail-service';
 
 @Injectable({
@@ -22,7 +21,7 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
   openAddCommentDialog(mail: T, tab: string) {
     const conf = new MatDialogConfig();
     conf.disableClose = true;
-    conf.data = { title: `Ajouter une annotation`, mail, endpoint: this.endpoint };
+    conf.data = { title: `ANNOTATION ASSISTANT${this.http.role === Roles.ADMIN_ASSISTANT ? ' ADMINISTRATIF' : ' PRINCIPAL'}`, mail, endpoint: this.endpoint };
     conf.minWidth = this.xSmallOrSmall() ? '96vw' : '57vw';
     const dialogRef = this.dialog.open(CommentDialogComponent, conf);
     dialogRef.afterClosed().subscribe((result: T) => {
@@ -33,18 +32,6 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
         if (index !== -1) {
           this.page.items[index].status = result.status;
         }
-      }
-    });
-  }
-
-  AddTreatmentProof(mail: T) {
-    const conf = new MatDialogConfig();
-    conf.disableClose = true;
-    conf.data = { title: `Ajouter une preuve de traitement`, mail, endpoint: this.endpoint };
-    const dialogRef = this.dialog.open(TreatmentProoftDialogComponent, conf);
-    dialogRef.afterClosed().subscribe((result: T) => {
-      if (result) {
-        this.buildInitial();
       }
     });
   }
@@ -181,36 +168,41 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
       case 'view_detail':
         this.gotToDetails(event.data);
         break;
-      case 'display_document':
-        this.displayOnline(event.data.id, 'document');
-        break;
-      case 'display_proof':
-        this.displayOnline(event.data.id, 'proof');
+      case 'add_comment':
+        this.openAddCommentDialog(event.data, this.tab);
         break;
       case 'receipt':
-        // Implement receipt logic
+        this.receiptPrintService.print(event.data);
+        break;
+      case 'display_mail':
+        this.displayOnline(event.data.id, 'document');
         break;
       case 'download_mail':
         this.downloadDocument(event.data.id, 'document');
         break;
+      case 'share_mail':
+
+        break;
+      case 'treatment_proof':
+        this.addFile(event.data, 'Ajouter un justificatif de traitement', 'treatment-proof')
+        break;
+      case 'display_proof':
+        this.displayOnline(event.data.id, 'proof');
+        break;
       case 'download_proof':
         this.downloadDocument(event.data.id, 'proof');
         break;
-      case 'add_comment':
-        this.openAddCommentDialog(event.data, this.tab);
-        break;
-      case 'treatment_proof':
-        this.AddTreatmentProof(event.data);
-        break;
-      case 'share_mail':
-        // Implement share logic
+      case 'share_proof':
+
         break;
       case 'assign_agent':
+
+        break;
       case 'edit_mail':
         this.goToForm(event.action, event.data);
         break;
       case 'delete_mail':
-        // Implement delete logic
+
         break;
       case 'send':
         this.send(event.data);

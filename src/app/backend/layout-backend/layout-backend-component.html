@@ -19,8 +19,8 @@
       </button>
 
       <mat-menu #accountMenu [overlapTrigger]="false" yPosition="below">
-        <button mat-menu-item routerLink="/">
-          <mat-icon>dashboard</mat-icon>Dashboard
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>launch</mat-icon>Déconnexion
         </button>
         <button mat-menu-item>
           <mat-icon>help</mat-icon><span>Aide</span>
@@ -33,7 +33,7 @@
       <mat-menu #role [overlapTrigger]="false" yPosition="below">
         @for (item of roles; track item) {
           <button mat-menu-item (click)="onChangeRole(item)">
-             {{ buildRoleName(item) }}
+             {{ roleService.build(item) }}
           </button>
         }
       </mat-menu>
@@ -104,7 +104,7 @@
               <mat-icon class="me-3" matListItemIcon>supervisor_account</mat-icon>
               <span routerLinkActive="active" matListItemTitle>Externes</span>
             </mat-list-item>
-            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/groupes/new">
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/mails/outgoing/internal">
               <mat-icon class="me-3" matListItemIcon>settings_applications</mat-icon>
               <span routerLinkActive="active" matListItemTitle>Internes</span>
             </mat-list-item>

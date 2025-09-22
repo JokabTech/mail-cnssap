@@ -38,6 +38,11 @@ export const backendRoutes: Routes = [
     loadComponent: () => import('./incoming-mail/chunks/incoming-externa-mail-detail/incoming-externa-mail-detail-component').then(m => m.IncomingExternaMailDetailComponent)
   },
   {
+    path: 'mails/incoming/external/detail/:id',
+    loadComponent: () => import('./incoming-mail/chunks/incoming-externa-mail-detail/incoming-externa-mail-detail-component').then(m => m.IncomingExternaMailDetailComponent)
+  },
+
+  {
     path: 'mails/incoming/internal',
     loadComponent: () => import('./incoming-mail/incoming-internal-mail-list/incoming-internal-mail-list-component').then(m => m.IncomingInternalMailListComponent)
   },
@@ -58,5 +63,20 @@ export const backendRoutes: Routes = [
   {
     path: 'mails/outgoing/external/form',
     loadComponent: () => import('./outgoing-mail/outgoing-external-mail-form/outgoing-external-mail-form-component').then(m => m.OutgoingExternalMailFormComponent)
+  },
+
+  {
+    path: 'mails/outgoing/internal',
+    loadComponent: () => import('./outgoing-mail/outgoing-internal-mail-list/outgoing-internal-mail-list-component').then(m => m.OutgoingInternalMailListComponent)
+  },
+  {
+    path: 'mails/outgoing/internal/form',
+    loadComponent: () => import('./outgoing-mail/outgoing-internal-mail-form/outgoing-internal-mail-form-component').then(m => m.OutgoingInternalMailFormComponent)
+  },
+
+
+  {
+    path: 'pdf',
+    loadComponent: () => import('../shared/components/pdf-viewer/pdf-viewer-component').then(m => m.PdfViewerComponent)
   },
 ];

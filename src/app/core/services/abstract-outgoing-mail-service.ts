@@ -56,14 +56,23 @@ export abstract class AbstractOutgoingMailService<T extends OutgoingMail> extend
       case 'display_document':
         this.displayOnline(event.data.id, 'document');
         break;
-      case 'receipt':
-        // Implement receipt logic
-        break;
       case 'download_mail':
         this.downloadDocument(event.data.id, 'document');
         break;
       case 'share_mail':
-        // Implement share logic
+
+        break;
+        case 'add_receipt':
+          this.addFile(event.data, 'Ajouter un accusé de réception', 'acknowledgement-receipt')
+        break;
+        case 'preview_receipt':
+          this.displayOnline(event.data.id, 'acknowledgement-receipt');
+        break;
+        case 'download_receipt':
+          this.downloadDocument(event.data.id, 'acknowledgement-receipt');
+        break;
+         case 'share_receipt':
+
         break;
       case 'edit_mail':
         this.goToForm(event.action, event.data);

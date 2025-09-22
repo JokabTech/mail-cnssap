@@ -67,7 +67,6 @@ export class ToolbarComponent implements OnInit {
       for (let index in this.tabsOutgoing) {
         if (this.tabsOutgoing[index].key === this.selectedTab) {
           this.title = this.getTooltip(this.tabsOutgoing[index]);
-
         }
       }
     } else {
@@ -92,16 +91,21 @@ export class ToolbarComponent implements OnInit {
   }
 
   getTooltip(tab: Tab): string | undefined {
-    if (tab.key === 'initial') {
-      switch (this.role) {
-        case Roles.MAIL_ARCHIVES_AGENT:
-          return tab.tooltipMaa;
-        case Roles.DIRECTOR:
-          return tab.tooltipDir;
-        default:
-          return tab.tooltipAaSa;
+    if (this.forOutgoingMail) {
+      return tab.tooltip;
+    } else {
+      if (tab.key === 'initial') {
+        switch (this.role) {
+          case Roles.MAIL_ARCHIVES_AGENT:
+            return tab.tooltipMaa;
+          case Roles.DIRECTOR:
+            return tab.tooltipDir;
+          default:
+            return tab.tooltipAaSa;
+        }
       }
     }
+
     return tab.tooltip;
   }
 

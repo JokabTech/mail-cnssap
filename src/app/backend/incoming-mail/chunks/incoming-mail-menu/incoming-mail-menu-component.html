@@ -3,59 +3,68 @@
       <mat-icon>list</mat-icon>Voir le détail
     </button>
 
-    @if (item.scanned_document) {
-      <button mat-menu-item (click)="onMenuItemClicked('display_document', item)">
-        <mat-icon>remove_red_eye</mat-icon><span>Aperçu document</span>
+    @if (role === roles.ADMIN_ASSISTANT || role === roles.SENIOR_ASSISTANT) {
+      <mat-divider></mat-divider>
+
+      <button mat-menu-item (click)="onMenuItemClicked('add_comment', item)">
+          <mat-icon>edit</mat-icon><span>Modifier Annotation</span>
       </button>
     }
 
-    @if (item.treatment_proof && role !== roles.MAIL_ARCHIVES_AGENT && role !== roles.EXECUTIVE_SECRETARY) {
-      <button mat-menu-item (click)="onMenuItemClicked('display_proof', item)">
-        <mat-icon>remove_red_eye</mat-icon><span>Aperçu preuve</span>
-      </button>
-    }
-
-    <mat-divider></mat-divider>
     <button mat-menu-item (click)="onMenuItemClicked('receipt', item)">
       <mat-icon>print</mat-icon><span>Accusé de réception</span>
     </button>
 
-     @if (item.scanned_document) {
+    <mat-divider></mat-divider>
+
+    @if (item.scanned_document) {
+      <button mat-menu-item (click)="onMenuItemClicked('display_mail', item)">
+        <mat-icon>remove_red_eye</mat-icon><span>Aperçu du document</span>
+      </button>
+
       <button mat-menu-item (click)="onMenuItemClicked('download_mail', item)">
-        <mat-icon>cloud_download</mat-icon><span>Télécharger courrier</span>
+        <mat-icon>get_app</mat-icon><span>Télécharger le document</span>
+      </button>
+
+      <button mat-menu-item (click)="onMenuItemClicked('share_mail', item)">
+        <mat-icon>shared</mat-icon><span>Partager le document</span>
       </button>
     }
 
-    @if (item.treatment_proof && role !== roles.MAIL_ARCHIVES_AGENT && role !== roles.EXECUTIVE_SECRETARY) {
-      <button mat-menu-item (click)="onMenuItemClicked('download_proof', item)">
-      <mat-icon>get_app</mat-icon><span>Télécharger preuve</span>
-    </button>
-    }
+    <mat-divider></mat-divider>
 
-    @if (role !== roles.MAIL_ARCHIVES_AGENT && role !== roles.EXECUTIVE_SECRETARY) {
-      <mat-divider></mat-divider>
-      @if (role !== roles.DIRECTOR) {
-        <button mat-menu-item (click)="onMenuItemClicked('add_comment', item)">
-          <mat-icon>add</mat-icon><span>Ajouter Annotation</span>
-        </button>
-      }
+    @if (role === roles.ADMIN_ASSISTANT || role === roles.SENIOR_ASSISTANT || role === roles.DIRECTOR) {
       <button mat-menu-item (click)="onMenuItemClicked('treatment_proof', item)">
         <mat-icon>attach_file</mat-icon><span>Joindre une preuve</span>
       </button>
-      <button mat-menu-item (click)="onMenuItemClicked('share_mail', item)">
-        <mat-icon>shared</mat-icon><span>Partager le courrier</span>
-      </button>
-      @if (role === roles.DIRECTOR) {
+
+      @if (item.treatment_proof) {
+        <button mat-menu-item (click)="onMenuItemClicked('display_proof', item)">
+          <mat-icon>remove_red_eye</mat-icon><span>Aperçu de la preuve</span>
+        </button>
+
+        <button mat-menu-item (click)="onMenuItemClicked('download_proof', item)">
+          <mat-icon>get_app</mat-icon><span>Télécharger la preuve</span>
+        </button>
+
+        <button mat-menu-item (click)="onMenuItemClicked('share_proof', item)">
+          <mat-icon>shared</mat-icon><span>Partager la preuve</span>
+        </button>
+      }
+
+      <mat-divider></mat-divider>
+    }
+
+    @if (role === roles.DIRECTOR) {
         <button mat-menu-item (click)="onMenuItemClicked('assign_agent', item)">
           <mat-icon>person</mat-icon><span>Assigner un agent</span>
         </button>
-      }
     }
+
     @if (role === roles.ADMIN_ASSISTANT || role === roles.EXECUTIVE_SECRETARY && isExternalMail === false || role === roles.MAIL_ARCHIVES_AGENT && isExternalMail === true) {
-      <mat-divider></mat-divider>
       <button mat-menu-item (click)="onMenuItemClicked('edit_mail', item)">
-      <mat-icon>edit</mat-icon><span>Modifier ce courrier</span>
-    </button>
+        <mat-icon>edit</mat-icon><span>Modifier ce courrier</span>
+      </button>
     }
 
      @if (role === roles.SENIOR_ASSISTANT || role === roles.ADMIN_ASSISTANT) {
