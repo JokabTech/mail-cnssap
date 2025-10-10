@@ -67,7 +67,7 @@ export class DepartmentEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  add() {
+ add() {
     this.http.url = `departments`;
     this.http.save(this.form.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (data) => {

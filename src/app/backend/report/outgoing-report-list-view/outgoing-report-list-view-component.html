@@ -1,0 +1,117 @@
+<div class="flex flex-col md:mt-6">
+  <div class="overflow-x-auto">
+    <div class="inline-block min-w-full align-middle">
+      <div class="overflow-hidden border-y border-gray-200 dark:border-gray-700 md:rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th scope="col" class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <button class="flex items-center gap-x-3 focus:outline-none">
+                  N°
+                </button>
+              </th>
+
+              <th scope="col" class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <button class="flex items-center gap-x-3 focus:outline-none">
+                  <span>Objet du courrier</span>
+                </button>
+              </th>
+
+              <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                Dates du courrier
+              </th>
+
+              <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                Destinataire
+              </th>
+
+              <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                Doc
+              </th>
+
+              <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                Accusé
+              </th>
+
+              @if (!isExternal) {
+                <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                  Type
+                </th>
+              }
+
+              <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                État de la transmission
+              </th>
+
+              <th scope="col" class="relative py-3.5 px-4">
+                <span class="sr-only">Edit</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+            @for (item of mails; track item.id; let i = $index;) {
+              <tr>
+                <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                  {{ item.id }}
+                </td>
+
+                <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                  <div>
+                    <h2 class="font-medium text-gray-800 dark:text-white "> {{ item.subject }} </h2>
+                    <p class="text-sm font-normal text-gray-600 dark:text-gray-400">Par {{ item.sender ? item.sender.full_name : '' }} </p>
+                  </div>
+                </td>
+
+                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                  <div>
+                    <h4 class="text-gray-700 dark:text-gray-200">Courrier du  {{ item.mail_date | date: 'dd/MM/yyyy' }} </h4>
+                    <p class="text-gray-500 dark:text-gray-400">Enregisté le {{ item.create_at | date: 'dd/MM/yyyy' }} à {{ item.create_at | date: 'HH:mm' }} </p>
+                  </div>
+                </td>
+
+                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ onFindSender(item) }}
+                  </div>
+                </td>
+
+                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ item.scanned_document }}
+                  </div>
+                </td>
+
+                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                  <div class="flex items-center">
+                    {{ item.acknowledgement_receipt }}
+                  </div>
+                </td>
+
+                 @if (!isExternal) {
+                  <td class="px-4 py-4 text-sm whitespace-nowrap">
+                    <div class="flex items-center">
+                      {{ onFindDocumentType(item) }}
+                    </div>
+                  </td>
+                }
+
+                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                  <div class="w-48 h-1.5 bg-blue-200 overflow-hidden rounded-full">
+                    <div class="bg-blue-500 h-1.5 {{ !item.is_transmitted ? 'w-1/3' : item.is_transmitted }}">
+                    </div>
+                  </div>
+                </td>
+
+                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                  <button mat-icon-button>
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

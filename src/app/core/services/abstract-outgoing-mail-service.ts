@@ -7,8 +7,8 @@ import { AbstractMailService } from './abstract-mail-service';
   providedIn: 'root'
 })
 export abstract class AbstractOutgoingMailService<T extends OutgoingMail> extends AbstractMailService<T> {
-  protected constructor(endpoint: string, routePrefix: string, key: string) {
-    super(endpoint, routePrefix, key);
+  protected constructor(endpoint: string, routePrefix: string, key: string, exportEndpoint: string) {
+    super(endpoint, routePrefix, key, exportEndpoint);
   }
 
   public selectTab(tab: string, isNewTab = false) {
@@ -44,6 +44,9 @@ export abstract class AbstractOutgoingMailService<T extends OutgoingMail> extend
       case 'print':
         // Implement print logic
         break;
+      case 'report':
+        this.goToReport()
+        break;
       default:
     }
   }
@@ -62,16 +65,16 @@ export abstract class AbstractOutgoingMailService<T extends OutgoingMail> extend
       case 'share_mail':
 
         break;
-        case 'add_receipt':
-          this.addFile(event.data, 'Ajouter un accusé de réception', 'acknowledgement-receipt')
+      case 'add_receipt':
+        this.addFile(event.data, 'Ajouter un accusé de réception', 'acknowledgement-receipt')
         break;
-        case 'preview_receipt':
-          this.displayOnline(event.data.id, 'acknowledgement-receipt');
+      case 'preview_receipt':
+        this.displayOnline(event.data.id, 'acknowledgement-receipt');
         break;
-        case 'download_receipt':
-          this.downloadDocument(event.data.id, 'acknowledgement-receipt');
+      case 'download_receipt':
+        this.downloadDocument(event.data.id, 'acknowledgement-receipt');
         break;
-         case 'share_receipt':
+      case 'share_receipt':
 
         break;
       case 'edit_mail':

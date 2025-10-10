@@ -1,0 +1,75 @@
+<app-report-toolbar-component (searchChanged)="searchChanged($event)" (actionButton)="onActionButton($event)" [selectedTab]="tab" [isAnalytics]="true" [isInternal]="false"></app-report-toolbar-component>
+
+@if (mailMetrics && !loading) {
+    <div class="border-b border-gray-200 mt-3.5 mb-5 mx-0"></div>
+
+    <div class="w-full my-8">
+      <div class="bg-white rounded-md shadow-sm p-5 text-center">
+        <h2 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-1">
+          TOTAL DES COURRIERS SUIVIS : <span class="text-2xl font-extrabold text-blue-600">{{ mailMetrics.totalMails }}</span>
+        </h2>
+      </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full mt-6">
+    <div class="bg-white rounded-md shadow-md">
+      <div class="px-5 pt-5">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-bold text-gray-800">
+            COURRIERS TRAITÉS | TOTAL : {{mailMetrics.processedLate + mailMetrics.processedOnTime}}
+          </h2>
+          <button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ item: { mailMetrics, is_processed: true } }" matIconButton><mat-icon>more_vert</mat-icon></button>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-200 mt-3.5 mb-5 mx-0"></div>
+
+      <div class="px-5 h-[300px] flex justify-center items-center">
+        @if (isPieProcessed) {
+          <app-analytics-component [pieChartType]="'pie'" [late]="mailMetrics.processedLate" [onTime]="mailMetrics.processedOnTime"></app-analytics-component>
+        }@else {
+           <app-analytics-component [pieChartType]="'doughnut'" [late]="mailMetrics.processedLate" [onTime]="mailMetrics.processedOnTime"></app-analytics-component>
+        }
+      </div>
+    </div>
+
+    <div class="bg-white rounded-md shadow-md">
+      <div class="px-5 pt-5">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-bold text-gray-800">
+            COURRIERS NON TRAITER | TOTAL : {{mailMetrics.pendingLate + mailMetrics.pendingOnTime}}
+          </h2>
+          <button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ item: { mailMetrics, is_processed: false } }" matIconButton><mat-icon>more_vert</mat-icon></button>
+        </div>
+      </div>
+
+      <div class="border-b border-gray-200 mt-3.5 mb-5 mx-0"></div>
+
+      <div class="px-5 h-[300px] flex justify-center items-center">
+         @if (isPiePending) {
+          <app-analytics-component [pieChartType]="'pie'" [late]="mailMetrics.pendingLate" [onTime]="mailMetrics.pendingOnTime"></app-analytics-component>
+        }@else {
+          <app-analytics-component [pieChartType]="'doughnut'" [late]="mailMetrics.pendingLate" [onTime]="mailMetrics.pendingOnTime"></app-analytics-component>
+        }
+      </div>
+    </div>
+  </div>
+
+  <mat-menu #menu="matMenu" [overlapTrigger]="false" xPosition="before">
+    <ng-template matMenuContent let-item="item">
+      <button mat-menu-item>
+      <mat-icon>remove_red_eye</mat-icon>Afficher le détail
+    </button>
+
+    <mat-divider></mat-divider>
+
+    <button mat-menu-item (click)="changePie(item.is_processed, true)">
+      <mat-icon>pie_chart</mat-icon>Graphique en Secteurs
+    </button>
+    <button mat-menu-item (click)="changePie(item.is_processed, false)">
+      <mat-icon>donut_large</mat-icon>Graphique en Anneau
+    </button>
+    </ng-template>
+</mat-menu>
+}
+

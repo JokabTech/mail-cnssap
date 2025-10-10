@@ -1,69 +1,92 @@
-<div class="bg-gray-100 h-full md:bg-transparent md:h-auto">
-  <div class="bg-gray-100 h-full lg:h-auto">
-    <div class="container mx-auto py-4 xl:py-10 xl:px-20">
-      <div class="flex flex-wrap items-center content-center">
-        <div class="w-full lg:w-6/12 hidden lg:block">
-          <img class="h-52 ml-1" src="assets/images/logo.PNG" alt="Logo Ubunifu events">
-          <p class="pt-4 ml-4 text-md">
-            Cette application permet la gestion
-            centralisée, sécurisée et numérique des courriers entrants et sortants au sein de la CNSSAP. d
-          </p>
+<div class="flex md:items-center min-h-screen bg-gray-200 dark:bg-gray-900">
+  <div class="container mx-auto">
+
+    <div class="max-w-lg mx-auto mt-0 md:mt-10 rounded-xl shadow-2xl border border-gray-300 overflow-hidden">
+
+      <div class="bg-[#007ac3] dark:bg-blue-800 text-white h-20 flex items-center justify-center text-2xl font-extrabold">
+        CNSSAP
+      </div>
+
+      <div class="p-4 md:p-8 bg-white dark:bg-gray-800">
+        <div class="text-center">
+
+          <div class="
+              w-40 h-40 mx-auto p-1
+              rounded-full
+              bg-gradient-to-br from-yellow-300 via-green-400 to-blue-500
+              dark:from-yellow-500 dark:via-green-600 dark:to-blue-700
+              shadow-xl
+              relative -mt-12 mb-0
+          ">
+            <div class="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center">
+                <img
+                  src="assets/images/logo.PNG"
+                  alt="Logo E-DOCs"
+                  class="w-32 h-32 object-contain"
+                >
+            </div>
+          </div>
+
+          <h1 class="mt-4 mb-1 text-3xl font-normal text-gray-700 dark:text-gray-200">E-DOCs</h1>
+          <p class="text-gray-500 dark:text-gray-400">Géstion électronique des documents</p>
         </div>
-        <form class="w-full lg:w-6/12 p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
-          <div class="lg:bg-white lg:rounded-md lg:border lg:border-gray-300 md:py-11 md:px-11">
-            <h1 class="text-center font-medium text-2xl text-blue-950">COURRIERS CNSSAP</h1>
-            <p class="text-center mt-2">Veuillez vous connecter avec votre compte</p>
-            <mat-form-field class="w-full mt-7">
-              <mat-label>Nom d'utilisateur</mat-label>
+        <div class="mx-4 my-6 md:mx-0">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="outline" class="w-full mb-1">
+              <mat-label>Adresse E-mail</mat-label>
               <input type="email" matInput formControlName="username">
               <mat-icon color="primary" matSuffix>person</mat-icon>
             </mat-form-field>
-            <mat-form-field class="w-full mt-1">
-              <mat-label>Mot de passe</mat-label>
-              <input type="password" matInput formControlName="password" [type]="hide ? 'password' : 'text'"
-                (focus)="lock = true">
-              <a mat-icon-button matSuffix (click)="hide = !hide">
-                @if (lock) {
+            <div class="mb-6">
+              <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Mot de passe</mat-label>
+                <input type="password" matInput [type]="hide ? 'password' : 'text'" (focus)="lock = true" formControlName="password">
+                <a mat-icon-button matSuffix (click)="hide = !hide">
+                  @if (lock) {
                   <mat-icon color="primary">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                }@else {
+                  }@else {
                   <mat-icon color="primary">lock</mat-icon>
-                }
-              </a>
-            </mat-form-field>
-            <p class="text-right text-blue-950 cursor-pointer hover:text-blue-900">Mot de passe oublié ?</p>
-            <button class="w-full mt-4" mat-flat-button [disabled]="loader">
-              <div class="flex items-center">
-                  @if (loader) {
-                    <img height="20" width="20" src="assets/images/loader.gif" alt="Google" class="m-4">
                   }
-                  <span>Se connecter maintenant</span>
-                </div>
-            </button>
-            <div class="flex items-center gap-2 mt-5">
-              <hr class="flex-1 border-t border-gray-400">
-              <p class="text-gray-600 font-semibold">OU</p>
-              <hr class="flex-1 border-t border-gray-400">
+                </a>
+              </mat-form-field>
+              <div class="flex items-center justify-between -mt-4">
+                <mat-checkbox> Se souvenir</mat-checkbox>
+                <a href="#" class="text-sm text-blue-600 hover:underline focus:text-blue-800">Mot de passe oublié ?</a>
+              </div>
             </div>
-            <div class="flex flex-col md:flex-row mt-3 gap-3">
-              <button class="md:w-6/12" type="button" mat-stroked-button color="primary" (click)="onLogin()">
-                <div class="flex items-center">
-                  <img height="20" width="20" src="assets/images/google.png" alt="Google" class="me-2">
-                  <span>Se connecter avec Google</span>
-                </div>
-              </button>
-              <button class="md:w-6/12" type="button" mat-stroked-button color="primary">
-                <div class="flex items-center">
-                  <img height="20" width="20" src="assets/images/facebook.png" alt="Google" class="me-2">
-                  <span>Se connecter avec Facebook</span>
-                </div>
-              </button>
+            <div class="mb-6">
+              <button class="w-full" mat-flat-button>Se connecter</button>
             </div>
-            <p class="w-full text-center text-md mt-10"> Etes-vous nouveau ?
-              <a routerLink="/auth/register" class="cursor-pointer text-blue-900 hover:text-blue-700">Créer un compte</a>
-            </p>
-          </div>
-        </form>
+
+            <div class="mb-6">
+              <div class="flex flex-col space-y-5">
+                <span class="flex items-center justify-center space-x-2">
+                  <span class="h-px bg-gray-400 w-14"></span>
+                  <span class="font-normal text-gray-500"> Ou connectez-vous avec</span>
+                  <span class="h-px bg-gray-400 w-14"></span>
+                </span>
+                <div class="flex flex-col space-y-4">
+                  <button (click)="loginWithGoogle()" type="button" mat-stroked-button class="w-full">
+                    <div class="flex items-center">
+                      <img height="20" width="20" src="assets/images/google.png"  alt="Google" class="me-2">
+                      <span>Google</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p class="text-md text-center text-gray-900">
+                Nouveau sur la platforme ? <a routerLink="/auth/register" class="text-blue-600 focus:outline-none hover:underline focus:underline focus:text-blue-800 dark:focus:border-indigo-800">Inscrivez-vous</a>.
+              </p>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+
+      <div class="bg-gray-50 dark:bg-gray-700 p-4 text-center text-sm text-gray-500 dark:text-gray-400 border-t border-gray-300 dark:border-gray-700">
+        &copy; 2025 - Tous droits réservés | Version 1.0.0
+      </div>
+      </div>
   </div>
 </div>

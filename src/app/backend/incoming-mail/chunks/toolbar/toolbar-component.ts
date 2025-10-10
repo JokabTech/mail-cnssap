@@ -5,16 +5,7 @@ import { StateService } from '../../../../core/services/state.service';
 import { Location } from '@angular/common';
 import { Roles } from '../../../../shared/enums/roles-enum';
 import { HttpService } from '../../../../core/services/http.service';
-
-export interface Tab {
-  key: string;
-  icon: string;
-  tooltip?: string;
-  tooltipMaa?: string;
-  tooltipAaSa?: string;
-  tooltipDir?: string;
-  roles?: string[];
-}
+import { Tab } from '../../../../shared/models/tab';
 
 @Component({
   selector: 'app-toolbar-component',
@@ -52,7 +43,7 @@ export class ToolbarComponent implements OnInit {
   ];
 
   tabsOutgoing: Tab[] = [
-    { key: 'initial', icon: 'receipt', tooltip: 'Courriers en cours de transmission' },
+    { key: 'initial', icon: 'hourglass_empty', tooltip: 'Courriers en cours de transmission' },
     { key: 'sent', icon: 'list', tooltip: 'Courriers déjà transmis' },
     { key: 'all', icon: 'assignment_turned_in', tooltip: 'Liste complete de courriers' },
   ];
@@ -86,7 +77,6 @@ export class ToolbarComponent implements OnInit {
   }
 
   onEmit(action: string) {
-    this.selectedTab = action;
     this.actionButton.emit(action);
   }
 

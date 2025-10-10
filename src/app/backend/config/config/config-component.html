@@ -1,0 +1,73 @@
+<section class="flex items-center justify-between md:h-16 md:px-4 border-b border-b-gray-300 md:border-b-0 py-2 md:py-0"
+  [ngClass]="xSmallOrSmall() ? '' : 'u-bg-header-main'">
+  <div class="flex gap-2">
+    <app-back-component></app-back-component>
+  </div>
+
+  @if (!xSmallOrSmall()) {
+    <span class="text-lg"> Configuration </span>
+  }
+
+  <div>
+  </div>
+</section>
+
+@if (loading) {
+  <div class="flex justify-center">
+    <mat-spinner></mat-spinner>
+  </div>
+}@else {
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="w-[99%] md:w-7/12 mx-auto my-8">
+      <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-4">Courriers entrants externes</h2>
+      <div class="md:bg-white md:rounded-lg md:shadow-md overflow-hidden">
+        <div class="flex flex-col">
+          <div class="flex items-center justify-between py-2.5 md:py-4 md:p-4 border-gray-200" [class.border-t]="true">
+            <div>
+              <p class="text-base md:text-xl text-gray-700">
+                Nombre de jours ouvrables
+              </p>
+              <p class="text-base text-gray-500">
+                Nombre de jours ouvrables alloués au traitement des courriers entrants externes
+              </p>
+            </div>
+            <input formControlName="incoming_external_delay" type="number" placeholder="Ex: 3" min="1" required
+              class="px-3 py-2 border border-gray-300 rounded-lg  focus:ring-blue-500 focus:border-blue-500 text-base text-center transition duration-150 ease-in-out">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-[99%] md:w-7/12 mx-auto my-8">
+      <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-4">Courriers entrants internes</h2>
+      <div class="md:bg-white md:rounded-lg md:shadow-md overflow-hidden">
+        <div class="flex flex-col">
+          <div class="flex items-center justify-between py-2.5 md:py-4 md:p-4 border-gray-200" [class.border-t]="true">
+            <div>
+              <p class="text-base md:text-xl text-gray-700">
+                Nombre de jours ouvrables
+              </p>
+              <p class="text-base text-gray-500">
+                Nombre de jours ouvrables alloués au traitement des courriers entrants internes
+              </p>
+            </div>
+            <input formControlName="incoming_internal_delay" type="number" placeholder="Ex: 3" min="1" required
+              class="px-3 py-2 border border-gray-300 rounded-lg  focus:ring-blue-500 focus:border-blue-500 text-base text-center transition duration-150 ease-in-out">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-[99%] md:w-7/12 mx-auto my-8 flex justify-end">
+      <button class="mt-4" mat-flat-button [disabled]="sended">
+        <div class="flex items-center">
+          @if (sended) {
+          <img height="20" width="20" src="assets/images/loader.gif" alt="Google" class="m-4">
+          }
+          <span>Sauvegarder</span>
+        </div>
+      </button>
+    </div>
+  </form>
+
+}

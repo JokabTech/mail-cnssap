@@ -1,3 +1,4 @@
+import { AuthService } from './../../core/services/auth-service';
 import { Component } from '@angular/core';
 import { SharedImports } from '../../shared/imports/shared-imports';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -13,17 +14,20 @@ import { MessageService } from '../../core/services/message.service';
   styleUrl: './login-component.scss'
 })
 export class LoginComponent {
+
   hide = true;
   lock = false;
   form!: FormGroup;
   unsubscribe$ = new Subject<void>();
   loader = false;
+  url = '';
 
   constructor(
     private _formBuilder: FormBuilder,
     private router: Router,
     private http: HttpService,
-    private message: MessageService
+    private message: MessageService,
+    private authService: AuthService
   ) { }
 
   private initForm(): void {
@@ -34,6 +38,9 @@ export class LoginComponent {
   }
 
   ngOnInit(): void {
+    this.http.url = 'auth/google';
+    this.url = this.http.url;
+    console.log(this.url);
     this.initForm();
   }
 
@@ -48,7 +55,6 @@ export class LoginComponent {
     this.unsubscribe$.next();
     this.http.login(this.form.value).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: data => {
-        console.log(data);
         sessionStorage.setItem('authentication', JSON.stringify(data));
       },
       error: err => {
@@ -65,7 +71,8 @@ export class LoginComponent {
     });
   }
 
-  onLogin() {
-    this.router.navigateByUrl('/dashboard');
+  loginWithGoogle() {
+    this.authService.loginWithGoogle();
   }
+
 }

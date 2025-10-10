@@ -9,6 +9,7 @@ import { ActionEvent } from '../../../../shared/models/action-event';
 import { SearchBarComponent } from '../../chunks/search-bar/search-bar-component';
 import { ToolbarComponent } from '../../chunks/toolbar/toolbar-component';
 import { IncomingExternalMail } from '../../../../shared/models/incoming-external-mail';
+import { IncomingReportListViewComponent } from "../../../report/incoming-report-list-view/incoming-report-list-view-component";
 
 @Component({
   selector: 'app-incoming-external-mail-list-impl-component',
@@ -16,14 +17,16 @@ import { IncomingExternalMail } from '../../../../shared/models/incoming-externa
     ToolbarComponent,
     SearchBarComponent,
     ...SharedBackend,
-    IncomingMailGridComponent
-  ],
+    IncomingMailGridComponent,
+    IncomingReportListViewComponent
+],
   templateUrl: './incoming-external-mail-list-impl-component.html',
   styleUrl: './incoming-external-mail-list-impl-component.scss'
 })
-export class IncomingExternalMailListImplComponent implements OnInit{
+export class IncomingExternalMailListImplComponent implements OnInit {
   public mailService = inject(IncomingExternalMailService);
   protected stateService = inject(StateService);
+  view = 'grid';
 
   constructor() {
     if (sessionStorage.getItem(this.mailService.key)) {
@@ -39,6 +42,10 @@ export class IncomingExternalMailListImplComponent implements OnInit{
   onSearchChanged(criteria: Criteria) {
     Object.assign(this.mailService.criteria, criteria);
     this.onSelectTab(this.mailService.tab);
+  }
+
+  onviewChanged(string: string){
+    this.view = string;
   }
 
   onSelectTab(tab: string, isNewTab = false) {

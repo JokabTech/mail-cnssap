@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { IncomingMail } from '../../shared/models/incoming-mail';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Tabs } from '../../shared/enums/tab-enum';
@@ -9,19 +9,21 @@ import { CommentDialogComponent } from '../../backend/incoming-mail/comment-dial
 import { HttpEventType } from '@angular/common/http';
 import { ActionEvent } from '../../shared/models/action-event';
 import { AbstractMailService } from './abstract-mail-service';
+import { ReportPdfBuilderService } from './report-pdf-builder-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class AbstractIncomingMailService<T extends IncomingMail> extends AbstractMailService<T> {
-  protected constructor(endpoint: string, routePrefix: string, key: string) {
-    super(endpoint, routePrefix, key);
+
+  protected constructor(endpoint: string, routePrefix: string, key: string, exportEndpoint: string) {
+    super(endpoint, routePrefix, key, exportEndpoint);
   }
 
   openAddCommentDialog(mail: T, tab: string) {
     const conf = new MatDialogConfig();
     conf.disableClose = true;
-    conf.data = { title: `ANNOTATION ASSISTANT${this.http.role === Roles.ADMIN_ASSISTANT ? ' ADMINISTRATIF' : ' PRINCIPAL'}`, mail, endpoint: this.endpoint };
+    conf.data = { title: `ANNOTATION ASSISTANT${this.http.role === Roles.ADMIN_ASSISTANT ? ' ADMINISTRATIF' : ' PRINCIPAL'}`, mail, endpoint: this.exportEndpoint };
     conf.minWidth = this.xSmallOrSmall() ? '96vw' : '57vw';
     const dialogRef = this.dialog.open(CommentDialogComponent, conf);
     dialogRef.afterClosed().subscribe((result: T) => {
@@ -36,7 +38,7 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
     });
   }
 
-  buildInitial() {
+  private buildInitial() {
     const baseCriteria = { ...this.criteria };
     switch (this.http.role) {
       case Roles.MAIL_ARCHIVES_AGENT:
@@ -55,17 +57,17 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
     }
   }
 
-  buildToProcess() {
+  private buildToProcess() {
     this.search({ ...this.criteria, assigned_to_me: true });
   }
 
-  buildAnnotated() {
+  private buildAnnotated() {
     if (this.http.role === Roles.ADMIN_ASSISTANT || this.http.role === Roles.SENIOR_ASSISTANT) {
       this.search({ ...this.criteria, withAnnotated: true });
     }
   }
 
-  buildAll() {
+  private buildAll() {
     const baseCriteria = { ...this.criteria };
     switch (this.http.role) {
       case Roles.ADMIN_ASSISTANT:
@@ -80,7 +82,7 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
     }
   }
 
-  buildTreated() {
+  private buildTreated() {
     this.search({ ...this.criteria, processed: true });
   }
 
@@ -120,7 +122,7 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
     });
   }
 
-  public selectTab(tab: string, isNewTab = false) {
+  public override selectTab(tab: string, isNewTab = false) {
     if (isNewTab) {
       this.criteria.page = 1;
       this.criteria.pageSize = 6;
@@ -148,7 +150,7 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
     sessionStorage.setItem(this.key, tab);
   }
 
-  public actionButton(tab: string) {
+  public override actionButton(tab: string) {
     switch (tab) {
       case 'goToForm':
         this.goToForm('add');
@@ -159,11 +161,17 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
       case 'print':
         // Implement print logic
         break;
+      case 'report':
+        this.goToReport()
+        break;
+      case 'analytics':
+        this.goToAnalytics()
+        break;
       default:
     }
   }
 
-  public menuSelected(event: ActionEvent<T>) {
+  public override menuSelected(event: ActionEvent<T>) {
     switch (event.action) {
       case 'view_detail':
         this.gotToDetails(event.data);

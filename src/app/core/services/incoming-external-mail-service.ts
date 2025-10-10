@@ -7,6 +7,6 @@ import { IncomingExternalMail } from '../../shared/models/incoming-external-mail
 })
 export class IncomingExternalMailService extends AbstractIncomingMailService<IncomingExternalMail> {
   constructor() {
-    super('incoming-external-mails', '/mails/incoming/external', 'incoming-external');
+    super('incoming-external-mails', '/mails/incoming/external', 'incoming-external', 'incoming-external-mails');
   }
 }

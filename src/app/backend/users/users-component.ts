@@ -50,7 +50,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   functions: Function[] = [];
 
   constructor() {
-    this.stateService.setHeader(new Header('GESTION DES UTILISATEURS', 'Liste des toutes les utilisateurs', 'people'));
+    this.stateService.setHeader(new Header('GESTION DES UTILISATEURS', `Liste de tous les utilisateurs du système et des personnes enregistrées.`, 'people'));
   }
 
   ngOnDestroy(): void {

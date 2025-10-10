@@ -1,12 +1,16 @@
 <app-toolbar-component (tabSelected)="onSelectTab($event, true)" (actionButton)="onActionButton($event)" [selectedTab]="mailService.tab"></app-toolbar-component>
-<app-search-bar-component (searchChanged)="onSearchChanged($event)"></app-search-bar-component>
+<app-search-bar-component (viewChanged)="onviewChanged($event)" (searchChanged)="onSearchChanged($event)"></app-search-bar-component>
 
 @if (mailService.loading) {
   <div class="flex items-center justify-center my-10">
     <mat-spinner></mat-spinner>
   </div>
-}@else {
-  <app-incoming-mail-grid-component [tab]="mailService.tab" (menuSelected)="onMenuSelected($event)" [mails]="mailService.page.items"></app-incoming-mail-grid-component>
+}@else if(mailService.page.totalItems > 0){
+  @if (view === 'grid') {
+    <app-incoming-mail-grid-component [tab]="mailService.tab" (menuSelected)="onMenuSelected($event)" [mails]="mailService.page.items"></app-incoming-mail-grid-component>
+  }@else {
+    <app-incoming-report-list-view-component (menuSelected)="onMenuSelected($event)" [mails]="mailService.page.items" [forReport]="false"></app-incoming-report-list-view-component>
+  }
 }
 
 @if (mailService.page) {

@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class PdfHeaderService {
 
-  getHear(logo: string) {
+  getHear(logo: string, pageOrientation: 'landscape' | 'portrait' = 'portrait') {
     return [
       {
         image: logo,
@@ -23,7 +23,7 @@ export class PdfHeaderService {
           {
             type: 'line',
             x1: 0, y1: 5,
-            x2: 515, y2: 5,
+            x2: pageOrientation === 'portrait' ? 515 : 775, y2: 5,
             lineWidth: 2,
             lineColor: '#007ac3'
           },

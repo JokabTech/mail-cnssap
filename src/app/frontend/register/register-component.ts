@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { SharedImports } from '../../shared/imports/shared-imports';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { MessageService } from '../../core/services/message.service';
 import { Router } from '@angular/router';
 import { HttpService } from '../../core/services/http.service';
+import { AuthService } from '../../core/services/auth-service';
 
 @Component({
   selector: 'app-register-component',
@@ -23,6 +24,7 @@ export class RegisterComponent {
     private message: MessageService,
     private router: Router,
     private http: HttpService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -41,7 +43,7 @@ export class RegisterComponent {
       password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]),
       password2: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]),
       terms: new FormControl(false, [Validators.required]),
-    });
+    }, { validators: this.passwordMatchValidator });
   }
 
   getErrorFullName(): string {
@@ -70,10 +72,17 @@ export class RegisterComponent {
   }
 
   getErrorTerms(): string {
-    return this.form.get('terms')!.hasError('required') ? `Veillez accepter ou ne créez pas de compte` : '';
+    return this.form.get('terms')!.hasError('required') ? `Vous devez accepter les termes` : '';
   }
 
   onSubmit(): void {
+     if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      //this.message.openSnackBar('Veuillez corriger les erreurs du formulaire.', 'Fermer', 4000);
+      return;
+    }
+
+
     this.loader = true;
     this.http.url = 'auth/register';
     this.unsubscribe$.next();
@@ -93,5 +102,18 @@ export class RegisterComponent {
         this.router.navigateByUrl('/auth/verification');
       }
     });
+  }
+
+  private passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('password2')?.value;
+    if (password && confirmPassword && password !== confirmPassword) {
+      return { mismatch: true };
+    }
+    return null;
+  };
+
+    loginWithGoogle() {
+    this.authService.loginWithGoogle();
   }
 }

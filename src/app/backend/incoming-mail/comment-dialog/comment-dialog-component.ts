@@ -78,6 +78,15 @@ export class CommentDialogComponent implements OnInit, OnDestroy {
   }
 
   private initForm(): void {
+    let comment: string | undefined;
+
+    if (this.role === Roles.ADMIN_ASSISTANT) {
+      comment = this.data.mail.admin_assistant_comment;
+    }else {
+      comment = this.data.mail.senior_assistant_comment || this.data.mail.admin_assistant_comment;
+    }
+
+
     this.commentFormControlName = this.role === Roles.ADMIN_ASSISTANT ? 'admin_assistant_comment' : 'senior_assistant_comment';
     this.assigneeFormControlName = this.role === Roles.ADMIN_ASSISTANT ? 'senior_assistant_id' : 'director_id';
 
@@ -88,10 +97,11 @@ export class CommentDialogComponent implements OnInit, OnDestroy {
       asign = this.data.mail.director ? this.data.mail.director.id : '';
     }
 
+
     const formGroupConfig: { [key: string]: any } = {
       should_send_document: new FormControl(false),
 
-      [this.commentFormControlName]: new FormControl((this.data.mail as any)[this.commentFormControlName], [Validators.required]),
+      [this.commentFormControlName]: new FormControl(comment, [Validators.required]),
 
       [this.assigneeFormControlName]: new FormControl(3, [Validators.required])
     };

@@ -1,3 +1,6 @@
+import { PrinterService } from './printer-service';
+import { ReportPdfBuilderService } from './report-pdf-builder-service';
+import { RequestOptions } from './../../shared/models/request-options';
 import { ReceiptPrintService } from './receipt-print-service';
 import { computed, inject, Injectable } from '@angular/core';
 import { BaseMail } from '../../shared/models/base-mail';
@@ -9,14 +12,14 @@ import { HttpParamsService } from './http-params-service';
 import { MessageService } from './message.service';
 import { PdfService } from './pdf-service';
 import { finalize, Subject, switchMap } from 'rxjs';
-import { RequestOptions } from '../../shared/models/request-options';
 import { Page } from '../../shared/models/page';
 import { Criteria } from '../../shared/models/criteria';
 import { PageEvent } from '@angular/material/paginator';
 import { FormActionPayload } from '../../shared/models/form-action-payload';
 import { ActionEvent } from '../../shared/models/action-event';
 import { AddFileComponent } from '../../shared/components/add-file/add-file-component';
-import { RoleService } from './role-service';
+import { ImageToBase64Service } from './image-to-base64-service';
+import { Header } from '../../shared/models/header';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +32,12 @@ export abstract class AbstractMailService<T extends BaseMail> {
   protected paramsService = inject(HttpParamsService);
   protected message = inject(MessageService);
   protected pdfService = inject(PdfService);
+  protected printerService = inject(PrinterService);
+
   protected receiptPrintService = inject(ReceiptPrintService);
+
+  protected reportPdfBuilderService = inject(ReportPdfBuilderService);
+  protected imageToBase64Service = inject(ImageToBase64Service);
 
   private readonly mailSearchTrigger$ = new Subject<RequestOptions>();
 
@@ -45,7 +53,7 @@ export abstract class AbstractMailService<T extends BaseMail> {
   public pageIndex = 0;
   public tab = 'initial';
 
-  protected constructor(protected endpoint: string, protected routePrefix: string, public key: string) {
+  protected constructor(protected endpoint: string, protected routePrefix: string, public key: string, public exportEndpoint: string) {
     this.sessionKey = this.endpoint.replace(/-/g, '')
     this.mailSearchTrigger$
       .pipe(
@@ -70,8 +78,16 @@ export abstract class AbstractMailService<T extends BaseMail> {
     this.router.navigateByUrl(`${this.routePrefix}/form`);
   }
 
+  public goToReport() {
+    this.router.navigateByUrl(`${this.routePrefix}/report`);
+  }
+
+  public GoToDestined() {
+    this.router.navigateByUrl(`${this.routePrefix}`);
+  }
+
   downloadDocument(documentId: number, target: 'document' | 'proof' | 'acknowledgement-receipt') {
-    this.http.url = `${this.endpoint}/${target}/${documentId}`;
+    this.http.url = `${this.exportEndpoint}/${target}/${documentId}`;
     this.http.getPdfDocument().subscribe({
       next: (data: Blob) => {
         const fileURL = URL.createObjectURL(data);
@@ -92,14 +108,56 @@ export abstract class AbstractMailService<T extends BaseMail> {
     });
   }
 
+  public goToAnalytics() {
+    this.router.navigateByUrl(`${this.routePrefix}/analytics`);
+  }
+
+
+  downloadExcel(requestOptions: RequestOptions) {
+    this.http.url = `${this.exportEndpoint}/${requestOptions.url}`;
+    this.http.getPdfDocument(requestOptions.params).subscribe({
+      next: (data: Blob) => {
+        const fileURL = URL.createObjectURL(data);
+        const a = document.createElement('a');
+        a.href = fileURL;
+        a.download = `export.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(fileURL);
+        a.remove();
+      },
+      error: () => {
+        this.message.openSnackBar('Erreur lors du téléchargement du document', 'Fermer', 6000);
+      },
+      complete: () => {
+        this.message.openSnackBar('Début du téléchargement', 'Fermer', 1000);
+      },
+    });
+  }
+
   addFile(mail: T, title: string, target: 'treatment-proof' | 'acknowledgement-receipt') {
     const conf = new MatDialogConfig();
     conf.disableClose = true;
-    conf.data = { title, id: mail.id, subject: mail.subject, endpoint: `${this.endpoint}/${target}` };
+    conf.data = { title, id: mail.id, subject: mail.subject, endpoint: `${this.exportEndpoint}/${target}` };
     const dialogRef = this.dialog.open(AddFileComponent, conf);
     dialogRef.afterClosed().subscribe((result: T) => {
       if (result) {
         this.selectTab(this.tab);
+      }
+    });
+  }
+
+  printRepoport(title: string, subTitle: string): void {
+    const imagePath = 'assets/images/logo.PNG';
+    this.imageToBase64Service.getImageAsBase64(imagePath).subscribe({
+      next: (logo: string) => {
+        this.printerService.print(this.reportPdfBuilderService.generateSingleAdaptedPdf(this.page.items, logo, title, subTitle));
+      },
+      error: (err: any) => {
+        console.error('Erreur lors de la conversion de l\'image en Base64 :', err);
+      },
+      complete: () => {
+        console.log('Conversion de l\'image terminée.');
       }
     });
   }
@@ -127,7 +185,7 @@ export abstract class AbstractMailService<T extends BaseMail> {
   }
 
   displayOnline(mail_id: number, target: 'document' | 'proof' | 'acknowledgement-receipt') {
-    this.pdfService.displayOnlinePdf(mail_id, target, this.endpoint);
+    this.pdfService.displayOnlinePdf(mail_id, target, this.exportEndpoint);
   }
 
   displayLocal() {
@@ -136,7 +194,7 @@ export abstract class AbstractMailService<T extends BaseMail> {
 
   public abstract selectTab(tab: string, isNewTab?: boolean): void;
 
-  public abstract actionButton(tab: string): void;
+  public abstract actionButton(tab: string, event?: ActionEvent<Header>): void;
 
   public abstract menuSelected(event: ActionEvent<T>): void;
 }

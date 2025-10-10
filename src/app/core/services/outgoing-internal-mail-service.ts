@@ -7,6 +7,6 @@ import { OutgoingInternalMail } from '../../shared/models/outgoing-internal-mail
 })
 export class OutgoingInternalMailService extends AbstractOutgoingMailService<OutgoingInternalMail> {
   constructor() {
-    super('outgoing-internal-mails', '/mails/outgoing/internal', 'outgoing-internal');
+    super('outgoing-internal-mails', '/mails/outgoing/internal', 'outgoing-internal', 'outgoing-internal-mails');
   }
 }

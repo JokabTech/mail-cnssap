@@ -16,7 +16,7 @@
 </section>
 
 <div class="w-full md:px-16">
-  <h1 class="mt-7 text-lg md:px-4 hidden md:block">FORMULAIRE D'AJOUT D'UN NOUVEAU COURRIER ENTRANT INTERNE</h1>
+  <h1 class="mt-7 text-lg md:px-4 hidden md:block">FORMULAIRE ddd {{ formActionPayload && formActionPayload.action === 'add' ? `D'AJOUT` : 'DE MODIFICATION' }} D'UN COURRIER ENTRANT INTERNE</h1>
 
   @if (isFormReady) {
     <form class="w-full flex flex-wrap mt-4" [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -95,7 +95,7 @@
     </div>
 
     <div class="w-full md:px-4 mb-4">
-      <h1 class="text-lg font-bold">Destinateur et Annotateur</h1>
+      <h1 class="text-lg font-bold">Destinataire et Annotateur</h1>
       <p>
         Sélectionnez le directeur en charge de traiter ce courrier, il le recevra et le traitera. Veillez sélectinner également le type de courrier dont il s'agit
       </p>

@@ -4,19 +4,19 @@ import { inject, Injectable } from '@angular/core';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { PdfHeaderService } from './pdf-header-service';
-import { IncomingInternalMail } from '../../shared/models/incoming-internal-mail';
-import { IncomingExternalMail } from '../../shared/models/incoming-external-mail';
 import { formatDate } from '@angular/common';
-//pdfMake.vfs = pdfFonts.vfs;
+import { isIncomingExternalMail } from '../../shared/types/type-guards';
+import { User } from '../../shared/models/user';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class PrinterService {
   private pdfHeaderService = inject(PdfHeaderService);
   private pdfStylesService = inject(PdfStylesService);
 
-  private print(documentDefinition: any, action: 'open' | 'print' | 'download', name = 'document') {
+  public print(documentDefinition: any, action: 'open' | 'print' | 'download' = 'open', name = 'document') {
     switch (action) {
       case 'open': pdfMake.createPdf(documentDefinition, undefined, undefined, pdfFonts.vfs).open(); break;
       case 'print': pdfMake.createPdf(documentDefinition).print(); break;
@@ -31,7 +31,7 @@ export class PrinterService {
   }
 
   private buildReceipt(logo: string, mail: IncomingMail, recipient: string, role: string, url: string) {
-    const sender = this.getSenderForIncoming(mail);
+    const sender = this.onFindSender(mail);
     return {
       info: {
         title: `Accusé de réception pour ${sender}`.toUpperCase(),
@@ -119,7 +119,7 @@ export class PrinterService {
         {
           text: [
             'Nous, la Caisse Nationale de Sécurité Sociale des Agents Publics de l\'État (CNSSAP), confirmons avoir reçu votre courrier tel que détaillé ci-dessus. Votre document a été enregistré sous la référence ',
-            { text: 'AR-2025-#1', bold: true },
+            { text: `AR-2025-#${mail.id}`, bold: true },
             ' et sera traité par la direction comptétente.',
             '\n\n',
             { text: 'Pour toute question ou suivi, veuillez vous munir de cette référence.', italics: true }
@@ -146,7 +146,7 @@ export class PrinterService {
               [
                 {
                   stack: [
-                    { text: 'Validation Manuelle', bold: true, decoration: 'underline' },
+                    { text: 'Validation manuelle', bold: true, decoration: 'underline' },
                     {
                       text: 'Cachet du service réception :',
                       margin: [0, 10, 0, 5]
@@ -212,7 +212,7 @@ export class PrinterService {
                 // Colonne de droite : Suivi Numérique
                 {
                   stack: [
-                    { text: 'Accès Rapide au Suivi', bold: true, decoration: 'underline', alignment: 'right' },
+                    { text: 'Accès rapide au suivi', bold: true, decoration: 'underline', alignment: 'right' },
                     {
                       text: 'Scannez le QR Code pour le suivi',
                       alignment: 'right',
@@ -220,7 +220,7 @@ export class PrinterService {
                     },
                     // Espace pour le QR Code
                     {
-                      qr: `${url}/detai/1`,
+                      qr: `${url}detail/${mail.id}`,
                       fit: 140, // Taille du QR Code
                       alignment: 'right',
                       margin: [0, 0, 13, 20]
@@ -313,7 +313,12 @@ export class PrinterService {
     }
   }
 
+  /*
   private getSenderForIncoming(item: IncomingMail): string {
+    const isExternal = isIncomingExternalMail(item);
+    if (isExternal) {
+
+    }
     if ('documentType' in item) {
       const internalMail = item as IncomingInternalMail;
       return internalMail.sender.full_name;
@@ -324,6 +329,17 @@ export class PrinterService {
       return externalMail.sender;
     }
     return 'Inconnu';
+  }
+  */
+
+  onFindSender(mail: IncomingMail) {
+    const isExternal = isIncomingExternalMail(mail);
+    if (isExternal) {
+      return mail.sender;
+    } else {
+      const sender = mail.sender as User;
+      return sender.full_name;
+    }
   }
 
 }

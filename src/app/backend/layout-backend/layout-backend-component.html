@@ -31,11 +31,11 @@
         <mat-icon>keyboard_arrow_down</mat-icon>
       </button>
       <mat-menu #role [overlapTrigger]="false" yPosition="below">
-        @for (item of roles; track item) {
-          <button mat-menu-item (click)="onChangeRole(item)">
-             {{ roleService.build(item) }}
-          </button>
-        }
+        @for (item of authentication.roles; track item) {
+            <button mat-menu-item (click)="onChangeRole(item.name)">
+              {{ roleService.build(item.name) }}
+            </button>
+          }
       </mat-menu>
 
       <button mat-icon-button class="ms-3" (click)="onSwitch()">
@@ -50,7 +50,8 @@
         <div class="text-right">
           @if (authentication) {
             {{ authentication.full_name }} <br>
-            {{ roleLabel }}
+           {{ roleLabel }}
+
           }@else {
             Utilisateur anonyme
           }
@@ -101,11 +102,11 @@
           </mat-expansion-panel-header>
           <mat-nav-list dense>
             <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/mails/outgoing/external">
-              <mat-icon class="me-3" matListItemIcon>supervisor_account</mat-icon>
+              <mat-icon class="me-3" matListItemIcon>call_made</mat-icon>
               <span routerLinkActive="active" matListItemTitle>Externes</span>
             </mat-list-item>
             <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/mails/outgoing/internal">
-              <mat-icon class="me-3" matListItemIcon>settings_applications</mat-icon>
+              <mat-icon class="me-3" matListItemIcon>call_received</mat-icon>
               <span routerLinkActive="active" matListItemTitle>Internes</span>
             </mat-list-item>
           </mat-nav-list>
@@ -113,7 +114,7 @@
         <mat-divider></mat-divider>
         <mat-expansion-panel [class.mat-elevation-z0]="true" dense>
           <mat-expansion-panel-header>
-            <mat-icon class="me-3" matListItemIcon>folder</mat-icon>&nbsp;Types documents
+            <mat-icon class="me-3" matListItemIcon>drafts</mat-icon>&nbsp;Types documents
           </mat-expansion-panel-header>
           <mat-nav-list dense>
             <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/documents">
@@ -177,16 +178,16 @@
         <mat-divider></mat-divider>
         <mat-expansion-panel [class.mat-elevation-z0]="true" dense>
           <mat-expansion-panel-header>
-            <mat-icon class="me-3" matListItemIcon>devices</mat-icon>&nbsp;Courriers archivés
+            <mat-icon class="me-3" matListItemIcon>settings</mat-icon>&nbsp;Configurations
           </mat-expansion-panel-header>
           <mat-nav-list dense>
-            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/groupes">
-              <mat-icon class="me-3" matListItemIcon>send</mat-icon>
-              <span routerLinkActive="active" matListItemTitle>Invitations</span>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/holidays">
+              <mat-icon class="me-3" matListItemIcon>event</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Jours fériés</span>
             </mat-list-item>
-            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/groupes/new">
-              <mat-icon class="me-3" matListItemIcon>weekend</mat-icon>
-              <span routerLinkActive="active" matListItemTitle>Ticket</span>
+            <mat-list-item (click)="drawer.toggle(!XSmallOrSmall)" routerLink="/settings">
+              <mat-icon class="me-3" matListItemIcon>book</mat-icon>
+              <span routerLinkActive="active" matListItemTitle>Courriers</span>
             </mat-list-item>
           </mat-nav-list>
         </mat-expansion-panel>

@@ -11,7 +11,7 @@
   <form class="-mx-3 md:-mx-0" [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="w-full mt-1">
       <mat-form-field class="w-full">
-        <mat-label>Désignation de la direction</mat-label>
+        <mat-label>Nom complet</mat-label>
         <input type="text" matInput formControlName="full_name">
         @if (form.get('full_name')?.hasError) {
           <mat-error> {{ getErrorFullName() }} </mat-error>
@@ -19,7 +19,7 @@
       </mat-form-field>
 
       <mat-form-field class="w-full">
-        <mat-label>Acronyme de la direction</mat-label>
+        <mat-label>Numéro de téléhone</mat-label>
         <input type="tel" matInput formControlName="phone">
         @if (form.get('phone')?.hasError) {
           <mat-error> {{ getErrorPhone() }} </mat-error>
@@ -27,7 +27,7 @@
       </mat-form-field>
 
        <mat-form-field class="w-full">
-        <mat-label>Acronyme de la direction</mat-label>
+        <mat-label>Adresse e-mail</mat-label>
         <input type="email" matInput formControlName="email">
         @if (form.get('email')?.hasError) {
           <mat-error> {{ getErrorPhone() }} </mat-error>

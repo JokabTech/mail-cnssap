@@ -1,0 +1,127 @@
+<section class="flex items-center justify-between md:h-16 md:px-4 border-b border-b-gray-300 md:border-b-0 py-2 md:py-0" [ngClass]="xSmallOrSmall() ? '' : 'u-bg-header-main'">
+  <div class="flex gap-2">
+    <app-back-component></app-back-component>
+  </div>
+
+  @if (!xSmallOrSmall()) {
+    <span class="text-lg font-bold uppercase"> Jours Fériés Actuels ({{ page ? page.totalItems : '' }}) </span>
+  }
+
+  <div>
+   <button (click)="onAdd()" mat-flat-button>Nouveau jour férié</button>
+  </div>
+</section>
+
+<section class="flex flex-wrap my-4 md:mt-6">
+  <div class="w-full lg:w-4/12">
+    <div class="relative w-full">
+      <input [formControl]="searchKeyword" type="text" class="w-full p-3 pl-5 pr-15 text-lg border-2 border-gray-300 md:rounded-full outline-none transition duration-300 focus:border-blue-500 focus:text-gray-700 bg-white h-[45px] lg:h-[49px]" placeholder="Rechercher un jour férié par mot clé">
+      <mat-icon class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">search</mat-icon>
+    </div>
+  </div>
+  <div class="w-full lg:w-8/12 flex justify-end items-center flex-wrap mt-3 md:mt-0">
+    @if (!xSmallOrSmall()) {
+    <mat-button-toggle-group value="add">
+      <mat-button-toggle matTooltip="Nouveau groupe" value="add" aria-label="Text align center">
+        <span>Affichage Grille</span> <mat-icon color="primary">view_list</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle matTooltip="Liste des proclamateurs" value="print" aria-label="Text align center">
+        <span>Affichage tableau</span> <mat-icon color="primary">view_module</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    }
+  </div>
+</section>
+
+@if (loading) {
+  <div class="flex justify-center">
+    <mat-spinner></mat-spinner>
+  </div>
+}@else {
+
+<div class="flex flex-col md:mt-6">
+  <div class="overflow-x-auto">
+    <div class="inline-block min-w-full align-middle">
+      <div class="overflow-hidden border-y border-gray-200 dark:border-gray-700 md:rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th scope="col" class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <button class="flex items-center gap-x-3 focus:outline-none">
+                  <span>Nom du jour ferier</span>
+                </button>
+              </th>
+
+              <th scope="col" class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                Jour
+              </th>
+
+               <th scope="col" class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                Mois
+              </th>
+
+               <th scope="col" class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                Année
+              </th>
+
+               <th scope="col" class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                Reccurent
+              </th>
+
+              <th scope="col" class="relative py-3.5 px-4">
+                <span class="sr-only">Edit</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+            @for (item of page.items; track item.id; let i = $index;) {
+              <tr>
+                <td class="px-4 py-2.5 text-sm whitespace-nowrap">
+                  <div>
+                    <h2 class=" text-gray-800 dark:text-white "> {{ item.name }} </h2>
+                  </div>
+                </td>
+
+                <td class="px-12 py-2.5 text-sm whitespace-nowrap">
+                  {{ item.day }}
+                </td>
+
+                <td class="px-12 py-2.5 text-sm whitespace-nowrap">
+                  {{ localisation.getMonthName(item.month) }}
+                </td>
+
+                <td class="px-12 py-2.5 text-sm whitespace-nowrap">
+                  {{ item.year || 'Toutes les années' }}
+                </td>
+
+                <td class="px-12 py-2.5 text-sm whitespace-nowrap">
+                  {{ item.is_fixed ? 'Oui' : 'Non' }}
+                </td>
+
+                <td class="px-4 py-2.5 text-sm whitespace-nowrap">
+                  <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ item: item }">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<mat-menu #menu="matMenu" [overlapTrigger]="false" yPosition="below">
+  <ng-template matMenuContent let-item="item">
+    <button mat-menu-item (click)="onUpdate(item)">
+      <mat-icon>edit</mat-icon>Modifier
+    </button>
+    <button mat-menu-item>
+      <mat-icon>delete</mat-icon><span>Supprimer</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
+<mat-paginator  class="mt-10" [length]="totalLength" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage" showFirstLastButtons (page)="onPageChange($event)"></mat-paginator>

@@ -65,11 +65,11 @@
   <div class="w-full lg:w-8/12 flex justify-end items-center flex-wrap mt-3 md:mt-0">
     @if (!xSmallOrSmall()) {
       <mat-button-toggle-group value="add">
-        <mat-button-toggle matTooltip="Nouveau groupe" value="add" aria-label="Text align center">
-          <span>Affichage Grille</span> <mat-icon color="primary">view_list</mat-icon>
+        <mat-button-toggle (click)="onViewChanged('grid')" matTooltip="Nouveau groupe" value="add" aria-label="Text align center">
+          <span>Affichage grille</span>&nbsp;&nbsp;<mat-icon color="primary">view_list</mat-icon>
         </mat-button-toggle>
-        <mat-button-toggle matTooltip="Liste des proclamateurs" value="print" aria-label="Text align center">
-          <span>Affichage tableau</span> <mat-icon color="primary">view_module</mat-icon>
+        <mat-button-toggle (click)="onViewChanged('list')" matTooltip="Liste des proclamateurs" value="print" aria-label="Text align center">
+          <span>Affichage tableau</span>&nbsp;&nbsp;<mat-icon color="primary">view_module</mat-icon>
         </mat-button-toggle>
       </mat-button-toggle-group>
     }

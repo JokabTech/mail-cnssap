@@ -1,5 +1,13 @@
-@if (role() !== roles.AGENT) {
+@if (role() === roles.DIRECTOR) {
   <app-incoming-external-mail-list-impl-component></app-incoming-external-mail-list-impl-component>
+}@else if(role() === roles.SENIOR_ASSISTANT){
+    <app-incoming-external-mail-list-impl-component></app-incoming-external-mail-list-impl-component>
+}@else if(role() === roles.ADMIN_ASSISTANT){
+    <app-incoming-external-mail-list-impl-component></app-incoming-external-mail-list-impl-component>
+}@else if(role() === roles.MAIL_ARCHIVES_AGENT){
+    <app-incoming-external-mail-list-impl-component></app-incoming-external-mail-list-impl-component>
+}@else if(role() === roles.EXECUTIVE_SECRETARY){
+    <app-incoming-external-mail-list-impl-component></app-incoming-external-mail-list-impl-component>
 }@else {
-  <h1>Vous n'avez pas droit d'accèder à cette fonctionnalité</h1>
+  <h1>Vous n’avez pas le droit d’accéder à cette fonctionnalité</h1>
 }

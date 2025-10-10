@@ -1,0 +1,9 @@
+/* Définir une taille pour le conteneur du graphique est crucial */
+.chart-wrapper {
+  width: 500px; /* Exemple de largeur */
+  height: 500px; /* Exemple de hauteur */
+  margin: 20px auto; /* Centrer le graphique sur la page */
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}

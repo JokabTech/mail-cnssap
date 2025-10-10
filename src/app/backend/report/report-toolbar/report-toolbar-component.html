@@ -1,0 +1,163 @@
+<section class="flex items-center justify-between md:h-20 md:px-4 border-b border-b-gray-300 md:border-b-0 py-2 md:py-0" [ngClass]="xSmallOrSmall() ? '' : 'u-bg-header-main'">
+  <div class="flex gap-2">
+    @if (!xSmallOrSmall()) {
+      <app-back-component></app-back-component>
+    }
+
+    @if (!isAnalytics) {
+      @for (tab of tabs; track tab.key) {
+        <div [ngClass]="{'bg-gray-200': selectedTab === tab.key}" (click)="onSelectTab(tab)">
+          <button mat-icon-button [matTooltip]="tab.tooltip">
+            <mat-icon [ngStyle]="{'color': selectedTab === tab.key ? '#007ac3' : ''}">
+              {{ tab.icon }}
+            </mat-icon>
+          </button>
+        </div>
+     }
+    }
+
+  </div>
+
+  @if (!xSmallOrSmall()) {
+    <div class="flex flex-col items-center justify-center gap-y-0.5">
+      <span class="text-lg font-bold"> {{ title | uppercase }} </span>
+      <span class="text-base text-blue-700"> {{ subTitle }} </span>
+    </div>
+  }
+
+  <div>
+    <button mat-icon-button matTooltip="Actualiser" (click)="onEmitActionButton('refresh')">
+      <mat-icon>refresh</mat-icon>
+    </button>
+
+    @if (!isAnalytics) {
+      <button mat-icon-button matTooltip="Exporter"  [matMenuTriggerFor]="export">
+        <mat-icon>save_alt</mat-icon>
+      </button>
+    }
+
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+
+    <mat-menu #menu [overlapTrigger]="false" yPosition="below">
+        <button mat-menu-item (click)="onEmitActionButton('destined')"><mat-icon>list</mat-icon> Courriers qui me sont destinés</button>
+        <button mat-menu-item (click)="onEmitActionButton('report')"><mat-icon>check</mat-icon> Liste complète des courriers </button>
+        <button mat-menu-item (click)="onEmitActionButton('analytics')"><mat-icon>equalizer</mat-icon> Chiffres clés </button>
+      </mat-menu>
+
+      <mat-menu #export [overlapTrigger]="false" yPosition="below">
+        <button mat-menu-item (click)="onEmitActionButton('export')"><mat-icon>table_chart</mat-icon> Exporter en Excel </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="onEmitActionButton('print')"><mat-icon>print</mat-icon> Imprimer en PDF </button>
+        <button mat-menu-item (click)="onEmitActionButton('print')"><mat-icon>picture_as_pdf</mat-icon> Télécharger en PDF </button>
+      </mat-menu>
+  </div>
+</section>
+
+<!-----------------------------------------  For Search  ---------------------------------------------------------->
+
+@if (xSmallOrSmall()) {
+  <div class="mt-3 flex justify-between items-center">
+    <span class="text-base font-bold"> {{ title | uppercase }} </span>
+    <button mat-icon-button>
+      <mat-icon> view_module </mat-icon>
+    </button>
+  </div>
+}
+
+@if (withDate && isFormReady) {
+  <form class="w-full flex flex-wrap mt-4 md:justify-start items-start" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div [ngClass]="{'md:w-2/12': isInternal, 'md:w-3/12': !isInternal}" class="w-full md:px-3 py-1.5">
+      <label for="startDate" class="block text-sm text-gray-500 dark:text-gray-300">Date de début</label>
+      <input formControlName="startDate" type="date" placeholder="John Doe" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-3.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+    </div>
+
+    <div [ngClass]="{'md:w-2/12': isInternal, 'md:w-3/12': !isInternal}" class="w-full md:px-3 py-1.5">
+      <label for="endDate" class="block text-sm text-gray-500 dark:text-gray-300">Date de fin</label>
+        <input id="endDate" formControlName="endDate" type="date" placeholder="John Doe" class="block mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-3.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+    </div>
+
+    <div  class="w-full md:w-3/12 md:px-3 py-1.5">
+        <label for="direction" class="block text-sm text-gray-500 dark:text-gray-300">Direction</label>
+        <select formControlName="department_id" id="direction" class="mt-2 block w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-3.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
+            <option selected value="">Toutes les directions</option>
+            @for (item of departements; track item.id) {
+              <option [value]="item.id"> {{ item.designation }} </option>
+            }
+        </select>
+    </div>
+
+    @if (isInternal) {
+      <div class="w-full md:w-3/12 md:px-3 py-1.5">
+        <label for="document_type_id" class="block text-sm text-gray-500 dark:text-gray-300">Type de courrier</label>
+        <select formControlName="document_type_id" id="document_type_id" class="mt-2 block w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-3.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
+            <option selected value="">Type de courrier</option>
+            @for (item of documentTypes; track item.id) {
+              <option [value]="item.id"> {{ item.designation }} </option>
+            }
+        </select>
+      </div>
+    }
+
+    <div class="w-full md:w-1/12 md:px-3 py-1.5">
+      <label class="block text-sm text-gray-500 dark:text-gray-300 opacity-0 select-none">Rechercher</label>
+       <a matMiniFab class="mt-2" (click)="withSearch = !withSearch" [matTooltip]="withSearch ? 'Cacher' : 'Afficher'">
+        <mat-icon> {{ withSearch ? 'remove' : 'add' }} </mat-icon>
+      </a>
+    </div>
+
+    <div class="w-full md:w-1/12 md:px-3 py-1.5">
+      <label class="block text-sm text-gray-500 dark:text-gray-300 opacity-0 select-none">Rechercher</label>
+      <button class="mt-2 w-full" [disabled]="form.invalid" matButton="filled" type="submit">Rechercher</button>
+    </div>
+
+    @if (form.errors?.['dateRangeInvalid']) {
+      <div class="text-red-500 mb-1.5 w-full">
+        Plage de dates invalide : la date de début doit être antérieure à la date de fin.
+      </div>
+    }
+
+    @if (withSearch) {
+      <hr class="border-gray-300 w-full my-1.5">
+    }
+</form>
+}@else {
+  <div class="flex items-center justify-center my-10">
+      <img height="20" width="20" src="assets/images/loader.gif" alt="Google" class="m-4">
+  </div>
+}
+
+@if (withSearch) {
+  <section class="flex flex-wrap my-4 md:mt-3">
+    <div class="w-full lg:w-4/12">
+      <div class="relative w-full">
+        <input [formControl]="searchKeyword" type="text" class="w-full p-3 pl-5 pr-15 text-lg border-2 border-gray-300 rounded-full outline-none transition duration-300 focus:border-blue-500 focus:text-gray-700 bg-white h-[45px] lg:h-[49px]" placeholder="Rechercher un courrier par mot clé">
+        <div class="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center">
+
+          <span class="inline-block h-[45px] border-l border-gray-300"></span>
+          <button mat-icon-button [matMenuTriggerFor]="searchMenu" class="text-gray-500 hover:text-gray-700 ml-2">
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </button>
+          <mat-menu #searchMenu [overlapTrigger]="false" xPosition="before" yPosition="below">
+            <button mat-menu-item (click)="onToogleDateSelector(false)"><mat-icon> {{ withDate ? 'event_busy' : 'check' }} </mat-icon> Rechercher sans date </button>
+            <button mat-menu-item (click)="onToogleDateSelector(true)"><mat-icon> {{ withDate ? 'check' : 'date_range' }} </mat-icon> Rechercher avec date </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+    <div class="w-full lg:w-8/12 flex justify-end items-center flex-wrap mt-3 md:mt-0">
+      @if (!xSmallOrSmall()) {
+        <mat-button-toggle-group value="add">
+          <mat-button-toggle matTooltip="Nouveau groupe" value="add" aria-label="Text align center">
+            <span>Affichage Grille</span> <mat-icon color="primary">view_list</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle matTooltip="Liste des proclamateurs" value="print" aria-label="Text align center">
+            <span>Affichage tableau</span> <mat-icon color="primary">view_module</mat-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      }
+    </div>
+  </section>
+}

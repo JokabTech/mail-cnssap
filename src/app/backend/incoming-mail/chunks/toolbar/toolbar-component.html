@@ -32,7 +32,7 @@
   </div>
 
   @if (!xSmallOrSmall()) {
-    <span class="text-lg"> {{ title | uppercase }} </span>
+    <span class="text-lg font-bold"> {{ title | uppercase }} </span>
   }
 
   <div>
@@ -41,21 +41,22 @@
         <mat-icon>add</mat-icon>
       </button>
     }
+
     <button mat-icon-button matTooltip="Actualiser" (click)="onEmit('refresh')">
       <mat-icon>refresh</mat-icon>
     </button>
     <button mat-icon-button matTooltip="Imprimer" (click)="onEmit('print')">
       <mat-icon>print</mat-icon>
     </button>
-    @if (role === roles.ADMIN_ASSISTANT || role === roles.SENIOR_ASSISTANT) {
-      <button mat-icon-button [matMenuTriggerFor]="menu">
+
+   <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>keyboard_arrow_down</mat-icon>
       </button>
 
       <mat-menu #menu [overlapTrigger]="false" yPosition="below">
         <button mat-menu-item (click)="onEmit('destined')"><mat-icon>check</mat-icon> Courriers qui me sont destinés</button>
-        <button mat-menu-item (click)="onEmit('all')"><mat-icon>list</mat-icon> Liste complete des courriers </button>
-      </mat-menu>
-    }
+        <button mat-menu-item (click)="onEmit('report')"><mat-icon>list</mat-icon> Liste complète des courriers </button>
+        <button mat-menu-item (click)="onEmit('analytics')"><mat-icon>equalizer</mat-icon> Chiffres clés </button>
+    </mat-menu>
   </div>
 </section>

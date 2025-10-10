@@ -24,6 +24,7 @@ export class SearchBarComponent implements OnDestroy {
   private destroyFormSub$ = new Subject<void>();
 
   @Output() searchChanged = new EventEmitter<Criteria>();
+  @Output() viewChanged = new EventEmitter<string>();
 
   searchKeyword = new FormControl('');
   withDate = false;
@@ -107,6 +108,10 @@ export class SearchBarComponent implements OnDestroy {
     }
     this.withDate = withDate;
 
+  }
+
+  onViewChanged(view: string){
+    this.viewChanged.emit(view);
   }
 
 

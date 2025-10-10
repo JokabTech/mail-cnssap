@@ -31,9 +31,11 @@
       </button>
     }
 
-    <mat-divider></mat-divider>
 
-    @if (role === roles.ADMIN_ASSISTANT || role === roles.SENIOR_ASSISTANT || role === roles.DIRECTOR) {
+    @if (role === roles.ADMIN_ASSISTANT || role === roles.SENIOR_ASSISTANT || role === roles.DIRECTOR || role === roles.EXECUTIVE_SECRETARY) {
+         <mat-divider></mat-divider>
+
+
       <button mat-menu-item (click)="onMenuItemClicked('treatment_proof', item)">
         <mat-icon>attach_file</mat-icon><span>Joindre une preuve</span>
       </button>

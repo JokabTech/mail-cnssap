@@ -47,7 +47,7 @@
         <div><span>Date du courrier : </span> <span> {{ item.mail_date | date: 'dd/MM/yyyy' }} </span> &nbsp; | &nbsp;
           <span>Date d'enregistrement : </span> <span> {{ item.create_at | date: 'dd/MM/yyyy' }} </span>
         </div>
-        <div><span>Expéditeur : </span> <span> {{ getSenderForIncoming(item) }} </span></div>
+        <div><span>Expéditeur : </span> <span> {{ onFindSender(item) }} </span></div>
       </div>
     </div>
     @if (!last) {

@@ -18,16 +18,16 @@
 </section>
 
 <div class="w-full md:px-16">
-  <h1 class="mt-7 text-lg md:px-4 hidden md:block">FORMULAIRE D'AJOUT D'UN NOUVEAU COURRIER SORTANT EXTERNE</h1>
+  <h1 class="mt-7 text-lg md:px-4 hidden md:block">FORMULAIRE {{ formActionPayload && formActionPayload.action === 'add' ? `D'AJOUT` : `DE MODIFICATION`}} D'UN COURRIER SORTANT EXTERNE</h1>
 
   @if (isFormReady) {
     <form class="w-full flex flex-wrap mt-4" [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="w-full md:px-4 mb-4">
-        <h1 class="text-lg font-bold">Objet du courrier</h1>
+        <h1 class="text-lg font-bold">Objet du document</h1>
 
         <p>
-          Indiquez ici le sujet principal du courrier. Il s'agit de l'objet tel qu'il figure sur le courrier scanné.
-          Ce titre apparaîtra dans les listes et les recherches.
+          Indiquez ici le sujet principal du document. Il s'agit de l'objet tel qu'il figure sur le courrier scanné.
+          Ce titre sera affiché dans les listes et utilisé lors des recherches.
         </p>
       </div>
 
@@ -42,15 +42,15 @@
       </div>
 
       <div class="w-full md:px-4 mb-4">
-        <h1 class="text-lg font-bold">Date et Référence du courrier</h1>
+        <h1 class="text-lg font-bold">Date et Référence du document</h1>
         <p>
-          Saisissez la date d’émission du courrier ainsi que sa férérence ici
+          Saisissez la date d’émission du document ainsi que sa férérence ici
         </p>
       </div>
 
       <div class="w-full md:w-6/12 md:px-4">
         <mat-form-field class="w-full">
-          <mat-label>Date du courrier</mat-label>
+          <mat-label>Date du document</mat-label>
           <input matInput [matDatepicker]="picker1" formControlName="mail_date">
           <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
           <mat-datepicker #picker1></mat-datepicker>
@@ -62,7 +62,7 @@
 
       <div class="w-full md:w-6/12 md:px-4">
         <mat-form-field class="w-full">
-          <mat-label>Référence du courrier</mat-label>
+          <mat-label>Référence du document</mat-label>
           <input type="text" matInput formControlName="reference">
           @if (form.get('reference')?.hasError) {
             <mat-error> {{ getErrorReference() }} </mat-error>
@@ -71,7 +71,7 @@
       </div>
 
       <div class="w-full md:px-4 mb-4">
-        <h1 class="text-lg font-bold">Expéditeur et Destinataire du courrier</h1>
+        <h1 class="text-lg font-bold">Expéditeur et Destinataire du document</h1>
         <p>
           Séléctionner le  l'expéditeur et saissize le destinatair du courier
         </p>
@@ -102,7 +102,7 @@
       </div>
 
       <div class="w-full md:px-4 mb-4">
-        <h1 class="text-lg font-bold">Courrier Scanné</h1>
+        <h1 class="text-lg font-bold">Document Scanné</h1>
         <p>
           Il s'agit d'une lettre ou d’un document papier qui a été numérisé à l’aide d’un scanner,
           afin d’être conservé ou envoyé sous format électronique. Nous acceptons uniquement les fichiers

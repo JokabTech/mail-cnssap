@@ -7,8 +7,8 @@ import { MailStatus } from '../../../../shared/enums/mail-status.enum';
 import { Tabs } from '../../../../shared/enums/tab-enum';
 import { HttpService } from '../../../../core/services/http.service'
 import { IncomingMailMenuComponent } from "../incoming-mail-menu/incoming-mail-menu-component";
-import { IncomingInternalMail } from '../../../../shared/models/incoming-internal-mail';
-import { IncomingExternalMail } from '../../../../shared/models/incoming-external-mail';
+import { isIncomingExternalMail } from '../../../../shared/types/type-guards';
+import { User } from '../../../../shared/models/user';
 
 @Component({
   selector: 'app-incoming-mail-grid-component',
@@ -23,7 +23,7 @@ export class IncomingMailGridComponent<T extends IncomingMail> implements OnInit
   httpService = inject(HttpService);
 
   @Input() tab: string = 'initial';
-  @Input() mails: T[] | undefined = undefined;
+  @Input() mails!: T[];
   @Output() menuSelected = new EventEmitter<ActionEvent<T>>();
 
   roles = Roles;
@@ -31,12 +31,14 @@ export class IncomingMailGridComponent<T extends IncomingMail> implements OnInit
   tabs = Tabs;
 
   role = this.httpService.role;
+  isExternal!: boolean;
 
   onActinSelected(action: ActionEvent<T>) {
     this.menuSelected.emit(action);
   }
 
   ngOnInit(): void {
+    this.isExternal = isIncomingExternalMail(this.mails[0]);
   }
 
   onSend(mail: T) {
@@ -51,16 +53,12 @@ export class IncomingMailGridComponent<T extends IncomingMail> implements OnInit
     this.menuSelected.emit(new ActionEvent('treatment_proof', mail));
   }
 
-  getSenderForIncoming(item: IncomingMail): string {
-    if ('documentType' in item) {
-      const internalMail = item as IncomingInternalMail;
-      return internalMail.sender.full_name;
+  onFindSender(mail: T) {
+    if (this.isExternal) {
+      return mail.sender;
+    } else {
+      const sender = mail.sender as User;
+      return sender ? sender.full_name : 'Aucun expéditeur';
     }
-
-    if ('sender' in item) {
-      const externalMail = item as IncomingExternalMail;
-      return externalMail.sender;
-    }
-    return 'Inconnu';
   }
 }

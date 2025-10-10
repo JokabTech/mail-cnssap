@@ -1,0 +1,75 @@
+<div class="flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 shadow-sm">
+  <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-300">
+    {{ data.title }}
+  </h2>
+  <button mat-icon-button (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <form class="-mx-3 md:-mx-0 w-full flex flex-wrap mt-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="w-full px-3">
+        <mat-form-field class="w-full">
+            <mat-label>Désignation du congé</mat-label>
+            <input type="text" matInput formControlName="name">
+            @if (form.get('name')?.invalid && form.get('name')?.touched) {
+              <mat-error> {{ getErrorDesignation() }} </mat-error>
+            }
+        </mat-form-field>
+    </div>
+
+    <div class="w-full flex flex-wrap">
+        <div class="w-full md:w-6/12 px-3">
+            <mat-form-field class="w-full">
+                <mat-label>Jour du mois</mat-label>
+                <input type="number" matInput formControlName="day">
+
+                @if (form.get('day')?.invalid && form.get('day')?.touched) {
+                    <mat-error> {{ getErrorDay() }} </mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <div class="w-full md:w-6/12 px-3">
+            <mat-form-field class="w-full">
+                <mat-label>Mois</mat-label>
+                <mat-select matInput formControlName="month">
+                    @for (item of localisationService.MONTH_NAMES_FR; track item; let i = $index) {
+                      <mat-option [value]="i"> {{ item }} </mat-option>
+                    }
+                </mat-select>
+                @if (form.get('month')?.invalid && form.get('month')?.touched) {
+                    <mat-error> {{ getErrorMonth() }} </mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <div class="w-full flex justify-end px-3 mb-1.5">
+          <mat-checkbox formControlName="is_fixed">
+           Répéter chaque année
+          </mat-checkbox>
+      </div>
+
+      @if (!form.value.is_fixed) {
+        <div class="w-full px-3">
+        <mat-form-field class="w-full">
+            <mat-label>Année</mat-label>
+            <input type="number" matInput formControlName="year">
+            @if (form.get('year')?.invalid && form.get('year')?.touched) {
+              <mat-error> {{ getErrorYear() }} </mat-error>
+            }
+        </mat-form-field>
+    </div>
+      }
+
+    </div>
+</form>
+</mat-dialog-content>
+<div class="mt-5">
+  <hr class="border-gray-300">
+</div>
+<mat-dialog-actions>
+  <button mat-flat-button cdkFocusInitial (click)="onSubmit()"> {{ data.target === 'add' ? 'Enregistrer' : 'Modifier' }} </button>
+</mat-dialog-actions>

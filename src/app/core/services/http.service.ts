@@ -9,8 +9,9 @@ import { Authentication } from '../../shared/models/authentication';
 export class HttpService {
   private _url!: string;
   //private _baseUrl = 'http://localhost:3000/';
-  private _baseUrl = 'https://mail-cnssap-backend.onrender.com/';
-  //private _baseUrl = window.location.protocol + '//' + window.location.hostname + ':' + 3000 + '/';
+  //private _baseUrl = 'https://mail-cnssap-backend.onrender.com/';
+  //private _baseUrl = 'https://backend.cnssapdoc.com/';
+  private _baseUrl = window.location.protocol + '//' + window.location.hostname + ':' + 3000 + '/';
   //private _baseUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/';
 
   isAuthentifier = false;
@@ -129,8 +130,6 @@ export class HttpService {
       jsonString = JSON.stringify(formObject);
     }
 
-    console.log(jsonString);
-
     const formData = new FormData();
     formData.append('data', jsonString);
     if (file) {
@@ -156,8 +155,8 @@ export class HttpService {
     }
   }
 
-  getPdfDocument(): Observable<Blob> {
-    return this.http.get(this._url, { responseType: 'blob', headers: this.getHeader() });
+  getPdfDocument(params?: HttpParams): Observable<Blob> {
+    return this.http.get(this._url, { responseType: 'blob', headers: this.getHeader(), params });
   }
 
   getFile(): Observable<ArrayBuffer> {

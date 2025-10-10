@@ -20,7 +20,7 @@
 
 @if (!end) {
 <div class="w-full md:px-16">
-  <h1 class="mt-7 text-lg md:px-4 hidden md:block">FORMULAIRE D'AJOUT D'UN NOUVEAU COURRIER ENTRANT EXTERNE</h1>
+  <h1 class="mt-7 text-lg md:px-4 hidden md:block">FORMULAIRE {{ formActionPayload && formActionPayload.action === 'add' ? `D'AJOUT` : 'DE MODIFICATION' }} D'UN COURRIER ENTRANT EXTERNE</h1>
 
   @if (isFormReady) {
     <form class="w-full flex flex-wrap mt-4" [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -28,8 +28,8 @@
       <h1 class="text-lg font-bold">Objet du courrier</h1>
 
       <p>
-        Indiquez ici le sujet principal du courrier. Il s'agit de l'objet tel qu'il figure sur le courrier scanné.
-        Ce titre apparaîtra dans les listes et les recherches.
+        Indiquez ici le sujet principal du courrier. Il s’agit de l’objet tel qu’il apparaît sur le courrier scanné.
+        Ce titre sera affiché dans les listes et utilisé lors des recherches.
       </p>
     </div>
 
@@ -45,7 +45,7 @@
 
     @if (role === roles.SENIOR_ASSISTANT) {
     <div class="w-full md:px-4 mb-4">
-      <h1 class="text-lg font-bold">Destinateur</h1>
+      <h1 class="text-lg font-bold">Destinataire</h1>
       <p>
         Sélectionnez le directeur en charge de traiter ce courrier, il le recevra et le traitera
       </p>
@@ -72,7 +72,7 @@
     }
 
     <div class="w-full md:px-4 mb-4">
-      <h1 class="text-lg font-bold">Date et Expéditeur du courrier</h1>
+      <h1 class="text-lg font-bold">Date et expéditeur du courrier</h1>
       <p>
         Saisissez la date d’émission du courrier ainsi que le nom ou l'entité de l'expéditeur.
       </p>
@@ -197,7 +197,7 @@
     }
 
     @if (role === roles.ADMIN_ASSISTANT || role === roles.SENIOR_ASSISTANT) {
-    <div class="w-full md:px-4 mb-4">
+    <div class="w-full md:px-4 mb-4 mt-3.5">
       <h1 class="text-lg font-bold">Annotation assistant administratif</h1>
       <p>
         Il s'agit de votre commentaier entant qu'assistant administratif, ce commentaire sera visible par l'assistant
