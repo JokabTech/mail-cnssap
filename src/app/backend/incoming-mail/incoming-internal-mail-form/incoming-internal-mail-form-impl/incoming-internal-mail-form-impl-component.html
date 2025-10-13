@@ -16,7 +16,7 @@
 </section>
 
 <div class="w-full md:px-16">
-  <h1 class="mt-7 text-lg md:px-4 hidden md:block">FORMULAIRE ddd {{ formActionPayload && formActionPayload.action === 'add' ? `D'AJOUT` : 'DE MODIFICATION' }} D'UN COURRIER ENTRANT INTERNE</h1>
+  <h1 class="mt-7 text-lg md:px-4 hidden md:block">FORMULAIRE {{ formActionPayload && formActionPayload.action === 'add' ? `D'AJOUT` : 'DE MODIFICATION' }} D'UN COURRIER ENTRANT INTERNE</h1>
 
   @if (isFormReady) {
     <form class="w-full flex flex-wrap mt-4" [formGroup]="form" (ngSubmit)="onSubmit()">

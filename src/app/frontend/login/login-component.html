@@ -34,13 +34,13 @@
           <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <mat-form-field appearance="outline" class="w-full mb-1">
               <mat-label>Adresse E-mail</mat-label>
-              <input type="email" matInput formControlName="username">
+              <input maxlength="40" type="email" matInput formControlName="username">
               <mat-icon color="primary" matSuffix>person</mat-icon>
             </mat-form-field>
             <div class="mb-6">
               <mat-form-field class="w-full" appearance="outline">
                 <mat-label>Mot de passe</mat-label>
-                <input type="password" matInput [type]="hide ? 'password' : 'text'" (focus)="lock = true" formControlName="password">
+                <input maxlength="16" type="password" matInput [type]="hide ? 'password' : 'text'" (focus)="lock = true" formControlName="password">
                 <a mat-icon-button matSuffix (click)="hide = !hide">
                   @if (lock) {
                   <mat-icon color="primary">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -51,7 +51,7 @@
               </mat-form-field>
               <div class="flex items-center justify-between -mt-4">
                 <mat-checkbox> Se souvenir</mat-checkbox>
-                <a href="#" class="text-sm text-blue-600 hover:underline focus:text-blue-800">Mot de passe oublié ?</a>
+                <a routerLink="/auth/forgot-password" class="text-sm text-blue-600 hover:underline focus:text-blue-800">Mot de passe oublié ?</a>
               </div>
             </div>
             <div class="mb-6">

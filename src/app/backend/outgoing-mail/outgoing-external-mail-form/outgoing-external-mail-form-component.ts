@@ -12,10 +12,11 @@ import { Router } from '@angular/router';
 import { User } from '../../../shared/models/user';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { OutgoingInternalMail } from '../../../shared/models/outgoing-internal-mail';
+import { BackComponent } from "../../../shared/components/back/back-component";
 
 @Component({
   selector: 'app-outgoing-external-mail-form-component',
-  imports: [...SharedBackend, ...SharedImports],
+  imports: [...SharedBackend, ...SharedImports, BackComponent],
   templateUrl: './outgoing-external-mail-form-component.html',
   styleUrl: './outgoing-external-mail-form-component.scss',
   providers: [

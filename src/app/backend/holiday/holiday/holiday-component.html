@@ -65,7 +65,7 @@
               </th>
 
                <th scope="col" class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                Reccurent
+                Actif
               </th>
 
               <th scope="col" class="relative py-3.5 px-4">
@@ -95,7 +95,7 @@
                 </td>
 
                 <td class="px-12 py-2.5 text-sm whitespace-nowrap">
-                  {{ item.is_fixed ? 'Oui' : 'Non' }}
+                  {{ item.is_active ? 'Oui' : 'Non' }}
                 </td>
 
                 <td class="px-4 py-2.5 text-sm whitespace-nowrap">
@@ -118,7 +118,11 @@
     <button mat-menu-item (click)="onUpdate(item)">
       <mat-icon>edit</mat-icon>Modifier
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="onToogleStatus(item)">
+      <mat-icon> {{ item.is_active ? 'close' : 'check' }} </mat-icon> {{ item.is_active ? 'Désactiver' : 'Acviter' }}
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="onDelete(item)">
       <mat-icon>delete</mat-icon><span>Supprimer</span>
     </button>
   </ng-template>

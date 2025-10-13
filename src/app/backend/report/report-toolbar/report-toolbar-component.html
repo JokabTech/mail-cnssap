@@ -93,7 +93,7 @@
       <div class="w-full md:w-3/12 md:px-3 py-1.5">
         <label for="document_type_id" class="block text-sm text-gray-500 dark:text-gray-300">Type de courrier</label>
         <select formControlName="document_type_id" id="document_type_id" class="mt-2 block w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-3.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
-            <option selected value="">Type de courrier</option>
+            <option selected value="">Tous les types</option>
             @for (item of documentTypes; track item.id) {
               <option [value]="item.id"> {{ item.designation }} </option>
             }

@@ -30,22 +30,23 @@ export class ToolbarComponent implements OnInit {
   tabsIncoming: Tab[] = [
     {
       key: 'initial',
-      icon: 'toc',
+      icon: 'edit',
       tooltipMaa: 'Tous les courriers',
       tooltipAaSa: 'Courriers à annoter',
       tooltipDir: 'Courriers à traiter',
+      tooltipEs: 'Courriers enregistrés',
       roles: [Roles.MAIL_ARCHIVES_AGENT, Roles.EXECUTIVE_SECRETARY, Roles.ADMIN_ASSISTANT, Roles.SENIOR_ASSISTANT, Roles.DIRECTOR]
     },
     { key: 'annotated', icon: 'receipt', tooltip: 'Courrier déjà annotés', roles: [Roles.ADMIN_ASSISTANT, Roles.SENIOR_ASSISTANT] },
     { key: 'all', icon: 'list', tooltip: 'Liste complète de courriers', roles: [Roles.ADMIN_ASSISTANT, Roles.SENIOR_ASSISTANT, Roles.DIRECTOR] },
-    { key: 'treated', icon: 'assignment_turned_in', tooltip: 'Déjà traités', roles: [Roles.ADMIN_ASSISTANT, Roles.SENIOR_ASSISTANT, Roles.DIRECTOR] },
+    { key: 'treated', icon: 'check', tooltip: 'Déjà traités', roles: [Roles.ADMIN_ASSISTANT, Roles.SENIOR_ASSISTANT, Roles.DIRECTOR] },
     { key: 'to-process', icon: 'translate', tooltip: 'Courriers à traiter', roles: [Roles.MAIL_ARCHIVES_AGENT, Roles.EXECUTIVE_SECRETARY, Roles.ADMIN_ASSISTANT, Roles.SENIOR_ASSISTANT] }
   ];
 
   tabsOutgoing: Tab[] = [
     { key: 'initial', icon: 'hourglass_empty', tooltip: 'Courriers en cours de transmission' },
-    { key: 'sent', icon: 'list', tooltip: 'Courriers déjà transmis' },
-    { key: 'all', icon: 'assignment_turned_in', tooltip: 'Liste complete de courriers' },
+    { key: 'sent', icon: 'check', tooltip: 'Courriers déjà transmis' },
+    { key: 'all', icon: 'list', tooltip: 'Liste complete de courriers' },
   ];
 
   title: string | undefined;
@@ -68,6 +69,10 @@ export class ToolbarComponent implements OnInit {
         }
       }
     }
+
+    if (this.role === Roles.EXECUTIVE_SECRETARY) {
+      this.tabsIncoming[0].icon = 'folder'
+    }
   }
 
   onSelectTab(tab: Tab) {
@@ -88,6 +93,8 @@ export class ToolbarComponent implements OnInit {
         switch (this.role) {
           case Roles.MAIL_ARCHIVES_AGENT:
             return tab.tooltipMaa;
+            case Roles.EXECUTIVE_SECRETARY:
+            return tab.tooltipEs;
           case Roles.DIRECTOR:
             return tab.tooltipDir;
           default:

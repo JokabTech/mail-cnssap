@@ -75,7 +75,7 @@ export class HttpService {
   private getHeader() {
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: this._authentication.authorization
+      Authorization: this._authentication ? this._authentication.authorization : ''
     })
   }
 
@@ -129,6 +129,7 @@ export class HttpService {
     } else {
       jsonString = JSON.stringify(formObject);
     }
+
 
     const formData = new FormData();
     formData.append('data', jsonString);

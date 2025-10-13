@@ -63,4 +63,20 @@ export class IncomingReportListViewComponent<T extends IncomingMail> implements 
   onAddProof(mail: T) {
     this.menuSelected.emit(new ActionEvent('treatment_proof', mail));
   }
+
+  // Dans votre composant TypeScript
+  getProgressBarPercentage(status: string): string {
+    switch (status) {
+      case 'aa':
+        return '25%'; // Premier niveau
+      case 'sa':
+        return '50%'; // Niveau intermédiaire
+      case 'dir':
+        return '75%'; // Nouveau statut (Quasi-terminé)
+      case 'proc':
+        return '100%'; // Finalisé
+      default:
+        return '100%';
+    }
+  }
 }

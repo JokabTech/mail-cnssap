@@ -37,7 +37,7 @@
       <div class="px-5 pt-5">
         <div class="flex justify-between items-center">
           <h2 class="text-xl font-bold text-gray-800">
-            COURRIERS NON TRAITER | TOTAL : {{mailMetrics.pendingLate + mailMetrics.pendingOnTime}}
+            COURRIERS NON TRAITÉS | TOTAL : {{mailMetrics.pendingLate + mailMetrics.pendingOnTime}}
           </h2>
           <button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ item: { mailMetrics, is_processed: false } }" matIconButton><mat-icon>more_vert</mat-icon></button>
         </div>
@@ -71,5 +71,7 @@
       </button>
     </ng-template>
 </mat-menu>
+}@else {
+  <app-information-component></app-information-component>
 }
 

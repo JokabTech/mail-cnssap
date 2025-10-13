@@ -11,6 +11,8 @@
   }@else {
     <app-incoming-report-list-view-component (menuSelected)="onMenuSelected($event)" [mails]="mailService.page.items" [forReport]="false"></app-incoming-report-list-view-component>
   }
+}@else {
+  <app-information-component></app-information-component>
 }
 
 @if (mailService.page) {

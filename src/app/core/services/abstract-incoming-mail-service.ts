@@ -9,7 +9,8 @@ import { CommentDialogComponent } from '../../backend/incoming-mail/comment-dial
 import { HttpEventType } from '@angular/common/http';
 import { ActionEvent } from '../../shared/models/action-event';
 import { AbstractMailService } from './abstract-mail-service';
-import { ReportPdfBuilderService } from './report-pdf-builder-service';
+import { UserFilterComponent } from '../../backend/user/user-filter/user-filter-component';
+import { User } from '../../shared/models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -189,7 +190,7 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
         this.downloadDocument(event.data.id, 'document');
         break;
       case 'share_mail':
-
+        this.sharedMail(event.data, 'DE DOCUMENT');
         break;
       case 'treatment_proof':
         this.addFile(event.data, 'Ajouter un justificatif de traitement', 'treatment-proof')
@@ -201,10 +202,10 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
         this.downloadDocument(event.data.id, 'proof');
         break;
       case 'share_proof':
-
+        this.sharedMail(event.data, 'DE LA PREUVE');
         break;
       case 'assign_agent':
-
+        this.assign(event.data);
         break;
       case 'edit_mail':
         this.goToForm(event.action, event.data);
@@ -218,5 +219,46 @@ export abstract class AbstractIncomingMailService<T extends IncomingMail> extend
       default:
         console.warn(`Action non gérée :`);
     }
+  }
+
+  assign(mail: T) {
+    const conf = new MatDialogConfig();
+    conf.disableClose = true;
+    conf.data = { title: `Rechercher un utilisateur` };
+    conf.minWidth = this.xSmallOrSmall() ? '96vw' : '57vw';
+    const dialogRef = this.dialog.open(UserFilterComponent, conf);
+    dialogRef.afterClosed().subscribe((user: User) => {
+      this.confirmation(mail, user);
+    });
+  }
+
+  confirmation(mail: T, user: User) {
+    const role = this.http.role;
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      data: {
+        message: `Souhaitez-vous vraiment affecter le traitement du courrier "${mail.subject}" à l'agent ${user.full_name} ?`,
+        buttonText: { ok: 'Oui', cancel: 'Non' },
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirm: boolean) => {
+      if (confirm) {
+        this.http.url = `${this.endpoint}/${mail.id}/assign`;
+        this.http.update({ agent_id: user.id }).subscribe({
+          next: (data: any) => {
+            const index = this.page.items.findIndex(item => item.id === data.id);
+            if (index !== -1) {
+              this.page.items[index] = data;
+            }
+          },
+          error: () => {
+            this.message.openSnackBar(`Une erreur est survenue, veuillez réessayer.`, 'Fermer', 4000);
+          },
+          complete: () => {
+            this.message.openSnackBar(`Affectation de traitement effectuée avec succès !`, 'Fermer', 4000);
+          },
+        });
+      }
+    });
   }
 }

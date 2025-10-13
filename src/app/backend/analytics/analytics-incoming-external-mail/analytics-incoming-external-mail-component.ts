@@ -12,10 +12,11 @@ import { HttpParamsService } from '../../../core/services/http-params-service';
 import { AnalyticsComponent } from "../analytics/analytics-component";
 import { SharedImports } from '../../../shared/imports/shared-imports';
 import { Router } from '@angular/router';
+import { InformationComponent } from "../../../shared/components/information/information-component";
 
 @Component({
   selector: 'app-analytics-incoming-external-mail-component',
-  imports: [ReportToolbarComponent, AnalyticsComponent, ...SharedImports],
+  imports: [ReportToolbarComponent, AnalyticsComponent, ...SharedImports, InformationComponent],
   templateUrl: './analytics-incoming-external-mail-component.html',
   styleUrl: './analytics-incoming-external-mail-component.scss'
 })

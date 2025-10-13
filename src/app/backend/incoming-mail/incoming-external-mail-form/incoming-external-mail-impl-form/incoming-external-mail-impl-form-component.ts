@@ -15,10 +15,11 @@ import { User } from '../../../../shared/models/user';
 import { FormActionPayload } from '../../../../shared/models/form-action-payload';
 import { Roles } from '../../../../shared/enums/roles-enum';
 import { IncomingExternalMail } from '../../../../shared/models/incoming-external-mail';
+import { BackComponent } from "../../../../shared/components/back/back-component";
 
 @Component({
   selector: 'app-incoming-external-mail-impl-form-component',
-  imports: [...SharedBackend, ...SharedImports, EditorComponent],
+  imports: [...SharedBackend, ...SharedImports, EditorComponent, BackComponent],
   templateUrl: './incoming-external-mail-impl-form-component.html',
   styleUrl: './incoming-external-mail-impl-form-component.scss',
   providers: [

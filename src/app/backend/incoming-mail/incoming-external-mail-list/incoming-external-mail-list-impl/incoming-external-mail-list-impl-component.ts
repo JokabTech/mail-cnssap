@@ -10,6 +10,7 @@ import { SearchBarComponent } from '../../chunks/search-bar/search-bar-component
 import { ToolbarComponent } from '../../chunks/toolbar/toolbar-component';
 import { IncomingExternalMail } from '../../../../shared/models/incoming-external-mail';
 import { IncomingReportListViewComponent } from "../../../report/incoming-report-list-view/incoming-report-list-view-component";
+import { InformationComponent } from "../../../../shared/components/information/information-component";
 
 @Component({
   selector: 'app-incoming-external-mail-list-impl-component',
@@ -18,7 +19,8 @@ import { IncomingReportListViewComponent } from "../../../report/incoming-report
     SearchBarComponent,
     ...SharedBackend,
     IncomingMailGridComponent,
-    IncomingReportListViewComponent
+    IncomingReportListViewComponent,
+    InformationComponent
 ],
   templateUrl: './incoming-external-mail-list-impl-component.html',
   styleUrl: './incoming-external-mail-list-impl-component.scss'

@@ -9,6 +9,7 @@ import { OutgoingExternalMailService } from '../../../../core/services/outgoing-
 import { SharedBackend } from '../../../../shared/imports/shared-backend-imports';
 import { ActionEvent } from '../../../../shared/models/action-event';
 import { OutgoingExternalMail } from '../../../../shared/models/outgoing-external-mail';
+import { InformationComponent } from "../../../../shared/components/information/information-component";
 
 @Component({
   selector: 'app-outgoing-external-mail-list-impl-component',
@@ -17,7 +18,8 @@ import { OutgoingExternalMail } from '../../../../shared/models/outgoing-externa
     SearchBarComponent,
     ...SharedBackend,
     OutgoingMailGridComponent,
-  ],
+    InformationComponent
+],
   templateUrl: './outgoing-external-mail-list-impl-component.html',
   styleUrl: './outgoing-external-mail-list-impl-component.scss'
 })

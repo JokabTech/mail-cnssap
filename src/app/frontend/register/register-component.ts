@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SharedImports } from '../../shared/imports/shared-imports';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
@@ -14,18 +14,18 @@ import { AuthService } from '../../core/services/auth-service';
   styleUrl: './register-component.scss'
 })
 export class RegisterComponent {
+  private message = inject(MessageService)
+  private router = inject(Router);
+  private http = inject(HttpService);
+  public authService = inject(AuthService);
+
   hide = true;
   lock = false;
   form!: FormGroup;
   unsubscribe$ = new Subject<void>();
   loader = false;
 
-  constructor(
-    private message: MessageService,
-    private router: Router,
-    private http: HttpService,
-    private authService: AuthService
-  ) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.initForm();
@@ -44,6 +44,10 @@ export class RegisterComponent {
       password2: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]),
       terms: new FormControl(false, [Validators.required]),
     }, { validators: this.passwordMatchValidator });
+
+    this.form.get('password')?.valueChanges.subscribe(value => {
+      this.authService.evaluatePassword(value);
+    });
   }
 
   getErrorFullName(): string {

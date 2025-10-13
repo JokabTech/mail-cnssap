@@ -8,7 +8,7 @@
 }@else if(mailService.page.totalItems > 0){
   <app-incoming-mail-grid-component [tab]="mailService.tab" (menuSelected)="onMenuSelected($event)" [mails]="mailService.page.items"></app-incoming-mail-grid-component>
 }@else {
-  <p>Aucun résultat à afficher</p>
+  <app-information-component></app-information-component>
 }
 
 @if (mailService.page) {

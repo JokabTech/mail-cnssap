@@ -11,6 +11,10 @@ export class AuthService {
   private router = inject(Router);
   private message = inject(MessageService);
 
+  passwordStrength: string = '';
+  strengthPercent: number = 0;
+  strengthClass: string = 'bg-gray-300';
+
   loginWithGoogle() {
     this.http.url = 'auth/google';
     const googleAuthUrl = `${this.http.baseUrl}auth/google`;
@@ -38,4 +42,41 @@ export class AuthService {
     };
     window.addEventListener('message', messageListener);
   }
+
+  evaluatePassword(password: string) {
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[\W_]/.test(password)) score++;
+
+    this.strengthPercent = (score / 5) * 100;
+
+    switch (score) {
+      case 0:
+      case 1:
+        this.passwordStrength = 'Très faible';
+        this.strengthClass = 'bg-red-600';
+        break;
+      case 2:
+        this.passwordStrength = 'Faible';
+        this.strengthClass = 'bg-orange-500';
+        break;
+      case 3:
+        this.passwordStrength = 'Moyen';
+        this.strengthClass = 'bg-yellow-400';
+        break;
+      case 4:
+        this.passwordStrength = 'Fort';
+        this.strengthClass = 'bg-green-500';
+        break;
+      case 5:
+        this.passwordStrength = 'Très fort';
+        this.strengthClass = 'bg-green-700';
+        break;
+    }
+  }
+
+
 }

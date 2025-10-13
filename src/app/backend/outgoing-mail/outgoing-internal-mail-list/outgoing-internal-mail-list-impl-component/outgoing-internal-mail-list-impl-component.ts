@@ -9,6 +9,7 @@ import { Header } from '../../../../shared/models/header';
 import { Criteria } from '../../../../shared/models/criteria';
 import { ActionEvent } from '../../../../shared/models/action-event';
 import { OutgoingInternalMail } from '../../../../shared/models/outgoing-internal-mail';
+import { InformationComponent } from "../../../../shared/components/information/information-component";
 
 @Component({
   selector: 'app-outgoing-internal-mail-list-impl-component',
@@ -17,7 +18,8 @@ import { OutgoingInternalMail } from '../../../../shared/models/outgoing-interna
     SearchBarComponent,
     ...SharedBackend,
     OutgoingMailGridComponent,
-  ],
+    InformationComponent
+],
   templateUrl: './outgoing-internal-mail-list-impl-component.html',
   styleUrl: './outgoing-internal-mail-list-impl-component.scss'
 })

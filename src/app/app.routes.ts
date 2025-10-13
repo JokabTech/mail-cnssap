@@ -16,8 +16,9 @@ export const routes: Routes = [
     path: '', loadComponent: () => import('./backend/layout-backend/layout-backend-component').then(m => m.LayoutBackendComponent),
     children: [
       {
-        path: '', loadChildren: () => import('./backend/backend-routes').then(m => m.backendRoutes)
+        path: '', loadChildren: () => import('./backend/backend-routes').then(m => m.backendRoutes),
+        data: { preload: true, preloadDelay: 10 }
       }
-    ]
+    ],
   },
 ];

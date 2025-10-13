@@ -14,10 +14,11 @@ import { Header } from '../../shared/models/header';
 import { Function } from '../../shared/models/function';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { UserEditComponent } from './user-edit/user-edit-component';
+import { BackComponent } from "../../shared/components/back/back-component";
 
 @Component({
   selector: 'app-users-component',
-  imports: [...SharedBackend, ...SharedImports, FormsModule],
+  imports: [...SharedBackend, ...SharedImports, FormsModule, BackComponent],
   templateUrl: './users-component.html',
   styleUrl: './users-component.scss'
 })

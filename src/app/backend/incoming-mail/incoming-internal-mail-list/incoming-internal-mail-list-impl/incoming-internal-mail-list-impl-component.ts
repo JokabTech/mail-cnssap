@@ -9,6 +9,7 @@ import { ActionEvent } from '../../../../shared/models/action-event';
 import { ToolbarComponent } from '../../chunks/toolbar/toolbar-component';
 import { SearchBarComponent } from '../../chunks/search-bar/search-bar-component';
 import { IncomingInternalMail } from '../../../../shared/models/incoming-internal-mail';
+import { InformationComponent } from "../../../../shared/components/information/information-component";
 
 @Component({
   selector: 'app-incoming-internal-mail-list-impl-component',
@@ -16,8 +17,9 @@ import { IncomingInternalMail } from '../../../../shared/models/incoming-interna
     ToolbarComponent,
     SearchBarComponent,
     ...SharedBackend,
-    IncomingMailGridComponent
-  ],
+    IncomingMailGridComponent,
+    InformationComponent
+],
   templateUrl: './incoming-internal-mail-list-impl-component.html',
   styleUrl: './incoming-internal-mail-list-impl-component.scss'
 })

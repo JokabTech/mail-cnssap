@@ -1,0 +1,51 @@
+<div class="flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 shadow-sm">
+  <h2 class="text-base font-bold text-gray-800 dark:text-gray-300">
+    {{ data.title }}
+  </h2>
+  <button mat-icon-button (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <div class="share-modal-container">
+    <div class="share-modal-content">
+
+      <h2 class="text-xl font-semibold mb-6">Objet : "{{ data.mail.subject }}" </h2>
+
+      @if (isNativeShareSupported) {
+         <div class="mb-6">
+        <button mat-flat-button color="primary" class="w-full" (click)="shareNative(shareUrl, `${ data.mail.subject }`)">
+          <mat-icon class="mr-2">share</mat-icon>
+          Partager via les options de mon appareil
+        </button>
+      </div>
+      }
+
+      <div class="border-t pt-4">
+        <p class="text-sm text-gray-600 mb-2 font-medium">Copier le lien</p>
+
+        <div class="flex">
+          <input [value]="shareUrl" readonly class="flex-grow p-2 border border-gray-300 rounded-l-lg bg-gray-50 text-sm overflow-ellipsis" #shareInput>
+
+          <button class="bg-gray-200 text-gray-800 px-4 rounded-r-lg hover:bg-gray-300 transition" (click)="copyLink(shareUrl)">
+            {{ copy ? 'Copié !' : 'Copier' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-6 mb-2">
+        <button mat-flat-button color="basic" class="w-full text-gray-700 hover:bg-gray-100 border-gray-300" (click)="shareByEmail(shareUrl, `${ data.mail.subject }`)">
+          <mat-icon class="mr-2 text-red-500">email</mat-icon>
+          Envoyer par E-mail
+        </button>
+      </div>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button matDialogClose>Fermer</button>
+
+</mat-dialog-actions>

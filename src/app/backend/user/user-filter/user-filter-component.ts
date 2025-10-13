@@ -1,3 +1,4 @@
+import { RoleService } from './../../../core/services/role-service';
 import { Component, computed, inject, OnDestroy, OnInit } from '@angular/core';
 import { HttpService } from '../../../core/services/http.service';
 import { MessageService } from '../../../core/services/message.service';
@@ -12,6 +13,7 @@ import { Page } from '../../../shared/models/page';
 import { SharedBackend } from '../../../shared/imports/shared-backend-imports';
 import { SharedImports } from '../../../shared/imports/shared-imports';
 import { DialogImports } from '../../../shared/imports/dialog-imports';
+import { Role } from '../../../shared/models/role';
 
 @Component({
   selector: 'app-user-filter-component',
@@ -21,10 +23,11 @@ import { DialogImports } from '../../../shared/imports/dialog-imports';
 })
 export class UserFilterComponent implements OnInit, OnDestroy {
   readonly dialogRef = inject(MatDialogRef<UserFilterComponent>);
-  readonly data: { title: string } = inject(MAT_DIALOG_DATA);
+  readonly data: { title: string, multiple: false } = inject(MAT_DIALOG_DATA);
   private http = inject(HttpService);
   private message = inject(MessageService);
   protected paramsService = inject(HttpParamsService);
+  private roleService = inject(RoleService);
 
   private stateService = inject(StateService);
   public xSmallOrSmall = computed(() => this.stateService.XSmallOrSmall());
@@ -35,6 +38,7 @@ export class UserFilterComponent implements OnInit, OnDestroy {
 
   loading = false;
   page!: Page<User>
+  users: User[] = [];
 
   currentPage = 1;
   pageSizeOptions: number[] = [5, 10, 20, 30, 50, 100, 200, 300];
@@ -74,6 +78,23 @@ export class UserFilterComponent implements OnInit, OnDestroy {
     this.searchTrigger$.next(this.paramsService.build('users', { page: this.currentPage, pageSize: this.pageSize }));
   }
 
+  isSelected(user: User): boolean {
+    return this.users.map(e => e.email.toLowerCase()).includes(user.email.toLowerCase());
+  }
+
+  onSelectUser(user: User): void {
+    if (this.data.multiple) {
+      const isCurrentlySelected = this.isSelected(user);
+      if (isCurrentlySelected) {
+        this.users = this.users.filter(email => email.email.toLowerCase() !== user.email.toLowerCase());
+      } else {
+        this.users.push(user);
+      }
+    } else {
+      this.dialogRef.close(user);
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroySearchKeywordSub$.next();
     this.destroySearchKeywordSub$.complete();
@@ -94,12 +115,25 @@ export class UserFilterComponent implements OnInit, OnDestroy {
     this.searchTrigger$.next(options);
   }
 
-  onClose(){
+  onClose() {
     this.dialogRef.close();
   }
 
-  onSelectUser(user: User){
-    this.dialogRef.close(user);
+  validate() {
+    this.dialogRef.close(this.users);
   }
+
+  getRolesDisplay(roles: Role[]): string {
+    if (!roles || roles.length === 0) {
+      return 'Aucun rôle';
+    }
+    return roles.map(role => {
+      return this.roleService.build(role.name);
+    }).join(', ');
+  }
+
+  onRemoveSelected(user: User): void {
+    this.users = this.users.filter(e => e.email.toLowerCase() !== user.email.toLowerCase());
+}
 
 }

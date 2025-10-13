@@ -5,5 +5,6 @@ export interface Tab {
   tooltipMaa?: string;
   tooltipAaSa?: string;
   tooltipDir?: string;
+  tooltipEs?: string;
   roles?: string[];
 }

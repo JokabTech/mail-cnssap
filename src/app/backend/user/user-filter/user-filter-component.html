@@ -9,86 +9,126 @@
 
 <mat-dialog-content>
 
-<div class="md:px-5 md:py-8">
-  <div class="flex flex-col md:flex-row items-center justify-between gap-x-5 gap-2.5 mb-3">
-    <div class="w-full md:w-5/12">
-      <div class="relative w-full">
-        <input [formControl]="searchKeyword" type="text" class="w-full p-3 pl-5 pr-15 text-lg border-2 border-gray-200 md:rounded-full outline-none transition duration-300 focus:border-blue-500 focus:text-gray-700 bg-white h-[44px]" placeholder="Rechercher un membre">
-        <mat-icon class="absolute right-4 pr-1 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">search</mat-icon>
-      </div>
-    </div>
-  </div>
-
-  @if (loading) {
-  <mat-spinner></mat-spinner>
-  }@else {
-  <div class="flex flex-col mt-6">
-    <!-- C’est ici qu’on force le scroll horizontal -->
-    <div class="overflow-x-auto">
-      <div class="inline-block min-w-full align-middle">
-        <div class="overflow-hidden border-y border-gray-200 dark:border-gray-700 md:rounded-lg">
-          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead class=" dark:bg-gray-800">
-              <tr>
-                <th scope="col" class="py-3.5 px-4 text-sm font-normal text-left text-gray-500 dark:text-gray-400">
-                  Nom de l'utilisateur
-                </th>
-                <th scope="col"
-                  class="hidden sm:table-cell px-12 py-3.5 text-sm font-normal text-center text-gray-500 dark:text-gray-400">
-                  Roles
-                </th>
-                <th scope="col"
-                  class="hidden sm:table-cell px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">
-                  Téléphone
-                </th>
-                <th scope="col"
-                  class="hidden sm:table-cell px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">
-                  E-mail
-                </th>
-                <th scope="col" class="relative py-3.5 px-4">
-                  <span class="sr-only">Opérations</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-              @for (item of page.items; track item.id; let i = $index) {
-              <tr class="hover:bg-gray-100 cursor-pointer" (click)="onSelectUser(item)">
-                <td class="px-4 py-1.5 text-sm font-medium whitespace-nowrap">
-                  <div>
-                    <h2 class="font-medium text-gray-800 dark:text-white"> {{ item.full_name }} </h2>
-                  </div>
-                </td>
-                <td class="hidden sm:table-cell px-12 py-1.5 text-sm text-center font-medium whitespace-nowrap">
-                  <div class="inline px-3 py-1 text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                    iv
-                  </div>
-                </td>
-                <td class="hidden sm:table-cell px-4 py-1.5 text-sm whitespace-nowrap">
-                  {{ item.phone }}
-                </td>
-                <td class="hidden sm:table-cell px-4 py-1.5 text-sm whitespace-nowrap">
-                  {{ item.email }}
-                </td>
-                <td class="px-4 py-1.5 text-sm whitespace-nowrap">
-                  <button mat-icon-button >
-                    <mat-icon>more_vert</mat-icon>
-                  </button>
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
+  <div class="md:px-5 md:py-3">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-x-5 gap-2.5 mb-3">
+      <div class="w-full md:w-5/12">
+        <div class="relative w-full">
+          <input [formControl]="searchKeyword" type="text"
+            class="w-full p-3 pl-5 pr-15 text-lg border-2 border-gray-200 md:rounded-full outline-none transition duration-300 focus:border-blue-500 focus:text-gray-700 bg-white h-[44px]"
+            placeholder="Rechercher un membre">
+          <mat-icon
+            class="absolute right-4 pr-1 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">search</mat-icon>
         </div>
       </div>
     </div>
-  </div>
-  }
 
-  @if (page) {
-    <div class="mt-12 mb-2">
-    <mat-paginator style="background-color: transparent;" class="mt-6" [length]="page.totalItems" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons  (page)="onPageChange($event)"/>
+    @if (loading) {
+      <mat-spinner></mat-spinner>
+    }@else {
+      <div class="flex flex-col mt-6">
+        <!-- C’est ici qu’on force le scroll horizontal -->
+        <div class="overflow-x-auto">
+          <div class="inline-block min-w-full align-middle">
+            <div class="overflow-hidden border-y border-gray-200 dark:border-gray-700 md:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class=" dark:bg-gray-800">
+                  <tr>
+                    <th scope="col" class="py-3.5 px-4 text-sm font-normal text-left text-gray-500 dark:text-gray-400">
+                      Nom de l'utilisateur
+                    </th>
+                    <th scope="col"
+                      class="hidden sm:table-cell px-12 py-3.5 text-sm font-normal text-center text-gray-500 dark:text-gray-400">
+                      Roles
+                    </th>
+                    <th scope="col"
+                      class="hidden sm:table-cell px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">
+                      Téléphone
+                    </th>
+                    <th scope="col"
+                      class="hidden sm:table-cell px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">
+                      E-mail
+                    </th>
+                    <th scope="col" class="relative py-3.5 px-4">
+                      <span class="sr-only">Opérations</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+                  @for (item of page.items; track item.id; let i = $index) {
+                  <tr class="hover:bg-gray-100 cursor-pointer" (click)="onSelectUser(item)">
+                    <td class="px-4 py-1.5 text-sm font-medium whitespace-nowrap">
+                      <div>
+                        <h2 class="font-medium text-gray-800 dark:text-white"> {{ item.full_name }} </h2>
+                      </div>
+                    </td>
+                    <td class="hidden sm:table-cell px-12 py-1.5 text-sm text-center font-medium whitespace-nowrap">
+                      <div
+                        class="inline px-3 py-1 text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+                        {{ getRolesDisplay(item.roles) }}
+                      </div>
+                    </td>
+                    <td class="hidden sm:table-cell px-4 py-1.5 text-sm whitespace-nowrap">
+                      {{ item.phone }}
+                    </td>
+                    <td class="hidden sm:table-cell px-4 py-1.5 text-sm whitespace-nowrap">
+                      {{ item.email }}
+                    </td>
+                    <td class="px-4 py-1.5 text-sm whitespace-nowrap">
+                      <mat-checkbox [checked]="isSelected(item)"
+                        (click)="$event.stopPropagation(); onSelectUser(item)"></mat-checkbox>
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (page) {
+      <div class="mt-12 mb-2">
+        <mat-paginator style="background-color: transparent;" class="mt-6" [length]="page.totalItems" [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons (page)="onPageChange($event)" />
+      </div>
+    }
+
+    <h1 class="text-xl font-semibold mt-8 mb-2 text-gray-800 dark:text-gray-300">
+      Personnes sélectionnées ({{ users.length }})
+    </h1>
+
+    <div class="border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+
+      @if (users.length === 0) {
+        <p class="text-gray-500 dark:text-gray-400 italic">
+          Aucun utilisateur sélectionné. Veuillez cocher les lignes dans le tableau ci-dessus.
+        </p>
+      } @else {
+        <div class="flex flex-wrap gap-2">
+          @for (item of users; track item.id) {
+          <div
+            class="flex items-center space-x-2 px-3 py-1 text-sm font-medium rounded-full
+                            bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 transition duration-150 ease-in-out">
+
+            <span>{{ item.email }}</span>
+
+            <button mat-icon-button class="h-3 w-5 leading-none p-0 ml-1 hover:text-red-600"
+              (click)="onRemoveSelected(item); $event.stopPropagation()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          }
+        </div>
+      }
+
+    </div>
+
   </div>
-  }
-</div>
 </mat-dialog-content>
 
+@if (data.multiple) {
+  <mat-dialog-actions>
+    <button (click)="validate()" mat-flat-button>Valider</button>
+  </mat-dialog-actions>
+}

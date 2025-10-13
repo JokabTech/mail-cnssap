@@ -114,7 +114,7 @@ export class FunctionComponent implements OnInit, OnDestroy {
   onAddDialog(f?: Function) {
     const conf = new MatDialogConfig();
     conf.disableClose = true;
-    conf.data = { title: `Ajouter une direction`, function: f, target: 'add' };
+    conf.data = { title: `Ajouter une fonction`, function: f, target: 'add' };
 
     //conf.minWidth = this.xSmallOrSmall() ? '96vw' : '60vw';
     //conf.height = '80%';
@@ -131,7 +131,7 @@ export class FunctionComponent implements OnInit, OnDestroy {
   onUpdateDialog(f?: Function) {
     const conf = new MatDialogConfig();
     conf.disableClose = true;
-    conf.data = { title: `Modifier une direction`, function: f, target: 'edit' };
+    conf.data = { title: `Modifier une fonction`, function: f, target: 'edit' };
 
     //conf.minWidth = this.xSmallOrSmall() ? '96vw' : '60vw';
     //conf.height = '80%';

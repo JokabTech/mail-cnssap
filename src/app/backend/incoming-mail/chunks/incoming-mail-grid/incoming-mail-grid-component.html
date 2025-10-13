@@ -30,7 +30,11 @@
             }
           }@else if (role === roles.DIRECTOR) {
             @if (tab === tabs.INITIAL || item.status === status.TO_DIRECTOR) {
-              <button matTooltip="Cliquer pour annoter" mat-button (click)="onAddProof(item)">Joindre preuve</button>
+              @if (item.agent) {
+                <span class="ps-3 text-base text-blue-600">Affecter à {{ item.agent.full_name }} </span>
+              }@else {
+                <button matTooltip="Cliquer pour annoter" mat-button (click)="onAddProof(item)">Joindre preuve</button>
+              }
             }@else {
               @if (item.status === status.TO_BE_PROCESSED) {
                 <button matTooltip="Cliquez pour afficher l'Assistant Principal" mat-icon-button><mat-icon>check</mat-icon></button>

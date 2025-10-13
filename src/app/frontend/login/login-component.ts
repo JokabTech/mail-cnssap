@@ -14,7 +14,6 @@ import { MessageService } from '../../core/services/message.service';
   styleUrl: './login-component.scss'
 })
 export class LoginComponent {
-
   hide = true;
   lock = false;
   form!: FormGroup;

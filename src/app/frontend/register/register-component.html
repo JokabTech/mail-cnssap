@@ -30,7 +30,7 @@
             </mat-form-field>
             <mat-form-field class="w-full mt-1" appearance="outline">
               <mat-label>Adresse E-mail</mat-label>
-              <input type="email" matInput formControlName="email">
+              <input type="email" maxlength="40" matInput formControlName="email">
               <mat-icon color="primary" matSuffix>home</mat-icon>
               @if (form.get('email')?.hasError) {
                 <mat-error> {{ getErrorEmail() }} </mat-error>
@@ -39,7 +39,7 @@
             <div class="flex flex-col md:flex-row gap-x-5">
               <mat-form-field class="w-full md:w-6/12 mt-1" appearance="outline">
                 <mat-label>Mot de passe</mat-label>
-                <input type="password" matInput formControlName="password" [type]="hide ? 'password' : 'text'" (focus)="lock = true">
+                <input maxlength="16" type="password" matInput formControlName="password" [type]="hide ? 'password' : 'text'" (focus)="lock = true">
                 <a mat-icon-button matSuffix (click)="hide = !hide">
                   @if (lock) {
                     <mat-icon color="primary">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -53,7 +53,7 @@
               </mat-form-field>
               <mat-form-field class="w-full md:w-6/12 mt-1" appearance="outline">
                 <mat-label>Confirmation</mat-label>
-                <input matInput formControlName="password2" [type]="hide ? 'password' : 'text'" (focus)="lock = true">
+                <input maxlength="16" matInput formControlName="password2" [type]="hide ? 'password' : 'text'" (focus)="lock = true">
                 <a mat-icon-button matSuffix (click)="hide = !hide">
                   @if (lock) {
                     <mat-icon color="primary">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -66,7 +66,18 @@
                 }
               </mat-form-field>
             </div>
-            <div >
+
+           @if (authService.passwordStrength) {
+              <div class="w-full h-2 bg-gray-200 rounded">
+                <div class="h-2 rounded transition-all duration-300" [style.width.%]="authService.strengthPercent" [ngClass]="authService.strengthClass"></div>
+              </div>
+
+              <p class="mt-1 font-medium text-sm">
+                {{ authService.passwordStrength }}
+              </p>
+            }
+
+            <div>
                @if (form.hasError('mismatch') && form.get('password2')?.touched) {
                 <mat-error >Les mots de passe ne correspondent pas</mat-error>
               }

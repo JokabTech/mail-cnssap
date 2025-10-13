@@ -10,9 +10,10 @@ export interface IncomingMail extends BaseMail {
   annotated_by_aa: boolean;
   senior_assistant_comment?: string;
   annotated_by_sa: boolean;
+  is_late: boolean;
+  days_taken: number | null;
   director?: User;
   adminAssistant?: User;
   seniorAssistant?: User;
   agent?: User;
-  days: number;
 }

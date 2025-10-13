@@ -13,10 +13,11 @@ import { Router } from '@angular/router';
 import { User } from '../../../shared/models/user';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { DocumentType } from '../../../shared/models/document_type';
+import { BackComponent } from "../../../shared/components/back/back-component";
 
 @Component({
   selector: 'app-outgoing-internal-mail-form-component',
-  imports: [...SharedBackend, ...SharedImports],
+  imports: [...SharedBackend, ...SharedImports, BackComponent],
   templateUrl: './outgoing-internal-mail-form-component.html',
   styleUrl: './outgoing-internal-mail-form-component.scss',
   providers: [

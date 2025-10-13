@@ -20,6 +20,7 @@ import { ActionEvent } from '../../shared/models/action-event';
 import { AddFileComponent } from '../../shared/components/add-file/add-file-component';
 import { ImageToBase64Service } from './image-to-base64-service';
 import { Header } from '../../shared/models/header';
+import { SharedComponent } from '../../shared/components/shared/shared-component';
 
 @Injectable({
   providedIn: 'root'
@@ -138,7 +139,7 @@ export abstract class AbstractMailService<T extends BaseMail> {
   addFile(mail: T, title: string, target: 'treatment-proof' | 'acknowledgement-receipt') {
     const conf = new MatDialogConfig();
     conf.disableClose = true;
-    conf.data = { title, id: mail.id, subject: mail.subject, endpoint: `${this.exportEndpoint}/${target}` };
+    conf.data = { title: title.toUpperCase(), id: mail.id, subject: mail.subject, endpoint: `${this.exportEndpoint}/${target}`, target };
     const dialogRef = this.dialog.open(AddFileComponent, conf);
     dialogRef.afterClosed().subscribe((result: T) => {
       if (result) {
@@ -158,6 +159,19 @@ export abstract class AbstractMailService<T extends BaseMail> {
       },
       complete: () => {
         console.log('Conversion de l\'image terminée.');
+      }
+    });
+  }
+
+  sharedMail(mail: T, target?: string){
+    const conf = new MatDialogConfig();
+    conf.disableClose = true;
+    conf.minWidth = '30vw'
+    conf.data = { title: `OPTIONS DE PARTAGE ${target || ''}`, id: mail.id, mail, endpoint: `${this.endpoint}` };
+    const dialogRef = this.dialog.open(SharedComponent, conf);
+    dialogRef.afterClosed().subscribe((result: T) => {
+      if (result) {
+        this.selectTab(this.tab);
       }
     });
   }

@@ -17,4 +17,12 @@ export const frontendRoutes: Routes = [
     path: 'verification/:code',
     loadComponent: () => import('./validation/validation-component').then(m => m.ValidationComponent)
   },
+  {
+    path: 'forgot-password',
+    loadComponent: () => import('./forgot-password/forgot-password-component').then(m => m.ForgotPasswordComponent)
+  },
+  {
+    path: 'reset-password/:token',
+    loadComponent: () => import('./reset-password/reset-password-component').then(m => m.ResetPasswordComponent)
+  },
 ];
